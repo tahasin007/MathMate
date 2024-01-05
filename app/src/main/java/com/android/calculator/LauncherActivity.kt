@@ -24,7 +24,7 @@ class LauncherActivity : ComponentActivity() {
                 Calculator(
                     state = state,
                     onAction = viewModel::onAction,
-                    buttonSpacing = 10.dp,
+                    buttonSpacing = 5.dp,
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.primary)
