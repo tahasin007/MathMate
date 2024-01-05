@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +22,6 @@ import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.components.CalculatorButton
 import com.android.calculator.operations.CalculatorOperation
 import com.android.calculator.state.CalculatorState
-import com.android.calculator.ui.theme.LightGreen
 
 @Composable
 fun Calculator(
@@ -53,7 +53,7 @@ fun Calculator(
                 horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
             ) {
                 CalculatorButton(
-                    symbol = "AC",
+                    symbol = "C",
                     modifier = Modifier
                         .aspectRatio(1f)
                         .weight(1f),
@@ -63,7 +63,7 @@ fun Calculator(
                 )
                 CalculatorButton(
                     symbol = "Del",
-                    buttonTextColor = LightGreen,
+                    buttonTextColor = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .weight(1f),
@@ -73,7 +73,7 @@ fun Calculator(
                 )
                 CalculatorButton(
                     symbol = "%",
-                    buttonTextColor = LightGreen,
+                    buttonTextColor = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .weight(1f),
@@ -83,7 +83,7 @@ fun Calculator(
                 )
                 CalculatorButton(
                     symbol = "/",
-                    buttonTextColor = LightGreen,
+                    buttonTextColor = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .weight(1f),
@@ -126,7 +126,7 @@ fun Calculator(
                 )
                 CalculatorButton(
                     symbol = "*",
-                    buttonTextColor = LightGreen,
+                    buttonTextColor = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .weight(1f),
@@ -169,7 +169,7 @@ fun Calculator(
                 )
                 CalculatorButton(
                     symbol = "-",
-                    buttonTextColor = LightGreen,
+                    buttonTextColor = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .weight(1f),
@@ -212,7 +212,7 @@ fun Calculator(
                 )
                 CalculatorButton(
                     symbol = "+",
-                    buttonTextColor = LightGreen,
+                    buttonTextColor = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier
                         .aspectRatio(1f)
                         .weight(1f),
@@ -246,7 +246,8 @@ fun Calculator(
                 )
                 CalculatorButton(
                     symbol = "=",
-                    buttonColor = LightGreen,
+                    buttonColor = MaterialTheme.colorScheme.onSecondary,
+                    buttonTextColor = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .aspectRatio(2f)
                         .weight(2f),

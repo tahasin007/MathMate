@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -22,14 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.calculator.R
 import com.android.calculator.ui.theme.ButtonRippleColor
-import com.android.calculator.ui.theme.ButtonTextColor
-import com.android.calculator.ui.theme.DarkGray
 
 @Composable
 fun CalculatorButton(
     symbol: String,
-    buttonColor: Color = DarkGray,
-    buttonTextColor: Color = ButtonTextColor,
+    buttonColor: Color = MaterialTheme.colorScheme.primary,
+    buttonTextColor: Color = MaterialTheme.colorScheme.onPrimary,
     modifier: Modifier,
     onClick: () -> Unit
 ) {
