@@ -28,6 +28,7 @@ fun CalculatorGrid(
         ) {
             CalculatorButton(
                 symbol = "C",
+                buttonTextColor = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier
                     .aspectRatio(1f)
                     .weight(1f),
@@ -42,7 +43,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Clear)
+                    onAction(CalculatorAction.Delete)
                 }
             )
             CalculatorButton(

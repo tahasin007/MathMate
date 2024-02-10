@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import com.android.calculator.R
 import com.android.calculator.ui.theme.ButtonRippleColor
 
@@ -61,6 +62,12 @@ fun CalculatorButton(
                     painter = painterResource(id = R.drawable.cal_delete),
                     contentDescription = "Delete",
                     colorFilter = ColorFilter.tint(buttonTextColor)
+                )
+            } else if (!symbol.isDigitsOnly()) {
+                Text(
+                    text = symbol,
+                    fontSize = 40.sp,
+                    color = buttonTextColor
                 )
             } else {
                 Text(

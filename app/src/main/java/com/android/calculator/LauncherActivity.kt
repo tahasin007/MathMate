@@ -20,7 +20,7 @@ class LauncherActivity : ComponentActivity() {
         setContent {
             CalculatorTheme {
                 val viewModel = viewModel<CalculatorViewModel>()
-                val state = viewModel.state
+                val state = viewModel.calculatorState
                 Calculator(
                     state = state,
                     onAction = viewModel::onAction,

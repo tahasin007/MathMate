@@ -7,96 +7,79 @@ import androidx.lifecycle.ViewModel
 import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.operations.CalculatorOperation
 import com.android.calculator.state.CalculatorState
+import com.android.calculator.utils.ExpressionEvaluator
 
 class CalculatorViewModel : ViewModel() {
 
-    var state by mutableStateOf(CalculatorState())
+    var calculatorState by mutableStateOf(CalculatorState())
 
     fun onAction(action: CalculatorAction) {
         when (action) {
             is CalculatorAction.Number -> enterNumber(action.number)
             is CalculatorAction.Delete -> delete()
-            is CalculatorAction.Clear -> state = CalculatorState()
+            is CalculatorAction.Clear -> calculatorState = CalculatorState()
             is CalculatorAction.Operation -> enterOperation(action.operation)
             is CalculatorAction.Decimal -> enterDecimal()
             is CalculatorAction.Calculate -> calculate()
-        }
-    }
-
-    private fun enterOperation(operation: CalculatorOperation) {
-        if (state.number1.isNotBlank()) {
-            state = state.copy(operation = operation)
+            is CalculatorAction.Parenthesis -> enterParenthesis()
         }
     }
 
     private fun calculate() {
-        val number1 = state.number1.toDoubleOrNull()
-        val number2 = state.number2.toDoubleOrNull()
-        if (number1 != null && number2 != null) {
-            val result = when (state.operation) {
-                is CalculatorOperation.Add -> number1 + number2
-                is CalculatorOperation.Subtract -> number1 - number2
-                is CalculatorOperation.Multiply -> number1 * number2
-                is CalculatorOperation.Divide -> number1 / number2
-                is CalculatorOperation.Mod -> number1 % number2
-                null -> return
-            }
-            state = state.copy(
-                number1 = result.toString().take(15),
-                number2 = "",
-                operation = null
-            )
-        }
-    }
-
-    private fun delete() {
-        when {
-            state.number2.isNotBlank() -> state = state.copy(
-                number2 = state.number2.dropLast(1)
-            )
-
-            state.operation != null -> state = state.copy(
-                operation = null
-            )
-
-            state.number1.isNotBlank() -> state = state.copy(
-                number1 = state.number1.dropLast(1)
-            )
-        }
-    }
-
-    private fun enterDecimal() {
-        if (state.operation == null && !state.number1.contains(".") && state.number1.isNotBlank()) {
-            state = state.copy(
-                number1 = state.number1 + "."
-            )
-            return
-        } else if (!state.number2.contains(".") && state.number2.isNotBlank()) {
-            state = state.copy(
-                number2 = state.number2 + "."
-            )
-        }
-    }
-
-    private fun enterNumber(number: Int) {
-        if (state.operation == null) {
-            if (state.number1.length >= MAX_NUM_LENGTH) {
-                return
-            }
-            state = state.copy(
-                number1 = state.number1 + number
-            )
-            return
-        }
-        if (state.number2.length >= MAX_NUM_LENGTH) {
-            return
-        }
-        state = state.copy(
-            number2 = state.number2 + number
+        val result = ExpressionEvaluator.evaluate(calculatorState.expression)
+        calculatorState = calculatorState.copy(
+            expression = result.toString()
         )
     }
 
-    companion object {
-        private const val MAX_NUM_LENGTH = 8
+    private fun delete() {
+        if (calculatorState.expression.isBlank()) return
+
+        calculatorState = calculatorState.copy(
+            expression = calculatorState.expression.dropLast(1)
+        )
+    }
+
+    private fun enterDecimal() {
+        if (calculatorState.expression.isBlank() || !calculatorState.expression.last().isDigit()) {
+            return
+        }
+
+        // Check if the current number already contains a decimal point
+        val lastNumberIndex =
+            calculatorState.expression.lastIndexOfAny(charArrayOf('+', '-', '*', '/', '%'))
+        val lastNumber = calculatorState.expression.substring(lastNumberIndex + 1)
+        if (lastNumber.contains('.')) {
+            return
+        }
+
+        val updatedExpression = calculatorState.expression + "."
+        calculatorState = calculatorState.copy(
+            expression = updatedExpression
+        )
+    }
+
+    private fun enterNumber(number: Int) {
+        val updatedExpression = calculatorState.expression + number.toString()
+        calculatorState = calculatorState.copy(
+            expression = updatedExpression
+        )
+    }
+
+    private fun enterOperation(operation: CalculatorOperation) {
+        if (calculatorState.expression.isBlank()) return
+
+        val updatedExpression =
+            if (calculatorState.expression.last() == '.')
+                calculatorState.expression + "0" + operation.symbol
+            else calculatorState.expression + operation.symbol
+
+        calculatorState = calculatorState.copy(
+            expression = updatedExpression
+        )
+    }
+
+    private fun enterParenthesis() {
+
     }
 }
