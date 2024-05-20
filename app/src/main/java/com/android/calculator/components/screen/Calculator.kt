@@ -34,7 +34,7 @@ fun Calculator(
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Spacer(modifier = Modifier.height(35.dp))
-            CalculationResult()
+            CalculationResult(state.result)
             CalculationView(state = state)
             CalculatorGrid(onAction = onAction, buttonSpacing = buttonSpacing)
         }

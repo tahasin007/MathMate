@@ -28,7 +28,8 @@ class CalculatorViewModel : ViewModel() {
     private fun calculate() {
         val result = ExpressionEvaluator.evaluate(calculatorState.expression)
         calculatorState = calculatorState.copy(
-            expression = result.toString()
+            expression = result.toString(),
+            result = result.toString()
         )
     }
 

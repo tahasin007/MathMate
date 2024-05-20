@@ -38,7 +38,7 @@ fun CalculatorButton(
 
     Card(
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 12.dp
+            defaultElevation = 1.dp
         ),
         colors = CardDefaults.cardColors(
             containerColor = buttonColor
