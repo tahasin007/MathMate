@@ -17,7 +17,7 @@ class CalculatorViewModel : ViewModel() {
         when (action) {
             is CalculatorAction.Number -> enterNumber(action.number)
             is CalculatorAction.Delete -> delete()
-            is CalculatorAction.Clear -> calculatorState = CalculatorState()
+            is CalculatorAction.Clear -> clear()
             is CalculatorAction.Operation -> enterOperation(action.operation)
             is CalculatorAction.Decimal -> enterDecimal()
             is CalculatorAction.Calculate -> calculate()
@@ -41,6 +41,10 @@ class CalculatorViewModel : ViewModel() {
         )
     }
 
+    private fun clear() {
+        calculatorState = CalculatorState()
+    }
+
     private fun enterDecimal() {
         if (calculatorState.expression.isBlank() || !calculatorState.expression.last().isDigit()) {
             return
@@ -61,7 +65,15 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun enterNumber(number: Int) {
-        val updatedExpression = calculatorState.expression + number.toString()
+        val updatedExpression =
+            if (calculatorState.expression.isNotEmpty() &&
+                calculatorState.result == calculatorState.expression
+            ) {
+                number.toString()
+            } else {
+                calculatorState.expression + number.toString()
+            }
+
         calculatorState = calculatorState.copy(
             expression = updatedExpression
         )
