@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.operations.CalculatorOperation
 import com.android.calculator.state.CalculatorState
@@ -13,7 +14,14 @@ class CalculatorViewModel : ViewModel() {
 
     var calculatorState by mutableStateOf(CalculatorState())
 
-    fun onAction(action: CalculatorAction) {
+    fun onAction(action: BaseAction) {
+        when (action) {
+            is CalculatorAction -> handleCalculatorAction(action)
+            else -> {}
+        }
+    }
+
+    private fun handleCalculatorAction(action: CalculatorAction) {
         when (action) {
             is CalculatorAction.Number -> enterNumber(action.number)
             is CalculatorAction.Delete -> delete()

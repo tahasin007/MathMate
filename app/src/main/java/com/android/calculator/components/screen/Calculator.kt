@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.components.CalculationResult
 import com.android.calculator.components.CalculationView
@@ -23,7 +24,7 @@ fun Calculator(
     state: CalculatorState,
     buttonSpacing: Dp,
     modifier: Modifier,
-    onAction: (CalculatorAction) -> Unit
+    onAction: (BaseAction) -> Unit
 ) {
     Box(modifier = modifier) {
         Column(

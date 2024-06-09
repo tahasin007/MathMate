@@ -14,13 +14,15 @@ import androidx.core.view.WindowCompat
 private val LightColorScheme = lightColorScheme(
     primary = PrimaryLight,
     onPrimary = OnPrimaryLight,
-    onSecondary = OnSecondaryLight
+    onSecondary = OnSecondaryLight,
+    onTertiary = OnTertiaryLight
 )
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryDark,
     onPrimary = OnPrimaryDark,
-    onSecondary = OnSecondaryDark
+    onSecondary = OnSecondaryDark,
+    onTertiary = OnTertiaryDark
 )
 
 @Composable
