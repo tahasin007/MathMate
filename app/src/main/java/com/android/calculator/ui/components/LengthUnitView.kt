@@ -29,7 +29,9 @@ fun LengthUnitView(
     value: String,
     items: Set<String>,
     selectedUnit: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onSelectedUnitChanged: (String) -> Unit,
+    isCurrentView: Boolean
 ) {
     Box(
         modifier = Modifier
@@ -47,29 +49,42 @@ fun LengthUnitView(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var multiplier by remember { mutableFloatStateOf(1.5f) }
             Box(
                 modifier = Modifier
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }) {}
             ) {
-                DropDownView(selectedUnit = selectedUnit, items = items)
+                DropDownView(
+                    selectedUnit = selectedUnit,
+                    items = items,
+                    onSelectedUnitChanged = onSelectedUnitChanged
+                )
             }
-            Text(
-                text = value,
-                maxLines = 1,
-                textAlign = TextAlign.End,
-                style = LocalTextStyle.current.copy(
-                    fontSize = LocalTextStyle.current.fontSize * multiplier
-                ),
-                onTextLayout = {
-                    if (it.hasVisualOverflow) {
-                        multiplier *= 1.99f
-                    }
-                },
-                color = MaterialTheme.colorScheme.primary
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                var multiplier by remember { mutableFloatStateOf(1.0f) }
+                Text(
+                    text = value,
+                    maxLines = 1,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.padding(end = 2.dp),
+                    style = LocalTextStyle.current.copy(
+                        fontSize = LocalTextStyle.current.fontSize * multiplier
+                    ),
+                    onTextLayout = {
+                        if (it.hasVisualOverflow) {
+                            multiplier *= 1.99f
+                        }
+                    },
+                    color = MaterialTheme.colorScheme.primary
+                )
+                if (isCurrentView) {
+                    DrawBlinkingVerticalLine(color = MaterialTheme.colorScheme.onTertiary)
+                }
+            }
         }
     }
 }

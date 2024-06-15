@@ -7,7 +7,7 @@ import com.android.calculator.actions.BMIAction
 import com.android.calculator.state.CalculatorState
 
 @Composable
-fun BMI (
+fun BMI(
     state: CalculatorState,
     buttonSpacing: Dp,
     modifier: Modifier,

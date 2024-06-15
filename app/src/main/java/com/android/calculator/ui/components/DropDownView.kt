@@ -31,7 +31,8 @@ import androidx.compose.ui.unit.sp
 fun DropDownView(
     items: Set<String>,
     menuWidth: Dp = 125.dp,
-    selectedUnit: String
+    selectedUnit: String,
+    onSelectedUnitChanged: (String) -> Unit
 ) {
     var selectedItem by remember { mutableStateOf(selectedUnit) }
     var expanded by remember { mutableStateOf(false) }
@@ -77,6 +78,7 @@ fun DropDownView(
                 onClick = {
                     selectedItem = item
                     expanded = false
+                    onSelectedUnitChanged.invoke(item)
                 },
                 modifier = Modifier
                     .background(

@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.android.calculator.ui.theme.OnSecondaryLight
 import kotlinx.coroutines.delay
 
 const val BlinkTime = 750L

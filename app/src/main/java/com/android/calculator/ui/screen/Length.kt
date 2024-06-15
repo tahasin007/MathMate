@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.LengthAction
 import com.android.calculator.state.LengthState
+import com.android.calculator.state.LengthView
 import com.android.calculator.state.ScreenType
 import com.android.calculator.ui.components.CalculatorGrid
 import com.android.calculator.ui.components.LengthUnitView
@@ -52,8 +53,14 @@ fun Length(
                         items = Constants.LENGTH_UNITS,
                         value = state.inputValue,
                         selectedUnit = state.inputUnit,
+                        isCurrentView = state.currentView == LengthView.INPUT,
                         onClick = {
-                            onAction(LengthAction.ChangeView)
+                            if (state.currentView != LengthView.INPUT) {
+                                onAction(LengthAction.ChangeView(LengthView.INPUT))
+                            }
+                        },
+                        onSelectedUnitChanged = {
+                            onAction(LengthAction.ChangeInputUnit(it))
                         }
                     )
                 }
@@ -64,11 +71,17 @@ fun Length(
                     contentAlignment = Alignment.Center
                 ) {
                     LengthUnitView(
-                        items = Constants.LENGTH_UNITS,
                         value = state.outputValue,
+                        items = Constants.LENGTH_UNITS,
                         selectedUnit = state.outputUnit,
+                        isCurrentView = state.currentView == LengthView.OUTPUT,
                         onClick = {
-                            onAction(LengthAction.ChangeView)
+                            if (state.currentView != LengthView.OUTPUT) {
+                                onAction(LengthAction.ChangeView(LengthView.OUTPUT))
+                            }
+                        },
+                        onSelectedUnitChanged = {
+                            onAction(LengthAction.ChangeOutputUnit(it))
                         }
                     )
                 }
