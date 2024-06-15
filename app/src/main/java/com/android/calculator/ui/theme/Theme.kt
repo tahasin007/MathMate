@@ -15,14 +15,16 @@ private val LightColorScheme = lightColorScheme(
     primary = PrimaryLight,
     onPrimary = OnPrimaryLight,
     onSecondary = OnSecondaryLight,
-    onTertiary = OnTertiaryLight
+    onTertiary = OnTertiaryLight,
+    onBackground = RippleColorLight
 )
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryDark,
     onPrimary = OnPrimaryDark,
     onSecondary = OnSecondaryDark,
-    onTertiary = OnTertiaryDark
+    onTertiary = OnTertiaryDark,
+    onBackground = RippleColorDark
 )
 
 @Composable

@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -26,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.android.calculator.R
-import com.android.calculator.ui.theme.ButtonRippleColor
+import com.android.calculator.ui.animation.shakeEffect
 
 @Composable
 fun CalculatorButton(
@@ -37,11 +39,12 @@ fun CalculatorButton(
     onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val rippleColor = remember { mutableStateOf(ButtonRippleColor) }
+    val rippleColor = MaterialTheme.colorScheme.onBackground
     val scale by animateFloatAsState(
-        targetValue = if (interactionSource.collectIsPressedAsState().value) 0.9f else 1f,
+        targetValue = if (interactionSource.collectIsPressedAsState().value) 0.25f else 1f,
         label = ""
     )
+    var shake by remember { mutableStateOf(false) }
 
     Card(
         elevation = CardDefaults.cardElevation(
@@ -53,14 +56,18 @@ fun CalculatorButton(
         modifier = modifier
             .fillMaxSize()
             .scale(scale)
+            .then(if (shake) Modifier.shakeEffect { shake = false } else Modifier)
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .clickable(
                     interactionSource = interactionSource,
-                    indication = rememberRipple(color = rippleColor.value),
-                    onClick = onClick
+                    indication = rememberRipple(color = rippleColor),
+                    onClick = {
+                        onClick()
+                        shake = true
+                    }
                 ),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally

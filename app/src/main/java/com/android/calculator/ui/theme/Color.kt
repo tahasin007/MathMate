@@ -12,4 +12,5 @@ val OnPrimaryDark = Color(0xBEC2CFCE)
 val OnSecondaryDark = Color(0xBE1A8F85)
 val OnTertiaryDark = Color(0xBE44FFEF)
 
-val ButtonRippleColor = Color(0xFF18181A)
+val RippleColorLight = Color(0xFFDBDBDB)
+val RippleColorDark = Color(0xFF2B2B2B)
