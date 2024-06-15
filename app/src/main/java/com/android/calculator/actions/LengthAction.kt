@@ -1,6 +1,10 @@
 package com.android.calculator.actions
 
-sealed class LengthAction: BaseAction {
-    data object Clear : LengthAction()
-    data object Delete : LengthAction()
+import com.android.calculator.state.LengthView
+
+sealed class LengthAction : BaseAction {
+    data class SelectInputUnit(val unit: String) : LengthAction()
+    data class SelectOutputUnit(val unit: String) : LengthAction()
+    data object ChangeView : LengthAction()
+    data object Convert : LengthAction()
 }

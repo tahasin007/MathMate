@@ -17,15 +17,15 @@ class CalculatorViewModel : ViewModel() {
     fun onAction(action: BaseAction) {
         when (action) {
             is CalculatorAction -> handleCalculatorAction(action)
+            is BaseAction.Number -> enterNumber(action.number)
+            is BaseAction.Clear -> clear()
             else -> {}
         }
     }
 
     private fun handleCalculatorAction(action: CalculatorAction) {
         when (action) {
-            is CalculatorAction.Number -> enterNumber(action.number)
             is CalculatorAction.Delete -> delete()
-            is CalculatorAction.Clear -> clear()
             is CalculatorAction.Operation -> enterOperation(action.operation)
             is CalculatorAction.Decimal -> enterDecimal()
             is CalculatorAction.Calculate -> calculate()

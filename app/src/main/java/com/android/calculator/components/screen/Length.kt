@@ -11,17 +11,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.android.calculator.actions.BaseAction
+import com.android.calculator.actions.LengthAction
 import com.android.calculator.components.CalculatorGrid
 import com.android.calculator.components.LengthUnitView
 import com.android.calculator.state.LengthState
+import com.android.calculator.utils.Constants
 
 @Composable
 fun Length(
     state: LengthState,
     buttonSpacing: Dp,
     modifier: Modifier,
-    onAction: (BaseAction) -> Unit
+    onAction: (LengthAction) -> Unit
 ) {
     Box(modifier = modifier) {
         Column(
@@ -44,7 +45,14 @@ fun Length(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    LengthUnitView(result = "12")
+                    LengthUnitView(
+                        items = Constants.LENGTH_UNITS,
+                        value = state.inputValue,
+                        selectedUnit = state.inputUnit,
+                        onClick = {
+                            onAction(LengthAction.ChangeView)
+                        }
+                    )
                 }
                 Box(
                     modifier = Modifier
@@ -52,7 +60,14 @@ fun Length(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    LengthUnitView(result = "345")
+                    LengthUnitView(
+                        items = Constants.LENGTH_UNITS,
+                        value = state.outputValue,
+                        selectedUnit = state.outputUnit,
+                        onClick = {
+                            onAction(LengthAction.ChangeView)
+                        }
+                    )
                 }
             }
             CalculatorGrid(onAction = onAction, buttonSpacing = buttonSpacing)

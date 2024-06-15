@@ -14,8 +14,8 @@ import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.operations.CalculatorOperation
 
 @Composable
-fun CalculatorGrid(
-    onAction: (BaseAction) -> Unit,
+fun <T : BaseAction> CalculatorGrid(
+    onAction: (T) -> Unit,
     buttonSpacing: Dp
 ) {
     Column(
@@ -34,7 +34,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Clear)
+                    onAction(BaseAction.Clear as T)
                 }
             )
             CalculatorButton(
@@ -44,7 +44,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Delete)
+                    onAction(CalculatorAction.Delete as T)
                 }
             )
             CalculatorButton(
@@ -54,7 +54,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Operation(CalculatorOperation.Mod))
+                    onAction(CalculatorAction.Operation(CalculatorOperation.Mod) as T)
                 }
             )
             CalculatorButton(
@@ -64,7 +64,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Operation(CalculatorOperation.Divide))
+                    onAction(CalculatorAction.Operation(CalculatorOperation.Divide) as T)
                 }
             )
         }
@@ -79,7 +79,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(7))
+                    onAction(BaseAction.Number(7) as T)
                 }
             )
             CalculatorButton(
@@ -88,7 +88,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(8))
+                    onAction(BaseAction.Number(8) as T)
                 }
             )
             CalculatorButton(
@@ -97,7 +97,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(9))
+                    onAction(BaseAction.Number(9) as T)
                 }
             )
             CalculatorButton(
@@ -107,7 +107,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Operation(CalculatorOperation.Multiply))
+                    onAction(CalculatorAction.Operation(CalculatorOperation.Multiply) as T)
                 }
             )
         }
@@ -122,7 +122,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(4))
+                    onAction(BaseAction.Number(4) as T)
                 }
             )
             CalculatorButton(
@@ -131,7 +131,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(5))
+                    onAction(BaseAction.Number(5) as T)
                 }
             )
             CalculatorButton(
@@ -140,7 +140,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(6))
+                    onAction(BaseAction.Number(6) as T)
                 }
             )
             CalculatorButton(
@@ -150,7 +150,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Operation(CalculatorOperation.Subtract))
+                    onAction(CalculatorAction.Operation(CalculatorOperation.Subtract) as T)
                 }
             )
         }
@@ -165,7 +165,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(1))
+                    onAction(BaseAction.Number(1) as T)
                 }
             )
             CalculatorButton(
@@ -174,7 +174,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(2))
+                    onAction(BaseAction.Number(2) as T)
                 }
             )
             CalculatorButton(
@@ -183,7 +183,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(3))
+                    onAction(BaseAction.Number(3) as T)
                 }
             )
             CalculatorButton(
@@ -193,7 +193,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Operation(CalculatorOperation.Add))
+                    onAction(CalculatorAction.Operation(CalculatorOperation.Add) as T)
                 }
             )
         }
@@ -208,7 +208,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Number(0))
+                    onAction(BaseAction.Number(0) as T)
                 }
             )
             CalculatorButton(
@@ -217,7 +217,7 @@ fun CalculatorGrid(
                     .aspectRatio(1f)
                     .weight(1f),
                 onClick = {
-                    onAction(CalculatorAction.Decimal)
+                    onAction(CalculatorAction.Decimal as T)
                 }
             )
             CalculatorButton(
@@ -228,7 +228,7 @@ fun CalculatorGrid(
                     .aspectRatio(2f)
                     .weight(2f),
                 onClick = {
-                    onAction(CalculatorAction.Calculate)
+                    onAction(CalculatorAction.Calculate as T)
                 }
             )
         }
