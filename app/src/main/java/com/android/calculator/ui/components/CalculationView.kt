@@ -1,4 +1,4 @@
-package com.android.calculator.components
+package com.android.calculator.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

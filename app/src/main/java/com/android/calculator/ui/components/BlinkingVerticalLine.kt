@@ -1,4 +1,4 @@
-package com.android.calculator.components
+package com.android.calculator.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

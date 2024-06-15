@@ -19,16 +19,16 @@ class CalculatorViewModel : ViewModel() {
             is CalculatorAction -> handleCalculatorAction(action)
             is BaseAction.Number -> enterNumber(action.number)
             is BaseAction.Clear -> clear()
+            is BaseAction.Delete -> delete()
+            is BaseAction.Calculate -> calculate()
+            is BaseAction.Operation -> enterOperation(action.operation)
+            is BaseAction.Decimal -> enterDecimal()
             else -> {}
         }
     }
 
     private fun handleCalculatorAction(action: CalculatorAction) {
         when (action) {
-            is CalculatorAction.Delete -> delete()
-            is CalculatorAction.Operation -> enterOperation(action.operation)
-            is CalculatorAction.Decimal -> enterDecimal()
-            is CalculatorAction.Calculate -> calculate()
             is CalculatorAction.Parenthesis -> enterParenthesis()
         }
     }

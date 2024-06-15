@@ -1,4 +1,4 @@
-package com.android.calculator.components
+package com.android.calculator.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -32,8 +32,8 @@ import com.android.calculator.ui.theme.ButtonRippleColor
 @Composable
 fun CalculatorButton(
     symbol: String,
-    buttonColor: Color = MaterialTheme.colorScheme.primary,
-    buttonTextColor: Color = MaterialTheme.colorScheme.onPrimary,
+    buttonColor: Color,
+    buttonTextColor: Color,
     modifier: Modifier,
     onClick: () -> Unit
 ) {

@@ -1,11 +1,12 @@
-package com.android.calculator.components
+package com.android.calculator.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,29 +23,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.android.calculator.ui.theme.PrimaryLight
 
 @Composable
-fun CalculationResult(result: String) {
+fun LengthUnitView(
+    value: String,
+    items: Set<String>,
+    selectedUnit: String,
+    onClick: () -> Unit
+) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.12f)
-            .padding(start = 5.dp, end = 5.dp)
+            .fillMaxHeight()
+            .padding(all = 5.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(MaterialTheme.colorScheme.onSecondary)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(end = 10.dp, start = 10.dp)
+                .fillMaxWidth()
+                .padding(end = 10.dp, start = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.weight(1f))
             var multiplier by remember { mutableFloatStateOf(1.5f) }
-
+            Box(
+                modifier = Modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {}
+            ) {
+                DropDownView(selectedUnit = selectedUnit, items = items)
+            }
             Text(
-                text = result,
-                maxLines = 2,
+                text = value,
+                maxLines = 1,
                 textAlign = TextAlign.End,
                 style = LocalTextStyle.current.copy(
                     fontSize = LocalTextStyle.current.fontSize * multiplier
@@ -54,8 +68,7 @@ fun CalculationResult(result: String) {
                         multiplier *= 1.99f
                     }
                 },
-                color = PrimaryLight,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }

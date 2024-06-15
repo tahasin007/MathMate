@@ -1,4 +1,4 @@
-package com.android.calculator.components.screen
+package com.android.calculator.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,10 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.LengthAction
-import com.android.calculator.components.CalculatorGrid
-import com.android.calculator.components.LengthUnitView
 import com.android.calculator.state.LengthState
+import com.android.calculator.state.ScreenType
+import com.android.calculator.ui.components.CalculatorGrid
+import com.android.calculator.ui.components.LengthUnitView
+import com.android.calculator.ui.factory.ButtonFactory
 import com.android.calculator.utils.Constants
 
 @Composable
@@ -22,7 +25,7 @@ fun Length(
     state: LengthState,
     buttonSpacing: Dp,
     modifier: Modifier,
-    onAction: (LengthAction) -> Unit
+    onAction: (BaseAction) -> Unit
 ) {
     Box(modifier = modifier) {
         Column(
@@ -70,7 +73,12 @@ fun Length(
                     )
                 }
             }
-            CalculatorGrid(onAction = onAction, buttonSpacing = buttonSpacing)
+            val buttons = ButtonFactory()
+            CalculatorGrid(
+                buttons = buttons.getButtons(ScreenType.LENGTH),
+                onAction = onAction,
+                buttonSpacing = buttonSpacing
+            )
         }
     }
 }

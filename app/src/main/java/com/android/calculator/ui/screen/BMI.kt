@@ -1,4 +1,4 @@
-package com.android.calculator.components.screen
+package com.android.calculator.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
