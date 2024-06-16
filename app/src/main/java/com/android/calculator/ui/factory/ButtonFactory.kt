@@ -9,8 +9,7 @@ class ButtonFactory {
     fun getButtons(screenType: ScreenType): List<List<CalculatorButtonInfo<out BaseAction>>> {
         return when (screenType) {
             ScreenType.CALCULATOR -> getCalculatorButtons()
-            ScreenType.LENGTH -> getLengthButtons()
-            ScreenType.MASS -> TODO()
+            ScreenType.LENGTH, ScreenType.MASS -> getBasicButtons()
         }
     }
 
@@ -49,7 +48,7 @@ class ButtonFactory {
         )
     }
 
-    private fun getLengthButtons(): List<List<CalculatorButtonInfo<out BaseAction>>> {
+    private fun getBasicButtons(): List<List<CalculatorButtonInfo<out BaseAction>>> {
 
         return listOf(
             listOf(

@@ -10,6 +10,7 @@ import com.android.calculator.actions.LengthAction
 import com.android.calculator.operations.CalculatorOperation
 import com.android.calculator.state.LengthState
 import com.android.calculator.state.LengthView
+import com.android.calculator.utils.Constants.LENGTH_UNITS
 import com.android.calculator.utils.ExpressionEvaluator
 import kotlinx.coroutines.launch
 
@@ -17,19 +18,6 @@ class LengthViewModel : ViewModel() {
 
     var lengthState by mutableStateOf(LengthState())
     private val operators = setOf('+', '-', '*', '/', '%')
-
-    private val conversionFactors = mapOf(
-        "Meter" to 1.0,
-        "Kilometer" to 1000.0,
-        "Centimeter" to 0.01,
-        "Millimeter" to 0.001,
-        "Micrometer" to 0.000001,
-        "Nanometer" to 0.000000001,
-        "Mile" to 1609.34,
-        "Yard" to 0.9144,
-        "Foot" to 0.3048,
-        "Inch" to 0.0254
-    )
 
     fun onAction(action: BaseAction) {
         when (action) {
@@ -61,8 +49,8 @@ class LengthViewModel : ViewModel() {
 
     private fun convert() {
         viewModelScope.launch {
-            val inputUnitFactor = conversionFactors[lengthState.inputUnit] ?: return@launch
-            val outputUnitFactor = conversionFactors[lengthState.outputUnit] ?: return@launch
+            val inputUnitFactor = LENGTH_UNITS[lengthState.inputUnit] ?: return@launch
+            val outputUnitFactor = LENGTH_UNITS[lengthState.outputUnit] ?: return@launch
 
             if (lengthState.currentView == LengthView.INPUT) {
                 val inputValue =

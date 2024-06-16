@@ -51,7 +51,7 @@ fun Mass(
                     contentAlignment = Alignment.Center
                 ) {
                     UnitView(
-                        items = Constants.LENGTH_UNITS,
+                        items = Constants.MASS_UNITS.keys.toSet(),
                         value = state.inputValue,
                         selectedUnit = state.inputUnit,
                         isCurrentView = state.currentView == MassView.INPUT,
@@ -73,7 +73,7 @@ fun Mass(
                 ) {
                     UnitView(
                         value = state.outputValue,
-                        items = Constants.LENGTH_UNITS,
+                        items = Constants.MASS_UNITS.keys.toSet(),
                         selectedUnit = state.outputUnit,
                         isCurrentView = state.currentView == MassView.OUTPUT,
                         onClick = {
@@ -89,7 +89,7 @@ fun Mass(
             }
             val buttons = ButtonFactory()
             CalculatorGrid(
-                buttons = buttons.getButtons(ScreenType.LENGTH),
+                buttons = buttons.getButtons(ScreenType.MASS),
                 onAction = onAction,
                 buttonSpacing = buttonSpacing
             )
