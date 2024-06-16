@@ -13,8 +13,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.LengthAction
-import com.android.calculator.state.LengthState
 import com.android.calculator.state.LengthView
+import com.android.calculator.state.MassState
+import com.android.calculator.state.MassView
 import com.android.calculator.state.ScreenType
 import com.android.calculator.ui.components.CalculatorGrid
 import com.android.calculator.ui.components.UnitView
@@ -22,8 +23,8 @@ import com.android.calculator.ui.factory.ButtonFactory
 import com.android.calculator.utils.Constants
 
 @Composable
-fun Length(
-    state: LengthState,
+fun Mass(
+    state: MassState,
     buttonSpacing: Dp,
     modifier: Modifier,
     onAction: (BaseAction) -> Unit
@@ -53,9 +54,9 @@ fun Length(
                         items = Constants.LENGTH_UNITS,
                         value = state.inputValue,
                         selectedUnit = state.inputUnit,
-                        isCurrentView = state.currentView == LengthView.INPUT,
+                        isCurrentView = state.currentView == MassView.INPUT,
                         onClick = {
-                            if (state.currentView != LengthView.INPUT) {
+                            if (state.currentView != MassView.INPUT) {
                                 onAction(LengthAction.ChangeView(LengthView.INPUT))
                             }
                         },
@@ -74,9 +75,9 @@ fun Length(
                         value = state.outputValue,
                         items = Constants.LENGTH_UNITS,
                         selectedUnit = state.outputUnit,
-                        isCurrentView = state.currentView == LengthView.OUTPUT,
+                        isCurrentView = state.currentView == MassView.OUTPUT,
                         onClick = {
-                            if (state.currentView != LengthView.OUTPUT) {
+                            if (state.currentView != MassView.OUTPUT) {
                                 onAction(LengthAction.ChangeView(LengthView.OUTPUT))
                             }
                         },

@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LengthUnitView(
+fun UnitView(
     value: String,
     items: Set<String>,
     selectedUnit: String,

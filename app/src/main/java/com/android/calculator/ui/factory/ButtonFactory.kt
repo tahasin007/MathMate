@@ -10,6 +10,7 @@ class ButtonFactory {
         return when (screenType) {
             ScreenType.CALCULATOR -> getCalculatorButtons()
             ScreenType.LENGTH -> getLengthButtons()
+            ScreenType.MASS -> TODO()
         }
     }
 
