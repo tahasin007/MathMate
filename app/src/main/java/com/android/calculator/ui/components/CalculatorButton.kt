@@ -41,7 +41,7 @@ fun CalculatorButton(
     val interactionSource = remember { MutableInteractionSource() }
     val rippleColor = MaterialTheme.colorScheme.onBackground
     val scale by animateFloatAsState(
-        targetValue = if (interactionSource.collectIsPressedAsState().value) 0.25f else 1f,
+        targetValue = if (interactionSource.collectIsPressedAsState().value) 0.33f else 1f,
         label = ""
     )
     var shake by remember { mutableStateOf(false) }

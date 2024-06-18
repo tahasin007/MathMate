@@ -50,8 +50,10 @@ fun Mass(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
+                    val unitList = Constants.MASS_UNITS.keys.toMutableSet()
+
                     UnitView(
-                        items = Constants.MASS_UNITS.keys.toSet(),
+                        items = unitList,
                         value = state.inputValue,
                         selectedUnit = state.inputUnit,
                         isCurrentView = state.currentView == MassView.INPUT,
@@ -71,9 +73,11 @@ fun Mass(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
+                    val unitList = Constants.MASS_UNITS.keys.toMutableSet()
+
                     UnitView(
                         value = state.outputValue,
-                        items = Constants.MASS_UNITS.keys.toSet(),
+                        items = unitList,
                         selectedUnit = state.outputUnit,
                         isCurrentView = state.currentView == MassView.OUTPUT,
                         onClick = {

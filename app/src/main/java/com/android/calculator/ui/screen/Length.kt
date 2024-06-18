@@ -49,8 +49,10 @@ fun Length(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
+                    val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
+
                     UnitView(
-                        items = Constants.LENGTH_UNITS,
+                        items = unitList,
                         value = state.inputValue,
                         selectedUnit = state.inputUnit,
                         isCurrentView = state.currentView == LengthView.INPUT,
@@ -70,9 +72,11 @@ fun Length(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
+                    val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
+
                     UnitView(
                         value = state.outputValue,
-                        items = Constants.LENGTH_UNITS,
+                        items = unitList,
                         selectedUnit = state.outputUnit,
                         isCurrentView = state.currentView == LengthView.OUTPUT,
                         onClick = {
