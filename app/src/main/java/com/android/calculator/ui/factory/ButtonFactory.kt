@@ -10,6 +10,7 @@ class ButtonFactory {
         return when (screenType) {
             ScreenType.CALCULATOR -> getCalculatorButtons()
             ScreenType.LENGTH, ScreenType.MASS -> getBasicButtons()
+            ScreenType.DISCOUNT -> getDiscountButtons()
         }
     }
 
@@ -79,6 +80,36 @@ class ButtonFactory {
                 CalculatorButtonInfo("0", BaseAction.Number(0)),
                 CalculatorButtonInfo(".", BaseAction.Decimal),
                 CalculatorButtonInfo("=", BaseAction.Calculate, aspectRatio = 2f, weight = 2f)
+            )
+        )
+    }
+
+    private fun getDiscountButtons(): List<List<CalculatorButtonInfo<out BaseAction>>> {
+
+        return listOf(
+            listOf(
+                CalculatorButtonInfo("7", BaseAction.Number(7)),
+                CalculatorButtonInfo("8", BaseAction.Number(8)),
+                CalculatorButtonInfo("9", BaseAction.Number(9))
+            ),
+            listOf(
+                CalculatorButtonInfo("4", BaseAction.Number(4)),
+                CalculatorButtonInfo("5", BaseAction.Number(5)),
+                CalculatorButtonInfo("6", BaseAction.Number(6))
+            ),
+            listOf(
+                CalculatorButtonInfo("1", BaseAction.Number(1)),
+                CalculatorButtonInfo("2", BaseAction.Number(2)),
+                CalculatorButtonInfo("3", BaseAction.Number(3))
+            ),
+            listOf(
+                CalculatorButtonInfo("00", BaseAction.Number(0)),
+                CalculatorButtonInfo("0", BaseAction.Number(0)),
+                CalculatorButtonInfo(".", BaseAction.Decimal)
+            ),
+            listOf(
+                CalculatorButtonInfo("C", BaseAction.Clear),
+                CalculatorButtonInfo("Del", BaseAction.Delete)
             )
         )
     }
