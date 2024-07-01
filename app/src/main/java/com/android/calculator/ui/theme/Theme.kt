@@ -16,6 +16,7 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = OnPrimaryLight,
     onSecondary = OnSecondaryLight,
     onTertiary = OnTertiaryLight,
+    tertiary = TertiaryLight,
     onBackground = RippleColorLight
 )
 
@@ -24,6 +25,7 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = OnPrimaryDark,
     onSecondary = OnSecondaryDark,
     onTertiary = OnTertiaryDark,
+    tertiary = TertiaryDark,
     onBackground = RippleColorDark
 )
 
