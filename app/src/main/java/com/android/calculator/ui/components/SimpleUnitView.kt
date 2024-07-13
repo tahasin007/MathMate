@@ -2,6 +2,7 @@ package com.android.calculator.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,20 +23,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun SimpleUnitView(
+    label: String,
     value: String,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)?,
     isCurrentView: Boolean
 ) {
+    val backgroundColor =
+        if (isCurrentView) MaterialTheme.colorScheme.tertiary
+        else MaterialTheme.colorScheme.primary
+
+    val textColor =
+        if (isCurrentView) MaterialTheme.colorScheme.onSecondary
+        else MaterialTheme.colorScheme.onPrimary
+
     Box(
         modifier = Modifier
             .fillMaxHeight()
             .padding(all = 5.dp)
             .clip(RoundedCornerShape(15.dp))
-            .background(MaterialTheme.colorScheme.tertiary)
-            .clickable(onClick = onClick),
+            .background(backgroundColor)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+            ) {
+                onClick?.invoke()
+            },
         contentAlignment = Alignment.Center
     ) {
         Row(
@@ -45,11 +61,21 @@ fun SimpleUnitView(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                var multiplier by remember { mutableFloatStateOf(1.0f) }
+            var multiplier by remember { mutableFloatStateOf(1.0f) }
+
+            Text(
+                modifier = Modifier.padding(start = 7.5.dp),
+                text = label,
+                fontSize = 20.sp,
+                color = textColor,
+                onTextLayout = {
+                    if (it.hasVisualOverflow) {
+                        multiplier *= 1.99f
+                    }
+                },
+            )
+
+            Box(contentAlignment = Alignment.CenterEnd) {
                 Text(
                     text = value,
                     maxLines = 1,
@@ -63,10 +89,13 @@ fun SimpleUnitView(
                             multiplier *= 1.99f
                         }
                     },
-                    color = MaterialTheme.colorScheme.primary
+                    color = textColor
                 )
                 if (isCurrentView) {
-                    DrawBlinkingVerticalLine(color = MaterialTheme.colorScheme.onTertiary)
+                    DrawBlinkingVerticalLine(
+                        color = MaterialTheme.colorScheme.onTertiary,
+                        lineHeight = 20.dp
+                    )
                 }
             }
         }

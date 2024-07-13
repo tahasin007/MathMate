@@ -103,7 +103,7 @@ class ButtonFactory {
                 CalculatorButtonInfo("3", BaseAction.Number(3))
             ),
             listOf(
-                CalculatorButtonInfo("00", BaseAction.Number(0)),
+                CalculatorButtonInfo("00", BaseAction.DoubleZero("00")),
                 CalculatorButtonInfo("0", BaseAction.Number(0)),
                 CalculatorButtonInfo(".", BaseAction.Decimal)
             ),

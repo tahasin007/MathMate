@@ -108,7 +108,6 @@ class LengthViewModel : ViewModel() {
         lengthState = if (lengthState.currentView == LengthView.INPUT) {
             lengthState.copy(
                 inputValue =
-
                 if (lengthState.inputValue == "0") number.toString()
                 else if (lengthState.inputValue.length == 25) lengthState.inputValue
                 else lengthState.inputValue + number.toString()
@@ -157,6 +156,5 @@ class LengthViewModel : ViewModel() {
         } else {
             lengthState.copy(currentView = LengthView.INPUT)
         }
-        convert()
     }
 }
