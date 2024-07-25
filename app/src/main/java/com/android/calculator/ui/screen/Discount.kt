@@ -1,6 +1,5 @@
 package com.android.calculator.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,9 +55,7 @@ fun Discount(
                         label = "Original price",
                         value = state.inputValue,
                         onClick = {
-                            Log.i("Discount", "${state.currentView}")
                             if (state.currentView != DiscountView.INPUT) {
-                                Log.i("Discount", "OnClick Input")
                                 onAction(DiscountAction.ChangeView(DiscountView.INPUT))
                             }
                         },
@@ -76,9 +73,7 @@ fun Discount(
                         label = "Discount (%)",
                         value = state.discountValue,
                         onClick = {
-                            Log.i("Discount", "${state.currentView}")
                             if (state.currentView != DiscountView.DISCOUNT) {
-                                Log.i("Discount", "OnClick Output")
                                 onAction(DiscountAction.ChangeView(DiscountView.DISCOUNT))
                             }
                         },

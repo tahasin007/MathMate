@@ -18,6 +18,7 @@ class CalculatorViewModel : ViewModel() {
         when (action) {
             is CalculatorAction -> handleCalculatorAction(action)
             is BaseAction.Number -> enterNumber(action.number)
+            is BaseAction.DoubleZero -> enterDoubleZero(action.number)
             is BaseAction.Clear -> clear()
             is BaseAction.Delete -> delete()
             is BaseAction.Calculate -> calculate()
@@ -30,6 +31,8 @@ class CalculatorViewModel : ViewModel() {
     private fun handleCalculatorAction(action: CalculatorAction) {
         when (action) {
             is CalculatorAction.Parenthesis -> enterParenthesis()
+            is CalculatorAction.BottomSheetVisibility -> openConverterBottomSheet()
+            else -> {}
         }
     }
 
@@ -87,6 +90,21 @@ class CalculatorViewModel : ViewModel() {
         )
     }
 
+    private fun enterDoubleZero(number: String) {
+        val updatedExpression =
+            if (calculatorState.expression.isNotEmpty() &&
+                calculatorState.result == calculatorState.expression
+            ) {
+                number
+            } else {
+                calculatorState.expression + number
+            }
+
+        calculatorState = calculatorState.copy(
+            expression = updatedExpression
+        )
+    }
+
     private fun enterOperation(operation: CalculatorOperation) {
         if (calculatorState.expression.isBlank()) return
 
@@ -102,5 +120,11 @@ class CalculatorViewModel : ViewModel() {
 
     private fun enterParenthesis() {
 
+    }
+
+    private fun openConverterBottomSheet() {
+        calculatorState = calculatorState.copy(
+            isBottomSheetOpen = calculatorState.isBottomSheetOpen.not()
+        )
     }
 }

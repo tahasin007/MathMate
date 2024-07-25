@@ -43,8 +43,9 @@ class ButtonFactory {
             ),
             listOf(
                 CalculatorButtonInfo("0", BaseAction.Number(0)),
+                CalculatorButtonInfo("00", BaseAction.DoubleZero("00")),
                 CalculatorButtonInfo(".", BaseAction.Decimal),
-                CalculatorButtonInfo("=", BaseAction.Calculate, aspectRatio = 2f, weight = 2f)
+                CalculatorButtonInfo("=", BaseAction.Calculate)
             )
         )
     }

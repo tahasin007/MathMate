@@ -15,9 +15,11 @@ import androidx.compose.ui.unit.dp
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.state.CalculatorState
 import com.android.calculator.state.ScreenType
+import com.android.calculator.ui.components.ActionIconRow
 import com.android.calculator.ui.components.CalculationResult
 import com.android.calculator.ui.components.CalculationView
 import com.android.calculator.ui.components.CalculatorGrid
+import com.android.calculator.ui.components.BottomSheetContainer
 import com.android.calculator.ui.factory.ButtonFactory
 
 @Composable
@@ -36,8 +38,10 @@ fun Calculator(
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Spacer(modifier = Modifier.height(35.dp))
-            CalculationResult(state.result)
+            CalculationResult(result = state.result)
             CalculationView(state = state)
+            ActionIconRow(onAction = onAction)
+            BottomSheetContainer(state = state, onAction = onAction)
             val buttons = ButtonFactory()
             CalculatorGrid(
                 buttons = buttons.getButtons(ScreenType.CALCULATOR),
