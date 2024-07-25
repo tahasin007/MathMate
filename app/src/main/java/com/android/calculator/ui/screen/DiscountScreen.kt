@@ -14,22 +14,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.android.calculator.actions.BaseAction
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.android.calculator.actions.DiscountAction
-import com.android.calculator.state.DiscountState
 import com.android.calculator.state.DiscountView
 import com.android.calculator.state.ScreenType
+import com.android.calculator.state.viewmodel.DiscountViewModel
 import com.android.calculator.ui.components.CalculatorGridSimple
 import com.android.calculator.ui.components.SimpleUnitView
 import com.android.calculator.ui.factory.ButtonFactory
 
 @Composable
-fun Discount(
-    state: DiscountState,
-    buttonSpacing: Dp,
-    modifier: Modifier,
-    onAction: (BaseAction) -> Unit
+fun DiscountScreen(
+    navController: NavHostController,
+    buttonSpacing: Dp = 20.dp,
+    modifier: Modifier
 ) {
+    val viewModel = viewModel<DiscountViewModel>()
+    val state = viewModel.discountState
+
     Box(modifier = modifier) {
         Column(
             modifier = Modifier
@@ -56,7 +59,7 @@ fun Discount(
                         value = state.inputValue,
                         onClick = {
                             if (state.currentView != DiscountView.INPUT) {
-                                onAction(DiscountAction.ChangeView(DiscountView.INPUT))
+                                viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
                             }
                         },
                         isCurrentView = state.currentView == DiscountView.INPUT
@@ -74,7 +77,7 @@ fun Discount(
                         value = state.discountValue,
                         onClick = {
                             if (state.currentView != DiscountView.DISCOUNT) {
-                                onAction(DiscountAction.ChangeView(DiscountView.DISCOUNT))
+                                viewModel.onAction(DiscountAction.ChangeView(DiscountView.DISCOUNT))
                             }
                         },
                         isCurrentView = state.currentView == DiscountView.DISCOUNT
@@ -115,8 +118,8 @@ fun Discount(
             ) {
                 val buttons = ButtonFactory()
                 CalculatorGridSimple(
-                    buttons = buttons.getButtons(ScreenType.DISCOUNT),
-                    onAction = onAction,
+                    buttons = buttons.getButtons(ScreenType.Discount),
+                    onAction = viewModel::onAction,
                     buttonSpacing = buttonSpacing
                 )
             }

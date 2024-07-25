@@ -31,7 +31,7 @@ class CalculatorViewModel : ViewModel() {
     private fun handleCalculatorAction(action: CalculatorAction) {
         when (action) {
             is CalculatorAction.Parenthesis -> enterParenthesis()
-            is CalculatorAction.BottomSheetVisibility -> openConverterBottomSheet()
+            is CalculatorAction.BottomSheetVisibility -> openConverterBottomSheet(action.isSheetOpen)
             else -> {}
         }
     }
@@ -122,9 +122,9 @@ class CalculatorViewModel : ViewModel() {
 
     }
 
-    private fun openConverterBottomSheet() {
+    private fun openConverterBottomSheet(sheetOpen: Boolean) {
         calculatorState = calculatorState.copy(
-            isBottomSheetOpen = calculatorState.isBottomSheetOpen.not()
+            isBottomSheetOpen = sheetOpen
         )
     }
 }

@@ -11,23 +11,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.android.calculator.actions.BaseAction
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.android.calculator.actions.LengthAction
-import com.android.calculator.state.LengthState
 import com.android.calculator.state.LengthView
+import com.android.calculator.state.MassView
 import com.android.calculator.state.ScreenType
+import com.android.calculator.state.viewmodel.MassViewModel
 import com.android.calculator.ui.components.CalculatorGrid
 import com.android.calculator.ui.components.UnitView
 import com.android.calculator.ui.factory.ButtonFactory
 import com.android.calculator.utils.Constants
 
 @Composable
-fun Length(
-    state: LengthState,
-    buttonSpacing: Dp,
-    modifier: Modifier,
-    onAction: (BaseAction) -> Unit
+fun MassScreen(
+    navController: NavHostController,
+    buttonSpacing: Dp = 10.dp,
+    modifier: Modifier
 ) {
+    val viewModel = viewModel<MassViewModel>()
+    val state = viewModel.massState
+
     Box(modifier = modifier) {
         Column(
             modifier = Modifier
@@ -49,20 +53,20 @@ fun Length(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
+                    val unitList = Constants.MASS_UNITS.keys.toMutableSet()
 
                     UnitView(
                         items = unitList,
                         value = state.inputValue,
                         selectedUnit = state.inputUnit,
-                        isCurrentView = state.currentView == LengthView.INPUT,
+                        isCurrentView = state.currentView == MassView.INPUT,
                         onClick = {
-                            if (state.currentView != LengthView.INPUT) {
-                                onAction(LengthAction.ChangeView(LengthView.INPUT))
+                            if (state.currentView != MassView.INPUT) {
+                                viewModel.onAction(LengthAction.ChangeView(LengthView.INPUT))
                             }
                         },
                         onSelectedUnitChanged = {
-                            onAction(LengthAction.ChangeInputUnit(it))
+                            viewModel.onAction(LengthAction.ChangeInputUnit(it))
                         }
                     )
                 }
@@ -72,28 +76,28 @@ fun Length(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
+                    val unitList = Constants.MASS_UNITS.keys.toMutableSet()
 
                     UnitView(
                         value = state.outputValue,
                         items = unitList,
                         selectedUnit = state.outputUnit,
-                        isCurrentView = state.currentView == LengthView.OUTPUT,
+                        isCurrentView = state.currentView == MassView.OUTPUT,
                         onClick = {
-                            if (state.currentView != LengthView.OUTPUT) {
-                                onAction(LengthAction.ChangeView(LengthView.OUTPUT))
+                            if (state.currentView != MassView.OUTPUT) {
+                                viewModel.onAction(LengthAction.ChangeView(LengthView.OUTPUT))
                             }
                         },
                         onSelectedUnitChanged = {
-                            onAction(LengthAction.ChangeOutputUnit(it))
+                            viewModel.onAction(LengthAction.ChangeOutputUnit(it))
                         }
                     )
                 }
             }
             val buttons = ButtonFactory()
             CalculatorGrid(
-                buttons = buttons.getButtons(ScreenType.LENGTH),
-                onAction = onAction,
+                buttons = buttons.getButtons(ScreenType.Mass),
+                onAction = viewModel::onAction,
                 buttonSpacing = buttonSpacing
             )
         }

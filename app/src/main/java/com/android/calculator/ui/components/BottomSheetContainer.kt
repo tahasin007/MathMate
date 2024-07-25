@@ -20,19 +20,21 @@ import com.android.calculator.R
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.state.CalculatorState
+import com.android.calculator.state.ScreenType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetContainer(
     state: CalculatorState,
-    onAction: (BaseAction) -> Unit
+    onAction: (BaseAction) -> Unit,
+    onNavigate: (screen: String) -> Unit
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
 
     if (state.isBottomSheetOpen) {
         ModalBottomSheet(
             onDismissRequest = {
-                onAction(CalculatorAction.BottomSheetVisibility)
+                onAction(CalculatorAction.BottomSheetVisibility(false))
             },
             sheetState = bottomSheetState,
             containerColor = Color.White
@@ -50,9 +52,22 @@ fun BottomSheetContainer(
                 }
                 Spacer(modifier = Modifier.height(25.dp))
                 Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                    ConverterIconView(R.drawable.ic_area, "Area", Modifier.weight(1f))
-                    ConverterIconView(R.drawable.ic_mass, "Mass", Modifier.weight(1f))
-                    ConverterIconView(R.drawable.ic_discount, "Discount", Modifier.weight(1f))
+                    ConverterIconView(R.drawable.ic_area, ScreenType.Length, Modifier.weight(1f)) {
+                        onNavigate.invoke(ScreenType.Length.route)
+                        onAction(CalculatorAction.BottomSheetVisibility(false))
+                    }
+                    ConverterIconView(R.drawable.ic_mass, ScreenType.Mass, Modifier.weight(1f)) {
+                        onNavigate.invoke(ScreenType.Mass.route)
+                        onAction(CalculatorAction.BottomSheetVisibility(false))
+                    }
+                    ConverterIconView(
+                        R.drawable.ic_discount,
+                        ScreenType.Discount,
+                        Modifier.weight(1f)
+                    ) {
+                        onNavigate.invoke(ScreenType.Mass.route)
+                        onAction(CalculatorAction.BottomSheetVisibility(false))
+                    }
                 }
             }
         }

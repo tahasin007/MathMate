@@ -8,9 +8,9 @@ import com.android.calculator.state.ScreenType
 class ButtonFactory {
     fun getButtons(screenType: ScreenType): List<List<CalculatorButtonInfo<out BaseAction>>> {
         return when (screenType) {
-            ScreenType.CALCULATOR -> getCalculatorButtons()
-            ScreenType.LENGTH, ScreenType.MASS -> getBasicButtons()
-            ScreenType.DISCOUNT -> getDiscountButtons()
+            ScreenType.Calculator -> getCalculatorButtons()
+            ScreenType.Length, ScreenType.Mass -> getBasicButtons()
+            ScreenType.Discount -> getDiscountButtons()
         }
     }
 
