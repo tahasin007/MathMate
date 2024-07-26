@@ -9,18 +9,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.state.CalculatorButtonInfo
 
 @Composable
 fun CalculatorGrid(
+    modifier: Modifier = Modifier,
     buttons: List<List<CalculatorButtonInfo<out BaseAction>>>,
     onAction: (BaseAction) -> Unit,
-    buttonSpacing: Dp
+    buttonSpacing: Dp = 7.5.dp
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(buttonSpacing)
     ) {
         buttons.forEach { row ->

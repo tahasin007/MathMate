@@ -6,10 +6,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -22,83 +30,98 @@ import com.android.calculator.ui.components.UnitView
 import com.android.calculator.ui.factory.ButtonFactory
 import com.android.calculator.utils.Constants
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LengthScreen(
     navController: NavHostController,
-    buttonSpacing: Dp = 10.dp,
     modifier: Modifier
 ) {
     val viewModel = viewModel<LengthViewModel>()
     val state = viewModel.lengthState
 
-    Box(modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .align(Alignment.BottomCenter),
-            verticalArrangement = Arrangement.SpaceBetween
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(ScreenType.Length.screen) },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigate(ScreenType.Calculator.route)
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Menu")
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier.padding(innerPadding)
         ) {
             Column(
-                modifier = Modifier
-                    .padding(top = 50.dp)
-                    .fillMaxHeight(0.25f)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Top
+                modifier = modifier,
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Box(
+                Column(
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxHeight(0.25f)
                         .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    verticalArrangement = Arrangement.Top
                 ) {
-                    val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
 
-                    UnitView(
-                        items = unitList,
-                        value = state.inputValue,
-                        selectedUnit = state.inputUnit,
-                        isCurrentView = state.currentView == LengthView.INPUT,
-                        onClick = {
-                            if (state.currentView != LengthView.INPUT) {
-                                viewModel.onAction(LengthAction.ChangeView(LengthView.INPUT))
+                        UnitView(
+                            items = unitList,
+                            value = state.inputValue,
+                            selectedUnit = state.inputUnit,
+                            isCurrentView = state.currentView == LengthView.INPUT,
+                            onClick = {
+                                if (state.currentView != LengthView.INPUT) {
+                                    viewModel.onAction(LengthAction.ChangeView(LengthView.INPUT))
+                                }
+                            },
+                            onSelectedUnitChanged = {
+                                viewModel.onAction(LengthAction.ChangeInputUnit(it))
                             }
-                        },
-                        onSelectedUnitChanged = {
-                            viewModel.onAction(LengthAction.ChangeInputUnit(it))
-                        }
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
 
-                    UnitView(
-                        value = state.outputValue,
-                        items = unitList,
-                        selectedUnit = state.outputUnit,
-                        isCurrentView = state.currentView == LengthView.OUTPUT,
-                        onClick = {
-                            if (state.currentView != LengthView.OUTPUT) {
-                                viewModel.onAction(LengthAction.ChangeView(LengthView.OUTPUT))
+                        UnitView(
+                            value = state.outputValue,
+                            items = unitList,
+                            selectedUnit = state.outputUnit,
+                            isCurrentView = state.currentView == LengthView.OUTPUT,
+                            onClick = {
+                                if (state.currentView != LengthView.OUTPUT) {
+                                    viewModel.onAction(LengthAction.ChangeView(LengthView.OUTPUT))
+                                }
+                            },
+                            onSelectedUnitChanged = {
+                                viewModel.onAction(LengthAction.ChangeOutputUnit(it))
                             }
-                        },
-                        onSelectedUnitChanged = {
-                            viewModel.onAction(LengthAction.ChangeOutputUnit(it))
-                        }
-                    )
+                        )
+                    }
                 }
+                val buttons = ButtonFactory()
+                CalculatorGrid(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp, start = 7.5.dp, end = 7.5.dp),
+                    buttons = buttons.getButtons(ScreenType.Length),
+                    onAction = viewModel::onAction
+                )
             }
-            val buttons = ButtonFactory()
-            CalculatorGrid(
-                buttons = buttons.getButtons(ScreenType.Length),
-                onAction = viewModel::onAction,
-                buttonSpacing = buttonSpacing
-            )
         }
     }
 }

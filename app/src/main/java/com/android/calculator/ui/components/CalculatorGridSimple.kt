@@ -24,7 +24,7 @@ fun CalculatorGridSimple(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 50.dp),
+            .padding(1.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         val buttonSize = buttons.size

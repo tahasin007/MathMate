@@ -46,8 +46,8 @@ fun NavGraphBuilder.discountScreenComposable(navController: NavHostController) {
             navController = navController,
             modifier = Modifier
                 .fillMaxSize()
+                .padding(all = 10.dp)
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(bottom = 20.dp, start = 15.dp, end = 15.dp)
         )
     }
 }

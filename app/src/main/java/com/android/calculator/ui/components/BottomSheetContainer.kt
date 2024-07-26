@@ -65,7 +65,7 @@ fun BottomSheetContainer(
                         ScreenType.Discount,
                         Modifier.weight(1f)
                     ) {
-                        onNavigate.invoke(ScreenType.Mass.route)
+                        onNavigate.invoke(ScreenType.Discount.route)
                         onAction(CalculatorAction.BottomSheetVisibility(false))
                     }
                 }

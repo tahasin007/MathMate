@@ -7,7 +7,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +32,7 @@ import com.android.calculator.ui.components.CalculatorGridSimple
 import com.android.calculator.ui.components.SimpleUnitView
 import com.android.calculator.ui.factory.ButtonFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscountScreen(
     navController: NavHostController,
@@ -33,95 +42,108 @@ fun DiscountScreen(
     val viewModel = viewModel<DiscountViewModel>()
     val state = viewModel.discountState
 
-    Box(modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .align(Alignment.BottomCenter),
-            verticalArrangement = Arrangement.SpaceBetween
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(ScreenType.Discount.screen) },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigate(ScreenType.Calculator.route)
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Menu")
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier.padding(innerPadding)
         ) {
             Column(
-                modifier = Modifier
-                    .padding(top = 50.dp)
-                    .fillMaxHeight(0.28f)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Top
+                modifier = modifier,
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Box(
+                Column(
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxHeight(0.28f)
                         .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    verticalArrangement = Arrangement.Top
                 ) {
-                    SimpleUnitView(
-                        label = "Original price",
-                        value = state.inputValue,
-                        onClick = {
-                            if (state.currentView != DiscountView.INPUT) {
-                                viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
-                            }
-                        },
-                        isCurrentView = state.currentView == DiscountView.INPUT
-                    )
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        SimpleUnitView(
+                            label = "Original price",
+                            value = state.inputValue,
+                            onClick = {
+                                if (state.currentView != DiscountView.INPUT) {
+                                    viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
+                                }
+                            },
+                            isCurrentView = state.currentView == DiscountView.INPUT
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        SimpleUnitView(
+                            label = "Discount (%)",
+                            value = state.discountValue,
+                            onClick = {
+                                if (state.currentView != DiscountView.DISCOUNT) {
+                                    viewModel.onAction(DiscountAction.ChangeView(DiscountView.DISCOUNT))
+                                }
+                            },
+                            isCurrentView = state.currentView == DiscountView.DISCOUNT
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        SimpleUnitView(
+                            label = "Final price",
+                            value = state.finalValue,
+                            onClick = null,
+                            isCurrentView = false
+                        )
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            fontSize = 12.sp,
+                            text = "YOU SAVED ${state.savedValue}"
+                        )
+                    }
                 }
 
-                Box(
+                Column(
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxHeight(0.72f)
                         .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-                    SimpleUnitView(
-                        label = "Discount (%)",
-                        value = state.discountValue,
-                        onClick = {
-                            if (state.currentView != DiscountView.DISCOUNT) {
-                                viewModel.onAction(DiscountAction.ChangeView(DiscountView.DISCOUNT))
-                            }
-                        },
-                        isCurrentView = state.currentView == DiscountView.DISCOUNT
+                    val buttons = ButtonFactory()
+                    CalculatorGridSimple(
+                        buttons = buttons.getButtons(ScreenType.Discount),
+                        onAction = viewModel::onAction,
+                        buttonSpacing = buttonSpacing
                     )
                 }
-
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    SimpleUnitView(
-                        label = "Final price",
-                        value = state.finalValue,
-                        onClick = null,
-                        isCurrentView = false
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        fontSize = 12.sp,
-                        text = "YOU SAVED ${state.savedValue}"
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight(0.72f)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                val buttons = ButtonFactory()
-                CalculatorGridSimple(
-                    buttons = buttons.getButtons(ScreenType.Discount),
-                    onAction = viewModel::onAction,
-                    buttonSpacing = buttonSpacing
-                )
             }
         }
     }
