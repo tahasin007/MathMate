@@ -19,13 +19,13 @@ import com.android.calculator.state.CalculatorButtonInfo
 fun CalculatorGridSimple(
     buttons: List<List<CalculatorButtonInfo<out BaseAction>>>,
     onAction: (BaseAction) -> Unit,
-    buttonSpacing: Dp
+    buttonSpacing: Dp = 7.5.dp
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(1.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+            .padding(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(buttonSpacing * 2)
     ) {
         val buttonSize = buttons.size
         val buttonCol1 = buttons.take(buttonSize - 1)
@@ -40,7 +40,7 @@ fun CalculatorGridSimple(
             buttonCol1.forEach { row ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(15.dp)
+                    horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
                 ) {
                     row.forEach { buttonInfo ->
                         val buttonColor = MaterialTheme.colorScheme.primary
@@ -65,8 +65,8 @@ fun CalculatorGridSimple(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.spacedBy(buttonSpacing)
+                .fillMaxHeight(.91f),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             buttonCol2.forEach { buttonInfo ->
                 val buttonColor = MaterialTheme.colorScheme.primary

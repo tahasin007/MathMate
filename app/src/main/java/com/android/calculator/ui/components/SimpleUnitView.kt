@@ -33,7 +33,7 @@ fun SimpleUnitView(
     isCurrentView: Boolean
 ) {
     val backgroundColor =
-        if (isCurrentView) MaterialTheme.colorScheme.tertiary
+        if (isCurrentView) MaterialTheme.colorScheme.secondary
         else MaterialTheme.colorScheme.primary
 
     val textColor =
@@ -64,7 +64,7 @@ fun SimpleUnitView(
             var multiplier by remember { mutableFloatStateOf(1.0f) }
 
             Text(
-                modifier = Modifier.padding(start = 7.5.dp),
+                modifier = Modifier.padding(start = 5.dp),
                 text = label,
                 fontSize = 20.sp,
                 color = textColor,
@@ -80,7 +80,7 @@ fun SimpleUnitView(
                     text = value,
                     maxLines = 1,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.padding(end = 2.dp),
+                    modifier = Modifier.padding(end = 2.dp, top = 2.dp),
                     style = LocalTextStyle.current.copy(
                         fontSize = LocalTextStyle.current.fontSize * multiplier
                     ),
@@ -93,7 +93,7 @@ fun SimpleUnitView(
                 )
                 if (isCurrentView) {
                     DrawBlinkingVerticalLine(
-                        color = MaterialTheme.colorScheme.onTertiary,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         lineHeight = 20.dp
                     )
                 }

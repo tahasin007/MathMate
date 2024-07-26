@@ -82,7 +82,7 @@ fun UnitView(
                     color = MaterialTheme.colorScheme.primary
                 )
                 if (isCurrentView) {
-                    DrawBlinkingVerticalLine(color = MaterialTheme.colorScheme.onTertiary)
+                    DrawBlinkingVerticalLine(color = MaterialTheme.colorScheme.secondary)
                 }
             }
         }

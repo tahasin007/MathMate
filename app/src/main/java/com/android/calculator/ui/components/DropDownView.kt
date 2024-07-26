@@ -82,7 +82,7 @@ fun DropDownView(
                 },
                 modifier = Modifier
                     .background(
-                        if (item == selectedItem) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.primary
+                        if (item == selectedItem) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
                     )
             )
         }

@@ -89,8 +89,20 @@ class DiscountViewModel : ViewModel() {
             discountState.copy(
                 inputValue =
                 if (discountState.inputValue == "0") number.toString()
-                else if (discountState.inputValue.length == 25) discountState.inputValue
-                else discountState.inputValue + number.toString()
+                else if (discountState.inputValue.contains(".")) {
+                    val parts = discountState.inputValue.split(".")
+                    if (parts[1].length < 5 && discountState.inputValue.length < 21) {
+                        discountState.inputValue + number.toString()
+                    } else {
+                        discountState.inputValue
+                    }
+                } else {
+                    if (discountState.inputValue.length < 21) {
+                        discountState.inputValue + number.toString()
+                    } else {
+                        discountState.inputValue
+                    }
+                }
             )
         } else {
             discountState.copy(
@@ -121,8 +133,8 @@ class DiscountViewModel : ViewModel() {
         ) {
             discountState = discountState.copy(
                 inputValue =
-                if (discountState.inputValue.length == 25) discountState.inputValue
-                else discountState.inputValue + "."
+                if (discountState.inputValue.length < 21) discountState.inputValue + "."
+                else discountState.inputValue
             )
         }
     }
