@@ -21,8 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.actions.LengthAction
-import com.android.calculator.state.LengthView
+import com.android.calculator.actions.MassAction
 import com.android.calculator.state.MassView
 import com.android.calculator.state.ScreenType
 import com.android.calculator.state.viewmodel.MassViewModel
@@ -76,18 +75,18 @@ fun MassScreen(
                         val unitList = Constants.MASS_UNITS.keys.toMutableSet()
 
                         UnitView(
-                            items = unitList,
+                            items = unitList - state.outputUnit,
                             value = state.inputValue,
                             selectedUnit = state.inputUnit,
                             isCurrentView = state.currentView == MassView.INPUT,
                             onClick = {
                                 if (state.currentView != MassView.INPUT) {
-                                    viewModel.onAction(LengthAction.ChangeView(LengthView.INPUT))
+                                    viewModel.onAction(MassAction.ChangeView(MassView.INPUT))
                                 }
                             },
                             onSelectedUnitChanged = {
-                                viewModel.onAction(LengthAction.ChangeInputUnit(it))
-                            }
+                                viewModel.onAction(MassAction.ChangeInputUnit(it))
+                            },
                         )
                     }
                     Box(
@@ -100,16 +99,16 @@ fun MassScreen(
 
                         UnitView(
                             value = state.outputValue,
-                            items = unitList,
+                            items = unitList - state.inputUnit,
                             selectedUnit = state.outputUnit,
                             isCurrentView = state.currentView == MassView.OUTPUT,
                             onClick = {
                                 if (state.currentView != MassView.OUTPUT) {
-                                    viewModel.onAction(LengthAction.ChangeView(LengthView.OUTPUT))
+                                    viewModel.onAction(MassAction.ChangeView(MassView.OUTPUT))
                                 }
                             },
                             onSelectedUnitChanged = {
-                                viewModel.onAction(LengthAction.ChangeOutputUnit(it))
+                                viewModel.onAction(MassAction.ChangeOutputUnit(it))
                             }
                         )
                     }

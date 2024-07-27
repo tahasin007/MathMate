@@ -33,12 +33,20 @@ fun UnitView(
     onSelectedUnitChanged: (String) -> Unit,
     isCurrentView: Boolean
 ) {
+    val backgroundColor =
+        if (isCurrentView) MaterialTheme.colorScheme.secondary
+        else MaterialTheme.colorScheme.primary
+
+    val textColor =
+        if (isCurrentView) MaterialTheme.colorScheme.onSecondary
+        else MaterialTheme.colorScheme.onPrimary
+
     Box(
         modifier = Modifier
             .fillMaxHeight()
             .padding(all = 5.dp)
             .clip(RoundedCornerShape(15.dp))
-            .background(MaterialTheme.colorScheme.onSecondary)
+            .background(backgroundColor)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -58,7 +66,8 @@ fun UnitView(
                 DropDownView(
                     selectedUnit = selectedUnit,
                     items = items,
-                    onSelectedUnitChanged = onSelectedUnitChanged
+                    onSelectedUnitChanged = onSelectedUnitChanged,
+                    textColor = textColor
                 )
             }
             Row(
@@ -68,7 +77,7 @@ fun UnitView(
                 var multiplier by remember { mutableFloatStateOf(1.0f) }
                 Text(
                     text = value,
-                    maxLines = 1,
+                    maxLines = 2,
                     textAlign = TextAlign.End,
                     modifier = Modifier.padding(end = 2.dp),
                     style = LocalTextStyle.current.copy(
@@ -79,10 +88,10 @@ fun UnitView(
                             multiplier *= 1.99f
                         }
                     },
-                    color = MaterialTheme.colorScheme.primary
+                    color = textColor
                 )
                 if (isCurrentView) {
-                    DrawBlinkingVerticalLine(color = MaterialTheme.colorScheme.secondary)
+                    DrawBlinkingVerticalLine(color = MaterialTheme.colorScheme.onSecondary)
                 }
             }
         }

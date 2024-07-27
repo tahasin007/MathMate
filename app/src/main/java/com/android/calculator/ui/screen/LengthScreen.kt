@@ -75,7 +75,7 @@ fun LengthScreen(
                         val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
 
                         UnitView(
-                            items = unitList,
+                            items = unitList - state.outputUnit,
                             value = state.inputValue,
                             selectedUnit = state.inputUnit,
                             isCurrentView = state.currentView == LengthView.INPUT,
@@ -99,7 +99,7 @@ fun LengthScreen(
 
                         UnitView(
                             value = state.outputValue,
-                            items = unitList,
+                            items = unitList - state.inputUnit,
                             selectedUnit = state.outputUnit,
                             isCurrentView = state.currentView == LengthView.OUTPUT,
                             onClick = {

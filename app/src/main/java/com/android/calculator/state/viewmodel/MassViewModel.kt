@@ -51,11 +51,20 @@ class MassViewModel : ViewModel() {
 
     private fun changeView() {
         massState = if (massState.currentView == MassView.INPUT) {
-            massState.copy(currentView = MassView.OUTPUT)
+            if (massState.inputValue.last() == '.') {
+                massState.copy(
+                    currentView = MassView.OUTPUT,
+                    inputValue = massState.inputValue.dropLast(1)
+                )
+            } else massState.copy(currentView = MassView.OUTPUT)
         } else {
-            massState.copy(currentView = MassView.INPUT)
+            if (massState.outputValue.last() == '.') {
+                massState.copy(
+                    currentView = MassView.INPUT,
+                    inputValue = massState.outputValue.dropLast(1)
+                )
+            } else massState.copy(currentView = MassView.INPUT)
         }
-        convert()
     }
 
     private fun convert() {
@@ -71,12 +80,14 @@ class MassViewModel : ViewModel() {
 
                 val valueInMeters = inputValue * inputUnitFactor
                 val convertedValue = valueInMeters / outputUnitFactor
-                massState = massState.copy(
-                    outputValue =
+
+                val outputValue =
                     if (convertedValue == 0.0) "0"
-                    else if (convertedValue.toString().length == 25) massState.outputValue
+                    else if (convertedValue.toString().length == 50) massState.outputValue
                     else convertedValue.toString()
-                )
+
+                massState =
+                    massState.copy(outputValue = CommonUtils.convertScientificToNormal(outputValue))
             } else {
                 val outputValue =
                     if (massState.outputValue.isBlank() || CommonUtils.isLastCharOperator(massState.outputValue)) return@launch
@@ -85,32 +96,37 @@ class MassViewModel : ViewModel() {
 
                 val valueInMeters = outputValue * outputUnitFactor
                 val convertedValue = valueInMeters / inputUnitFactor
-                massState = massState.copy(
-                    inputValue =
+
+                val inputValue =
                     if (convertedValue == 0.0) "0"
-                    else if (convertedValue.toString().length == 25) massState.inputValue
+                    else if (convertedValue.toString().length == 50) massState.inputValue
                     else convertedValue.toString()
-                )
+
+                massState =
+                    massState.copy(inputValue = CommonUtils.convertScientificToNormal(inputValue))
             }
         }
     }
 
     private fun enterNumber(number: Int) {
         massState = if (massState.currentView == MassView.INPUT) {
-            massState.copy(
-                inputValue =
-
+            val inputValue =
                 if (massState.inputValue == "0") number.toString()
-                else if (massState.inputValue.length == 25) massState.inputValue
-                else massState.inputValue + number.toString()
-            )
+                else if (massState.inputValue.length == 50) massState.inputValue
+                else if (massState.inputValue.last() == '.') massState.inputValue + number.toString()
+                else {
+                    CommonUtils.convertScientificToNormal(massState.inputValue) + number.toString()
+                }
+            massState.copy(inputValue = inputValue)
         } else {
-            massState.copy(
-                outputValue =
+            val outputValue =
                 if (massState.outputValue == "0") number.toString()
-                else if (massState.outputValue.length == 25) massState.outputValue
-                else massState.outputValue + number.toString()
-            )
+                else if (massState.outputValue.length == 50) massState.outputValue
+                else if (massState.outputValue.last() == '.') massState.outputValue + number.toString()
+                else {
+                    CommonUtils.convertScientificToNormal(massState.outputValue) + number.toString()
+                }
+            massState.copy(outputValue = outputValue)
         }
         convert()
     }
@@ -144,23 +160,17 @@ class MassViewModel : ViewModel() {
     private fun enterDecimal() {
         if (massState.currentView == MassView.INPUT && CommonUtils.canEnterDecimal(massState.inputValue)) {
             massState = if (CommonUtils.isLastCharOperator(massState.inputValue)) {
-                massState.copy(
-                    inputValue = massState.inputValue + "0."
-                )
+                massState.copy(inputValue = massState.inputValue + "0.")
             } else {
-                massState.copy(
-                    inputValue = massState.inputValue + "."
-                )
+                massState.copy(inputValue = massState.inputValue + ".")
             }
-        } else if (massState.currentView == MassView.OUTPUT && CommonUtils.canEnterDecimal(massState.outputValue)) {
+        } else if (massState.currentView == MassView.OUTPUT &&
+            CommonUtils.canEnterDecimal(massState.outputValue)
+        ) {
             massState = if (CommonUtils.isLastCharOperator(massState.outputValue)) {
-                massState.copy(
-                    outputValue = massState.outputValue + "0."
-                )
+                massState.copy(outputValue = massState.outputValue + "0.")
             } else {
-                massState.copy(
-                    outputValue = massState.outputValue + "."
-                )
+                massState.copy(outputValue = massState.outputValue + ".")
             }
         }
     }
@@ -170,7 +180,7 @@ class MassViewModel : ViewModel() {
             massState.copy(
                 inputValue =
                 if (massState.inputValue == "0" ||
-                    massState.inputValue.length == 25 ||
+                    massState.inputValue.length == 50 ||
                     CommonUtils.isLastCharOperator(massState.inputValue)
                 ) massState.inputValue
                 else {
@@ -183,7 +193,7 @@ class MassViewModel : ViewModel() {
             massState.copy(
                 outputValue =
                 if (massState.outputValue == "0" ||
-                    massState.outputValue.length == 25 ||
+                    massState.outputValue.length == 50 ||
                     CommonUtils.isLastCharOperator(massState.outputValue)
                 ) massState.outputValue
                 else {
@@ -205,14 +215,14 @@ class MassViewModel : ViewModel() {
     }
 
     private fun calculate() {
-        massState = if (massState.currentView == MassView.INPUT) {
-            massState.copy(
-                inputValue = calculate(massState.inputValue) ?: massState.inputValue
-            )
-        } else {
-            massState.copy(
-                outputValue = calculate(massState.outputValue) ?: massState.outputValue
-            )
+        viewModelScope.launch {
+            massState = if (massState.currentView == MassView.INPUT) {
+                val inputValue = calculate(massState.inputValue) ?: massState.inputValue
+                massState.copy(inputValue = CommonUtils.removeZeroAfterDecimalPoint(inputValue))
+            } else {
+                val outputValue = calculate(massState.outputValue) ?: massState.outputValue
+                massState.copy(outputValue = CommonUtils.removeZeroAfterDecimalPoint(outputValue))
+            }
         }
     }
 }

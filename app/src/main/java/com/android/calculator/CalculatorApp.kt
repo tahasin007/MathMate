@@ -17,7 +17,7 @@ fun CalculatorApp() {
 
     NavHost(
         navController = navController,
-        startDestination = ScreenType.Discount.route,
+        startDestination = ScreenType.Calculator.route,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
