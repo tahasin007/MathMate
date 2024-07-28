@@ -18,7 +18,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.android.calculator.state.ScreenType
 
-fun NavGraphBuilder.calculatorScreenComposable(navController: NavHostController) {
+fun NavGraphBuilder.calculatorScreenComposable(
+    navController: NavHostController,
+    isDarkTheme: Boolean,
+    onThemeUpdated: () -> Unit
+) {
     composable(
         route = ScreenType.Calculator.route,
         enterTransition = {
@@ -47,7 +51,9 @@ fun NavGraphBuilder.calculatorScreenComposable(navController: NavHostController)
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(all = 10.dp)
+                .padding(all = 10.dp),
+            isDarkTheme = isDarkTheme,
+            onThemeUpdated= onThemeUpdated
         )
     }
 }

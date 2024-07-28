@@ -23,7 +23,10 @@ import com.android.calculator.ui.factory.ButtonFactory
 @Composable
 fun CalculatorScreen(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    isDarkTheme: Boolean,
+    onThemeUpdated: () -> Unit
+
 ) {
     val viewModel = viewModel<CalculatorViewModel>()
     val state = viewModel.calculatorState
@@ -37,8 +40,11 @@ fun CalculatorScreen(
         CalculationView(state = state)
         ActionIconRow(
             state = state,
-            onAction = viewModel::onAction
+            onAction = viewModel::onAction,
+            isDarkTheme = isDarkTheme,
+            onThemeUpdated = onThemeUpdated
         )
+        Spacer(modifier = Modifier.height(10.dp))
         BottomSheetContainer(state = state, onAction = viewModel::onAction) {
             navController.navigate(it)
         }
