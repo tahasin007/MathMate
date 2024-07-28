@@ -8,6 +8,7 @@ import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.operations.CalculatorOperation
 import com.android.calculator.state.CalculatorState
+import com.android.calculator.utils.CommonUtils
 import com.android.calculator.utils.ExpressionEvaluator
 
 class CalculatorViewModel : ViewModel() {
@@ -37,10 +38,26 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun calculate() {
-        val result = ExpressionEvaluator.evaluate(calculatorState.expression)
+        val expression = calculatorState.expression
+        val openCount = expression.count { it == '(' }
+        val closeCount = expression.count { it == ')' }
+        val parenthesisDiff = openCount - closeCount
+
+        val filteredExpression = when {
+            CommonUtils.isLastCharOperator(expression) -> {
+                expression.dropLast(1)
+            }
+
+            parenthesisDiff > 0 -> {
+                expression + ")".repeat(parenthesisDiff)
+            }
+
+            else -> expression
+        }
+        val result = ExpressionEvaluator.evaluate(filteredExpression)
         calculatorState = calculatorState.copy(
-            expression = result.toString(),
-            result = result.toString()
+            expression = CommonUtils.removeZeroAfterDecimalPoint(result),
+            result = CommonUtils.removeZeroAfterDecimalPoint(result)
         )
     }
 
@@ -119,7 +136,23 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun enterParenthesis() {
+        val expression = calculatorState.expression
+        val openCount = expression.count { it == '(' }
+        val closeCount = expression.count { it == ')' }
 
+        val lastChar = expression.lastOrNull()
+
+        val parenthesis = when {
+            lastChar == null || lastChar in "+-*/%(" -> "("
+            openCount > closeCount -> ")"
+            CommonUtils.isLastCharNumber(expression) -> "*("
+            else -> "("
+        }
+
+        val updatedExpression = expression + parenthesis
+        calculatorState = calculatorState.copy(
+            expression = updatedExpression
+        )
     }
 
     private fun openConverterBottomSheet(sheetOpen: Boolean) {

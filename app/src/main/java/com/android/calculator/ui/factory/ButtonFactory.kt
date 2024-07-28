@@ -1,6 +1,7 @@
 package com.android.calculator.ui.factory
 
 import com.android.calculator.actions.BaseAction
+import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.operations.CalculatorOperation
 import com.android.calculator.state.CalculatorButtonInfo
 import com.android.calculator.state.ScreenType
@@ -19,7 +20,7 @@ class ButtonFactory {
         return listOf(
             listOf(
                 CalculatorButtonInfo("C", BaseAction.Clear),
-                CalculatorButtonInfo("Del", BaseAction.Delete),
+                CalculatorButtonInfo("Parenthesis", CalculatorAction.Parenthesis),
                 CalculatorButtonInfo("%", BaseAction.Operation(CalculatorOperation.Mod)),
                 CalculatorButtonInfo("/", BaseAction.Operation(CalculatorOperation.Divide))
             ),

@@ -15,6 +15,10 @@ object CommonUtils {
         return expression.last() == '.'
     }
 
+    fun isLastCharNumber(expression: String): Boolean {
+        return expression.last() in "0123456789"
+    }
+
     fun canEnterDecimal(expression: String): Boolean {
         if (isLastCharOperator(expression)) return true
 
@@ -40,6 +44,18 @@ object CommonUtils {
             }
         } catch (e: NumberFormatException) {
             number
+        }
+    }
+
+    fun removeZeroAfterDecimalPoint(number: Double): String {
+        return try {
+            if (number % 1 == 0.0) {
+                number.toInt().toString()
+            } else {
+                number.toString()
+            }
+        } catch (e: NumberFormatException) {
+            number.toString()
         }
     }
 

@@ -11,14 +11,26 @@ object ExpressionEvaluator {
         val operators = Stack<CalculatorOperation>()
 
         for (token in tokens) {
-            if (token.isNumeric()) {
-                numbers.add(token.toDouble())
-            } else if (token.isOperator()) {
-                val currentOperator = getOperator(token)
-                while (!operators.isEmpty() && hasPrecedence(operators.peek(), currentOperator)) {
-                    applyOperation(numbers, operators)
+            when {
+                token.isNumeric() -> {
+                    numbers.add(token.toDouble())
                 }
-                operators.push(currentOperator)
+                token.isOperator() -> {
+                    val currentOperator = getOperator(token)
+                    while (!operators.isEmpty() && operators.peek() != CalculatorOperation.Parenthesis && hasPrecedence(operators.peek(), currentOperator)) {
+                        applyOperation(numbers, operators)
+                    }
+                    operators.push(currentOperator)
+                }
+                token == "(" -> {
+                    operators.push(CalculatorOperation.Parenthesis)
+                }
+                token == ")" -> {
+                    while (operators.peek() != CalculatorOperation.Parenthesis) {
+                        applyOperation(numbers, operators)
+                    }
+                    operators.pop()
+                }
             }
         }
 
@@ -44,6 +56,9 @@ object ExpressionEvaluator {
                     tokens.add(currentToken.toString())
                     currentToken.clear()
                 }
+                if (char == '(' && tokens.isNotEmpty() && tokens.last().isNumeric()) {
+                    tokens.add("*")
+                }
                 tokens.add(char.toString())
             }
         }
@@ -65,6 +80,7 @@ object ExpressionEvaluator {
             CalculatorOperation.Multiply -> number1 * number2
             CalculatorOperation.Divide -> number1 / number2
             CalculatorOperation.Mod -> number1 % number2
+            else -> throw IllegalArgumentException("Invalid operator")
         }
         numbers.push(result)
     }
@@ -96,6 +112,7 @@ object ExpressionEvaluator {
             "*" -> CalculatorOperation.Multiply
             "/" -> CalculatorOperation.Divide
             "%" -> CalculatorOperation.Mod
+            "(" -> CalculatorOperation.Parenthesis
             else -> throw IllegalArgumentException("Invalid operator: $token")
         }
     }

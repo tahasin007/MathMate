@@ -43,7 +43,7 @@ fun ActionIconRow(
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
         )
         Image(
-            painter = painterResource(id = R.drawable.cal_delete),
+            painter = painterResource(id = R.drawable.ic_delete),
             contentDescription = "Delete",
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
         )

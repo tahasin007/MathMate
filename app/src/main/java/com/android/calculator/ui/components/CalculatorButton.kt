@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
@@ -72,17 +73,18 @@ fun CalculatorButton(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (symbol == "Del") {
+            if (symbol == "Parenthesis") {
                 Image(
-                    painter = painterResource(id = R.drawable.cal_delete),
-                    contentDescription = "Delete",
+                    painter = painterResource(id = R.drawable.ic_parenthesis),
+                    contentDescription = "Parenthesis",
                     colorFilter = ColorFilter.tint(buttonTextColor)
                 )
             } else if (!symbol.isDigitsOnly()) {
                 Text(
                     text = symbol,
                     fontSize = 40.sp,
-                    color = buttonTextColor
+                    color = buttonTextColor,
+                    fontWeight = FontWeight.SemiBold
                 )
             } else {
                 Text(
