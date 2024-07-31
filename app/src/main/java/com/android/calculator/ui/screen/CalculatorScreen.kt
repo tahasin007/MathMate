@@ -44,7 +44,7 @@ fun CalculatorScreen(
             isDarkTheme = isDarkTheme,
             onThemeUpdated = onThemeUpdated
         )
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         BottomSheetContainer(state = state, onAction = viewModel::onAction) {
             navController.navigate(it)
         }
