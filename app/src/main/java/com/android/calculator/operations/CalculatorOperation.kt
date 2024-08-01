@@ -6,5 +6,5 @@ sealed class CalculatorOperation(val symbol: String) {
     data object Multiply : CalculatorOperation("*")
     data object Divide : CalculatorOperation("/")
     data object Mod : CalculatorOperation("%")
-    data object Parenthesis: CalculatorOperation("(")
+    data object Parenthesis : CalculatorOperation("(")
 }

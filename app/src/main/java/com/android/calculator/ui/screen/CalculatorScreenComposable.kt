@@ -53,7 +53,7 @@ fun NavGraphBuilder.calculatorScreenComposable(
                 .background(MaterialTheme.colorScheme.primary)
                 .padding(all = 10.dp),
             isDarkTheme = isDarkTheme,
-            onThemeUpdated= onThemeUpdated
+            onThemeUpdated = onThemeUpdated
         )
     }
 }

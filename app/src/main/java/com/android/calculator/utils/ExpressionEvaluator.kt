@@ -15,16 +15,23 @@ object ExpressionEvaluator {
                 token.isNumeric() -> {
                     numbers.add(token.toDouble())
                 }
+
                 token.isOperator() -> {
                     val currentOperator = getOperator(token)
-                    while (!operators.isEmpty() && operators.peek() != CalculatorOperation.Parenthesis && hasPrecedence(operators.peek(), currentOperator)) {
+                    while (!operators.isEmpty() && operators.peek() != CalculatorOperation.Parenthesis && hasPrecedence(
+                            operators.peek(),
+                            currentOperator
+                        )
+                    ) {
                         applyOperation(numbers, operators)
                     }
                     operators.push(currentOperator)
                 }
+
                 token == "(" -> {
                     operators.push(CalculatorOperation.Parenthesis)
                 }
+
                 token == ")" -> {
                     while (operators.peek() != CalculatorOperation.Parenthesis) {
                         applyOperation(numbers, operators)

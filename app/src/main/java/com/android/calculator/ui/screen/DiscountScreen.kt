@@ -15,13 +15,17 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -46,11 +50,24 @@ fun DiscountScreen(
         topBar = {
             TopAppBar(
                 title = { Text(ScreenType.Discount.screen) },
+                modifier = Modifier
+                    .shadow(
+                        elevation = 2.5.dp,
+                        spotColor = MaterialTheme.colorScheme.secondary
+                    ),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onSecondary
+                ),
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.navigate(ScreenType.Calculator.route)
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Menu")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = ScreenType.Discount.screen,
+                            tint = MaterialTheme.colorScheme.onSecondary
+                        )
                     }
                 }
             )

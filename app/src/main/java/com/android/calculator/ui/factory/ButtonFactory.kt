@@ -12,6 +12,9 @@ class ButtonFactory {
             ScreenType.Calculator -> getCalculatorButtons()
             ScreenType.Length, ScreenType.Mass -> getBasicButtons()
             ScreenType.Discount -> getDiscountButtons()
+            ScreenType.TipCalculator -> TODO()
+            ScreenType.NumeralSystem -> TODO()
+            ScreenType.Currency -> TODO()
         }
     }
 
