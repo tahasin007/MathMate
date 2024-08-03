@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.android.calculator.actions.NumeralSystemAction
 import com.android.calculator.state.NumeralSystemView
 import com.android.calculator.state.ScreenType
 import com.android.calculator.state.viewmodel.NumeralSystemViewModel
@@ -34,6 +35,7 @@ import com.android.calculator.ui.components.CalculatorGrid
 import com.android.calculator.ui.components.UnitView
 import com.android.calculator.ui.factory.ButtonFactory
 import com.android.calculator.utils.Constants
+import com.android.calculator.utils.NumeralSystem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,15 +101,19 @@ fun NumeralSystemScreen(
                         ) {
                             UnitView(
                                 value = state.inputValue,
-                                items = unitList - state.inputUnit,
+                                items = unitList - state.outputUnit,
                                 selectedUnit = state.inputUnit,
                                 onClick = {
                                     if (state.currentView != NumeralSystemView.INPUT) {
-//                                        viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
+                                        viewModel.onAction(
+                                            NumeralSystemAction.ChangeView(
+                                                NumeralSystemView.INPUT
+                                            )
+                                        )
                                     }
                                 },
                                 onSelectedUnitChanged = {
-
+                                    viewModel.onAction(NumeralSystemAction.ChangeInputUnit(it))
                                 },
                                 isCurrentView = state.currentView == NumeralSystemView.INPUT
                             )
@@ -121,15 +127,19 @@ fun NumeralSystemScreen(
                         ) {
                             UnitView(
                                 value = state.outputValue,
-                                items = unitList - state.outputUnit,
+                                items = unitList - state.inputUnit,
                                 selectedUnit = state.outputUnit,
                                 onClick = {
-                                    if (state.currentView != NumeralSystemView.INPUT) {
-//                                        viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
+                                    if (state.currentView != NumeralSystemView.OUTPUT) {
+                                        viewModel.onAction(
+                                            NumeralSystemAction.ChangeView(
+                                                NumeralSystemView.OUTPUT
+                                            )
+                                        )
                                     }
                                 },
                                 onSelectedUnitChanged = {
-
+                                    viewModel.onAction(NumeralSystemAction.ChangeOutputUnit(it))
                                 },
                                 isCurrentView = state.currentView == NumeralSystemView.OUTPUT
                             )
@@ -145,10 +155,26 @@ fun NumeralSystemScreen(
                             .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
                         verticalArrangement = Arrangement.Bottom
                     ) {
+                        val numeralSystem = if (state.currentView == NumeralSystemView.INPUT) {
+                            when (state.inputUnit) {
+                                NumeralSystem.Binary::class.simpleName.toString() -> NumeralSystem.Binary
+                                NumeralSystem.Octal::class.simpleName.toString() -> NumeralSystem.Octal
+                                NumeralSystem.Decimal::class.simpleName.toString() -> NumeralSystem.Decimal
+                                else -> NumeralSystem.Hexadecimal
+                            }
+                        } else {
+                            when (state.outputUnit) {
+                                NumeralSystem.Binary::class.simpleName.toString() -> NumeralSystem.Binary
+                                NumeralSystem.Octal::class.simpleName.toString() -> NumeralSystem.Octal
+                                NumeralSystem.Decimal::class.simpleName.toString() -> NumeralSystem.Decimal
+                                else -> NumeralSystem.Hexadecimal
+                            }
+                        }
                         val buttons = ButtonFactory()
                         CalculatorGrid(
                             buttons = buttons.getButtons(ScreenType.NumeralSystem),
-                            onAction = viewModel::onAction
+                            onAction = viewModel::onAction,
+                            numeralSystem = numeralSystem
                         )
                     }
                 }

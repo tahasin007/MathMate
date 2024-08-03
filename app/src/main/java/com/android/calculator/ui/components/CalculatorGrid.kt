@@ -12,13 +12,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.state.CalculatorButtonInfo
+import com.android.calculator.utils.NumeralSystem
 
 @Composable
 fun CalculatorGrid(
     modifier: Modifier = Modifier,
     buttons: List<List<CalculatorButtonInfo<out BaseAction>>>,
     onAction: (BaseAction) -> Unit,
-    buttonSpacing: Dp = 7.5.dp
+    buttonSpacing: Dp = 7.5.dp,
+    numeralSystem: NumeralSystem = NumeralSystem.Decimal
 ) {
     Column(
         modifier = modifier,
@@ -38,6 +40,26 @@ fun CalculatorGrid(
                         else if (buttonInfo.symbol == "." || buttonInfo.isNumeric) MaterialTheme.colorScheme.onPrimary
                         else MaterialTheme.colorScheme.onSecondary
 
+                    val regexBinary = "001"
+                    val regexOctal = "001234567"
+                    val regexDecimal = "00123456789"
+
+                    val isEnabled = buttonInfo.isNumeric.not() || when (numeralSystem) {
+                        NumeralSystem.Binary -> {
+                            (buttonInfo.isNumeric && buttonInfo.symbol in regexBinary)
+                        }
+
+                        NumeralSystem.Octal -> {
+                            (buttonInfo.isNumeric && buttonInfo.symbol in regexOctal)
+                        }
+
+                        NumeralSystem.Decimal -> {
+                            (buttonInfo.isNumeric && buttonInfo.symbol in regexDecimal)
+                        }
+
+                        NumeralSystem.Hexadecimal -> true
+                    }
+
                     CalculatorButton(
                         symbol = buttonInfo.symbol,
                         buttonColor = buttonColor,
@@ -47,7 +69,8 @@ fun CalculatorGrid(
                             .weight(buttonInfo.weight),
                         onClick = {
                             onAction(buttonInfo.action)
-                        }
+                        },
+                        isEnabled = isEnabled
                     )
                 }
             }

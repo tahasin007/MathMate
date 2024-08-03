@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -36,7 +37,8 @@ fun CalculatorButton(
     buttonColor: Color,
     buttonTextColor: Color,
     modifier: Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isEnabled: Boolean = true
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val rippleColor = MaterialTheme.colorScheme.onBackground
@@ -62,13 +64,15 @@ fun CalculatorButton(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable(
+                    enabled = isEnabled,
                     interactionSource = interactionSource,
                     indication = rememberRipple(color = rippleColor),
                     onClick = {
                         onClick()
                         shake = true
                     }
-                ),
+                )
+                .alpha(if (isEnabled) 1f else 0.25f),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
