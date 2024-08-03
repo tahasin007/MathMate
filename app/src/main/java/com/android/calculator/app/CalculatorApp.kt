@@ -14,6 +14,7 @@ import com.android.calculator.ui.screen.calculatorScreenComposable
 import com.android.calculator.ui.screen.discountScreenComposable
 import com.android.calculator.ui.screen.lengthScreenComposable
 import com.android.calculator.ui.screen.massScreenComposable
+import com.android.calculator.ui.screen.numeralSystemScreenComposable
 import com.android.calculator.ui.theme.CalculatorTheme
 
 @Composable
@@ -34,6 +35,7 @@ fun CalculatorApp() {
             lengthScreenComposable(navController)
             massScreenComposable(navController)
             discountScreenComposable(navController)
+            numeralSystemScreenComposable(navController)
         }
     }
 }

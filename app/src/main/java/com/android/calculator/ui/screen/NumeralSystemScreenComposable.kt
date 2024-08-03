@@ -18,9 +18,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.android.calculator.state.ScreenType
 
-fun NavGraphBuilder.discountScreenComposable(navController: NavHostController) {
+fun NavGraphBuilder.numeralSystemScreenComposable(navController: NavHostController) {
     composable(
-        route = ScreenType.Discount.route,
+        route = ScreenType.NumeralSystem.route,
         enterTransition = {
             fadeIn(
                 animationSpec = tween(
@@ -42,7 +42,7 @@ fun NavGraphBuilder.discountScreenComposable(navController: NavHostController) {
             )
         }
     ) {
-        DiscountScreen(
+        NumeralSystemScreen(
             navController = navController,
             modifier = Modifier
                 .fillMaxSize()

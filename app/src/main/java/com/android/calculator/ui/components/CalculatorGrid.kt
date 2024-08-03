@@ -35,7 +35,7 @@ fun CalculatorGrid(
                         else MaterialTheme.colorScheme.primary
                     val buttonTextColor =
                         if (buttonInfo.symbol == "=") MaterialTheme.colorScheme.primary
-                        else if (buttonInfo.symbol.all { it.isDigit() || it == '.' }) MaterialTheme.colorScheme.onPrimary
+                        else if (buttonInfo.symbol == "." || buttonInfo.isNumeric) MaterialTheme.colorScheme.onPrimary
                         else MaterialTheme.colorScheme.onSecondary
 
                     CalculatorButton(

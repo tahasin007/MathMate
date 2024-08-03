@@ -44,7 +44,7 @@ fun CalculatorGridSimple(
                 ) {
                     row.forEach { buttonInfo ->
                         val buttonColor = MaterialTheme.colorScheme.primary
-                        val buttonTextColor = MaterialTheme.colorScheme.onSecondary
+                        val buttonTextColor = MaterialTheme.colorScheme.onPrimary
 
                         CalculatorButton(
                             symbol = buttonInfo.symbol,

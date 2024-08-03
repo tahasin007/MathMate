@@ -48,6 +48,7 @@ fun ActionIconRow(
             contentDescription = "Delete",
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary)
         )
+
         Image(
             painter = painterResource(id = R.drawable.ic_convert),
             contentDescription = "Delete",
@@ -65,9 +66,27 @@ fun ActionIconRow(
                     onAction(CalculatorAction.BottomSheetVisibility(state.isBottomSheetOpen.not()))
                 }
         )
+
         ThemeSwitch(isDarkTheme = isDarkTheme) {
             onThemeUpdated?.invoke()
         }
+
+        Image(
+            modifier = Modifier
+                .weight(1f)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(
+                        bounded = false,
+                        radius = 30.dp,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                ) { },
+            painter = painterResource(id = R.drawable.ic_settings),
+            contentDescription = "Delete",
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary)
+        )
+
         Image(
             painter = painterResource(id = R.drawable.ic_delete),
             contentDescription = "Delete",

@@ -26,4 +26,11 @@ object Constants {
         "Tonne" to 1000000.0,
         "Carat" to 0.2
     )
+
+    val NUMERAL_UNITS = setOf(
+        "Binary",
+        "Octal",
+        "Decimal",
+        "Hexadecimal"
+    )
 }

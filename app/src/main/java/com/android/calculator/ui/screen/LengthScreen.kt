@@ -83,14 +83,14 @@ fun LengthScreen(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.Top
                 ) {
+                    val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
+
                     Box(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
-
                         UnitView(
                             items = unitList - state.outputUnit,
                             value = state.inputValue,
@@ -112,8 +112,6 @@ fun LengthScreen(
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        val unitList = Constants.LENGTH_UNITS.keys.toMutableSet()
-
                         UnitView(
                             value = state.outputValue,
                             items = unitList - state.inputUnit,

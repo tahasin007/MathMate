@@ -101,7 +101,8 @@ fun BottomSheetContainer(
                         ScreenType.NumeralSystem,
                         Modifier.weight(1f)
                     ) {
-
+                        onNavigate.invoke(ScreenType.NumeralSystem.route)
+                        onAction(CalculatorAction.BottomSheetVisibility(false))
                     }
                     ConverterIconView(
                         R.drawable.ic_currency_convert,

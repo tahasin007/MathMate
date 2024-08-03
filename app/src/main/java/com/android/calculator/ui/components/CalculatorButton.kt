@@ -27,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.isDigitsOnly
 import com.android.calculator.R
 import com.android.calculator.ui.animation.shakeEffect
 
@@ -73,25 +72,31 @@ fun CalculatorButton(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (symbol == "Parenthesis") {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_parenthesis),
-                    contentDescription = "Parenthesis",
-                    colorFilter = ColorFilter.tint(buttonTextColor)
-                )
-            } else if (!symbol.isDigitsOnly()) {
-                Text(
-                    text = symbol,
-                    fontSize = 40.sp,
-                    color = buttonTextColor,
-                    fontWeight = FontWeight.SemiBold
-                )
-            } else {
-                Text(
-                    text = symbol,
-                    fontSize = 24.sp,
-                    color = buttonTextColor
-                )
+            when (symbol) {
+                "Del" -> {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_delete),
+                        contentDescription = "Delete",
+                        colorFilter = ColorFilter.tint(buttonTextColor)
+                    )
+                }
+
+                "Parenthesis" -> {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_parenthesis),
+                        contentDescription = "Parenthesis",
+                        colorFilter = ColorFilter.tint(buttonTextColor)
+                    )
+                }
+
+                else -> {
+                    Text(
+                        text = symbol,
+                        fontSize = 40.sp,
+                        color = buttonTextColor,
+                        fontWeight = FontWeight.W200
+                    )
+                }
             }
         }
     }

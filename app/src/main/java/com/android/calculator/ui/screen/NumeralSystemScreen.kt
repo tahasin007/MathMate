@@ -1,0 +1,158 @@
+package com.android.calculator.ui.screen
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.android.calculator.state.NumeralSystemView
+import com.android.calculator.state.ScreenType
+import com.android.calculator.state.viewmodel.NumeralSystemViewModel
+import com.android.calculator.ui.components.CalculatorGrid
+import com.android.calculator.ui.components.UnitView
+import com.android.calculator.ui.factory.ButtonFactory
+import com.android.calculator.utils.Constants
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NumeralSystemScreen(
+    navController: NavHostController,
+    modifier: Modifier
+) {
+    val viewModel = viewModel<NumeralSystemViewModel>()
+    val state = viewModel.numeralSystemState
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(ScreenType.NumeralSystem.screen) },
+                modifier = Modifier
+                    .shadow(
+                        elevation = 2.5.dp,
+                        spotColor = MaterialTheme.colorScheme.secondary
+                    ),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onSecondary
+                ),
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigate(ScreenType.Calculator.route)
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = ScreenType.NumeralSystem.screen,
+                            tint = MaterialTheme.colorScheme.onSecondary
+                        )
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            BoxWithConstraints(
+                modifier = modifier.fillMaxSize()
+            ) {
+                val totalHeight = maxHeight
+                val firstColumnHeight = totalHeight * 0.25f
+                val secondColumnHeight = totalHeight * 0.7f
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .height(firstColumnHeight)
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        val unitList = Constants.NUMERAL_UNITS.toMutableSet()
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            UnitView(
+                                value = state.inputValue,
+                                items = unitList - state.inputUnit,
+                                selectedUnit = state.inputUnit,
+                                onClick = {
+                                    if (state.currentView != NumeralSystemView.INPUT) {
+//                                        viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
+                                    }
+                                },
+                                onSelectedUnitChanged = {
+
+                                },
+                                isCurrentView = state.currentView == NumeralSystemView.INPUT
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            UnitView(
+                                value = state.outputValue,
+                                items = unitList - state.outputUnit,
+                                selectedUnit = state.outputUnit,
+                                onClick = {
+                                    if (state.currentView != NumeralSystemView.INPUT) {
+//                                        viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
+                                    }
+                                },
+                                onSelectedUnitChanged = {
+
+                                },
+                                isCurrentView = state.currentView == NumeralSystemView.OUTPUT
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Column(
+                        modifier = Modifier
+                            .height(secondColumnHeight)
+                            .fillMaxWidth()
+                            .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
+                        verticalArrangement = Arrangement.Bottom
+                    ) {
+                        val buttons = ButtonFactory()
+                        CalculatorGrid(
+                            buttons = buttons.getButtons(ScreenType.NumeralSystem),
+                            onAction = viewModel::onAction
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
