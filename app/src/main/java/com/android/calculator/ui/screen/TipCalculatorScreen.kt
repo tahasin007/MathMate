@@ -10,35 +10,41 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.actions.DiscountAction
-import com.android.calculator.state.DiscountView
 import com.android.calculator.state.ScreenType
-import com.android.calculator.state.viewmodel.DiscountViewModel
+import com.android.calculator.state.viewmodel.NumeralSystemViewModel
+import com.android.calculator.ui.components.AnimatedSlider
 import com.android.calculator.ui.components.AppBar
 import com.android.calculator.ui.components.CalculatorGridSimple
+import com.android.calculator.ui.components.NumberCounter
 import com.android.calculator.ui.components.SimpleUnitView
+import com.android.calculator.ui.components.TipInfoCard
 import com.android.calculator.ui.factory.ButtonFactory
 
 @Composable
-fun DiscountScreen(
+fun TipCalculatorScreen(
     navController: NavHostController,
     modifier: Modifier
 ) {
-    val viewModel = viewModel<DiscountViewModel>()
-    val state = viewModel.discountState
+    val viewModel = viewModel<NumeralSystemViewModel>()
 
     Scaffold(
         topBar = {
-            AppBar(screen = ScreenType.Discount.screen) {
+            AppBar(screen = ScreenType.TipCalculator.screen) {
                 navController.navigate(ScreenType.Calculator.route)
             }
         }
@@ -50,8 +56,8 @@ fun DiscountScreen(
                 modifier = modifier.fillMaxSize()
             ) {
                 val totalHeight = maxHeight
-                val firstColumnHeight = totalHeight * 0.35f
-                val secondColumnHeight = totalHeight * 0.50f
+                val firstColumnHeight = totalHeight * 0.45f
+                val secondColumnHeight = totalHeight * 0.5f
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -59,68 +65,81 @@ fun DiscountScreen(
                         modifier = Modifier
                             .height(firstColumnHeight)
                             .fillMaxWidth(),
-                        verticalArrangement = Arrangement.Top,
+                        verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Box(
                             modifier = Modifier
-                                .weight(1f)
+                                .weight(.75f)
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
                             SimpleUnitView(
-                                label = "Original price",
-                                value = state.inputValue,
+                                label = "Total Bill",
+                                value = "",
                                 onClick = {
-                                    if (state.currentView != DiscountView.INPUT) {
-                                        viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
-                                    }
                                 },
-                                isCurrentView = state.currentView == DiscountView.INPUT
+                                isCurrentView = true
                             )
                         }
 
                         Box(
                             modifier = Modifier
-                                .weight(1f)
+                                .weight(.75f)
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
-                            SimpleUnitView(
-                                label = "Discount (%)",
-                                value = state.discountValue,
-                                onClick = {
-                                    if (state.currentView != DiscountView.DISCOUNT) {
-                                        viewModel.onAction(DiscountAction.ChangeView(DiscountView.DISCOUNT))
-                                    }
-                                },
-                                isCurrentView = state.currentView == DiscountView.DISCOUNT
+                            Row(
+                                modifier = Modifier.padding(horizontal = 20.dp),
+                                horizontalArrangement = Arrangement.SpaceAround,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Split",
+                                    color = MaterialTheme.colorScheme.onSecondary,
+                                    fontSize = 20.sp,
+                                    modifier = Modifier.weight(0.6f)
+                                )
+                                NumberCounter(modifier = Modifier.weight(0.4f))
+                            }
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .weight(1.5f)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            var sliderValue by remember { mutableFloatStateOf(0.5f) }
+                            AnimatedSlider(
+                                value = sliderValue,
+                                onValueChange = { newValue -> sliderValue = newValue },
+                                modifier = Modifier
+                                    .fillMaxWidth(0.85f)
+                                    .padding(16.dp)
                             )
                         }
 
                         Box(
                             modifier = Modifier
-                                .weight(1f)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
+                                .weight(1.25f)
+                                .fillMaxWidth()
+                                .padding(5.dp),
+                            contentAlignment = Alignment.Center,
                         ) {
-                            SimpleUnitView(
-                                label = "Final price",
-                                value = state.finalValue,
-                                onClick = null,
-                                isCurrentView = false
-                            )
-                        }
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                fontSize = 12.sp,
-                                text = "YOU SAVED ${state.savedValue}"
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(5.dp)
+                            ) {
+                                TipInfoCard(
+                                    modifier = Modifier.weight(0.5f),
+                                    label = "TOTAL"
+                                )
+                                TipInfoCard(
+                                    modifier = Modifier.weight(0.5f),
+                                    label = "P/PERSON"
+                                )
+                            }
                         }
                     }
 
@@ -134,7 +153,7 @@ fun DiscountScreen(
                     ) {
                         val buttons = ButtonFactory()
                         CalculatorGridSimple(
-                            buttons = buttons.getButtons(ScreenType.Discount),
+                            buttons = buttons.getButtons(ScreenType.TipCalculator),
                             onAction = viewModel::onAction
                         )
                     }

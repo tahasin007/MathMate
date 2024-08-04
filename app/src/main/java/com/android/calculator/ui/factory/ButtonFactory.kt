@@ -12,8 +12,8 @@ class ButtonFactory {
         return when (screenType) {
             ScreenType.Calculator -> getCalculatorButtons()
             ScreenType.Length, ScreenType.Mass -> getBasicButtons()
-            ScreenType.Discount -> getDiscountButtons()
-            ScreenType.TipCalculator -> TODO()
+            ScreenType.Discount -> getSimpleGridButtons()
+            ScreenType.TipCalculator -> getSimpleGridButtons()
             ScreenType.NumeralSystem -> getNumeralSystemButtons()
             ScreenType.Currency -> TODO()
         }
@@ -90,7 +90,7 @@ class ButtonFactory {
         )
     }
 
-    private fun getDiscountButtons(): List<List<CalculatorButtonInfo<out BaseAction>>> {
+    private fun getSimpleGridButtons(): List<List<CalculatorButtonInfo<out BaseAction>>> {
 
         return listOf(
             listOf(

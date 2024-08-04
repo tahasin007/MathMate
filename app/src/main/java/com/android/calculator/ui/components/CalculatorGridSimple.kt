@@ -35,7 +35,7 @@ fun CalculatorGridSimple(
             modifier = Modifier
                 .weight(3f)
                 .fillMaxHeight(),
-            verticalArrangement = Arrangement.spacedBy(buttonSpacing)
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             buttonCol1.forEach { row ->
                 Row(
@@ -65,7 +65,7 @@ fun CalculatorGridSimple(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight(.91f),
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             buttonCol2.forEach { buttonInfo ->

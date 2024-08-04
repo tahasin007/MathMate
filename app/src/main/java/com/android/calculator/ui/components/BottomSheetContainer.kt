@@ -94,7 +94,8 @@ fun BottomSheetContainer(
                         ScreenType.TipCalculator,
                         Modifier.weight(1f)
                     ) {
-
+                        onNavigate.invoke(ScreenType.TipCalculator.route)
+                        onAction(CalculatorAction.BottomSheetVisibility(false))
                     }
                     ConverterIconView(
                         R.drawable.ic_binary,
