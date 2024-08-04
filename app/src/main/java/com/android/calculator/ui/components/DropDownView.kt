@@ -5,9 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
@@ -44,8 +45,7 @@ fun DropDownView(
             indication = null
         ) {
             expanded = !expanded
-        }
-        .padding(start = 5.dp),
+        },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
@@ -64,17 +64,29 @@ fun DropDownView(
         expanded = expanded,
         onDismissRequest = { expanded = false },
         modifier = Modifier
-            .background(Color.White)
-            .padding(5.dp)
             .width(menuWidth)
+            .background(MaterialTheme.colorScheme.primary)
     ) {
         items.forEach { item ->
             DropdownMenuItem(
                 text = {
-                    Text(
-                        text = item,
-                        color = if (item == selectedItem) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = item,
+                            color = if (item == selectedItem) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.weight(1f)
+                        )
+                        if (item == selectedItem) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "Selected",
+                                tint = MaterialTheme.colorScheme.onSecondary
+                            )
+                        }
+                    }
                 },
                 onClick = {
                     selectedItem = item

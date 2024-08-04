@@ -10,22 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -33,11 +23,11 @@ import com.android.calculator.actions.DiscountAction
 import com.android.calculator.state.DiscountView
 import com.android.calculator.state.ScreenType
 import com.android.calculator.state.viewmodel.DiscountViewModel
+import com.android.calculator.ui.components.AppBar
 import com.android.calculator.ui.components.CalculatorGridSimple
 import com.android.calculator.ui.components.SimpleUnitView
 import com.android.calculator.ui.factory.ButtonFactory
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscountScreen(
     navController: NavHostController,
@@ -48,29 +38,9 @@ fun DiscountScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(ScreenType.Discount.screen) },
-                modifier = Modifier
-                    .shadow(
-                        elevation = 2.5.dp,
-                        spotColor = MaterialTheme.colorScheme.secondary
-                    ),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSecondary
-                ),
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navController.navigate(ScreenType.Calculator.route)
-                    }) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = ScreenType.Discount.screen,
-                            tint = MaterialTheme.colorScheme.onSecondary
-                        )
-                    }
-                }
-            )
+            AppBar(screen = ScreenType.Discount.screen) {
+                navController.navigate(ScreenType.Calculator.route)
+            }
         }
     ) { innerPadding ->
         Surface(
