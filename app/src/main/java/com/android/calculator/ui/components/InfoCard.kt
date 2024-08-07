@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TipInfoCard(modifier: Modifier, label: String) {
+fun InfoCard(modifier: Modifier, label: String, value: String) {
     Card(
         modifier = modifier.fillMaxSize(),
         elevation = CardDefaults.cardElevation(
@@ -49,13 +49,13 @@ fun TipInfoCard(modifier: Modifier, label: String) {
             )
 
             Text(
-                text = "$200",
+                text = "$${value}",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 10.dp)
+                    .padding(top = 10.dp, start = 5.dp, end = 5.dp)
             )
         }
     }

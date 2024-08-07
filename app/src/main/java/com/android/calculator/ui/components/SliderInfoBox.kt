@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun InfoBox(label: String) {
+fun SliderInfoBox(label: String) {
     Box(modifier = Modifier.size(100.dp)) {
         // Rectangle
         Box(

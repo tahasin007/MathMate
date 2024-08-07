@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AnimatedSlider(
     modifier: Modifier = Modifier,
-    value: Float,
+    value: Int,
     onValueChange: (Float) -> Unit,
     valueRange: ClosedFloatingPointRange<Float> = 0f..100f, // Range of slider values
     thumbRadius: Dp = 16.dp,
@@ -46,7 +46,7 @@ fun AnimatedSlider(
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
 
-    var sliderPosition by remember { mutableFloatStateOf(value) }
+    var sliderPosition by remember { mutableFloatStateOf(value.toFloat()) }
     var sliderWidth by remember { mutableFloatStateOf(0f) }
 
     val animatedPosition by animateFloatAsState(
@@ -108,7 +108,7 @@ fun AnimatedSlider(
         ) {
             val progress =
                 (sliderPosition * (valueRange.endInclusive - valueRange.start) + valueRange.start).toInt()
-            InfoBox("Tip $progress%")
+            SliderInfoBox("Tip $progress%")
         }
     }
 

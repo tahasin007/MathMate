@@ -15,24 +15,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.android.calculator.actions.TipCalculatorAction
 import com.android.calculator.state.ScreenType
-import com.android.calculator.state.viewmodel.NumeralSystemViewModel
+import com.android.calculator.state.viewmodel.TipCalculatorViewModel
 import com.android.calculator.ui.components.AnimatedSlider
 import com.android.calculator.ui.components.AppBar
 import com.android.calculator.ui.components.CalculatorGridSimple
+import com.android.calculator.ui.components.InfoCard
 import com.android.calculator.ui.components.NumberCounter
 import com.android.calculator.ui.components.SimpleUnitView
-import com.android.calculator.ui.components.TipInfoCard
 import com.android.calculator.ui.factory.ButtonFactory
 
 @Composable
@@ -40,7 +37,8 @@ fun TipCalculatorScreen(
     navController: NavHostController,
     modifier: Modifier
 ) {
-    val viewModel = viewModel<NumeralSystemViewModel>()
+    val viewModel = viewModel<TipCalculatorViewModel>()
+    val state = viewModel.tipCalculatorState
 
     Scaffold(
         topBar = {
@@ -76,9 +74,8 @@ fun TipCalculatorScreen(
                         ) {
                             SimpleUnitView(
                                 label = "Total Bill",
-                                value = "",
-                                onClick = {
-                                },
+                                value = state.bill,
+                                onClick = null,
                                 isCurrentView = true
                             )
                         }
@@ -100,7 +97,12 @@ fun TipCalculatorScreen(
                                     fontSize = 20.sp,
                                     modifier = Modifier.weight(0.6f)
                                 )
-                                NumberCounter(modifier = Modifier.weight(0.4f))
+                                NumberCounter(
+                                    modifier = Modifier.weight(0.4f),
+                                    onValueChange = {
+                                        viewModel.onAction(TipCalculatorAction.EnterHeadCount(it))
+                                    }
+                                )
                             }
                         }
 
@@ -110,10 +112,11 @@ fun TipCalculatorScreen(
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
-                            var sliderValue by remember { mutableFloatStateOf(0.5f) }
                             AnimatedSlider(
-                                value = sliderValue,
-                                onValueChange = { newValue -> sliderValue = newValue },
+                                value = state.tipPercentage,
+                                onValueChange = {
+                                    viewModel.onAction(TipCalculatorAction.EnterTipPercent(it.toInt()))
+                                },
                                 modifier = Modifier
                                     .fillMaxWidth(0.85f)
                                     .padding(16.dp)
@@ -131,13 +134,15 @@ fun TipCalculatorScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(5.dp)
                             ) {
-                                TipInfoCard(
+                                InfoCard(
                                     modifier = Modifier.weight(0.5f),
-                                    label = "TOTAL"
+                                    label = "TOTAL",
+                                    value = state.totalBill
                                 )
-                                TipInfoCard(
+                                InfoCard(
                                     modifier = Modifier.weight(0.5f),
-                                    label = "P/PERSON"
+                                    label = "P/PERSON",
+                                    value = state.totalPerHead
                                 )
                             }
                         }

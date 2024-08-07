@@ -33,7 +33,7 @@ fun NumberCounter(
     initialValue: Int = 1,
     minValue: Int = 0,
     maxValue: Int = 99,
-    onValueChange: (Int) -> Unit = {}
+    onValueChange: (Int) -> Unit
 ) {
     var counterValue by remember { mutableIntStateOf(initialValue) }
 
