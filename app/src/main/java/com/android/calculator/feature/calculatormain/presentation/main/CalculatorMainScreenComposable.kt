@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.history.presentation
+package com.android.calculator.feature.calculatormain.presentation.main
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
@@ -16,11 +16,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.android.calculator.CalculatorApplication
 import com.android.calculator.utils.ScreenType
 
-fun NavGraphBuilder.historyScreenComposable(navController: NavHostController) {
+fun NavGraphBuilder.calculatorMainScreenComposable(
+    app: CalculatorApplication,
+    navController: NavHostController,
+    isDarkTheme: Boolean,
+    onThemeUpdated: () -> Unit
+) {
     composable(
-        route = ScreenType.History.route,
+        route = ScreenType.CalculatorMain.route,
         enterTransition = {
             fadeIn(
                 animationSpec = tween(
@@ -42,12 +48,15 @@ fun NavGraphBuilder.historyScreenComposable(navController: NavHostController) {
             )
         }
     ) {
-        HistoryScreen(
+        CalculatorMainScreen(
+            app = app,
             navController = navController,
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(all = 10.dp)
+                .padding(all = 10.dp),
+            isDarkTheme = isDarkTheme,
+            onThemeUpdated = onThemeUpdated
         )
     }
 }

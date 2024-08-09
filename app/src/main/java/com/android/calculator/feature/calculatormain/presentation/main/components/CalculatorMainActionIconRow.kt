@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.main.presentation.components
+package com.android.calculator.feature.calculatormain.presentation.main.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.android.calculator.R
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
-import com.android.calculator.feature.calculator.main.presentation.CalculatorMainState
+import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainState
 import com.android.calculator.utils.ScreenType
 
 @Composable

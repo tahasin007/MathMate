@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.main.presentation.components
+package com.android.calculator.feature.calculatormain.presentation.main.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

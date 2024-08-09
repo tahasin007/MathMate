@@ -1,15 +1,19 @@
-package com.android.calculator.feature.calculator.main.presentation
+package com.android.calculator.feature.calculatormain.presentation.main
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
+import com.android.calculator.feature.calculatormain.domain.model.Calculation
+import com.android.calculator.feature.calculatormain.domain.usecase.CalculationUseCases
 import com.android.calculator.utils.CommonUtils
 import com.android.calculator.utils.ExpressionEvaluator
+import kotlinx.coroutines.launch
 
-class CalculatorMainViewModel : ViewModel() {
+class CalculatorMainViewModel(private val calculationUseCases: CalculationUseCases) : ViewModel() {
 
     var calculatorState by mutableStateOf(CalculatorMainState())
 
@@ -57,6 +61,7 @@ class CalculatorMainViewModel : ViewModel() {
             expression = CommonUtils.removeZeroAfterDecimalPoint(result),
             result = CommonUtils.removeZeroAfterDecimalPoint(result)
         )
+        saveCalculation(filteredExpression)
     }
 
     private fun delete() {
@@ -157,5 +162,17 @@ class CalculatorMainViewModel : ViewModel() {
         calculatorState = calculatorState.copy(
             isBottomSheetOpen = sheetOpen
         )
+    }
+
+    private fun saveCalculation(filteredExpression: String) {
+        viewModelScope.launch {
+            calculationUseCases.insertCalculation(
+                Calculation(
+                    expression = filteredExpression,
+                    result = calculatorState.result,
+                    date = System.currentTimeMillis()
+                )
+            )
+        }
     }
 }

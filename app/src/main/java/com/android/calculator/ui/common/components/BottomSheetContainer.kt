@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.android.calculator.R
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
-import com.android.calculator.feature.calculator.main.presentation.CalculatorMainState
+import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainState
 import com.android.calculator.utils.ScreenType
 
 @OptIn(ExperimentalMaterial3Api::class)

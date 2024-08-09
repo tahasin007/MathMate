@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.main.presentation.components
+package com.android.calculator.feature.calculatormain.presentation.main.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,9 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.android.calculator.feature.calculator.main.presentation.CalculatorMainState
+import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainState
 import com.android.calculator.ui.common.components.DrawBlinkingVerticalLine
 
 @Composable
@@ -40,7 +44,16 @@ fun CalculationView(state: CalculatorMainState) {
             var multiplier by remember { mutableFloatStateOf(1.5f) }
 
             Text(
-                text = state.expression,
+                text = buildAnnotatedString {
+                    state.expression.forEach { char ->
+                        val color =
+                            if (char.isDigit() || char == '.') MaterialTheme.colorScheme.onPrimary
+                            else MaterialTheme.colorScheme.onSecondary
+                        withStyle(style = SpanStyle(color = color)) {
+                            append(char)
+                        }
+                    }
+                },
                 maxLines = 3,
                 fontWeight = FontWeight.W400,
                 style = LocalTextStyle.current.copy(

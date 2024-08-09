@@ -7,8 +7,9 @@ import androidx.activity.compose.setContent
 class LauncherActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val app = application as CalculatorApplication
         setContent {
-            CalculatorApp()
+            CalculatorApp(app)
         }
     }
 }

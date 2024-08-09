@@ -3,7 +3,7 @@ package com.android.calculator.ui.common.factory
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.actions.NumeralSystemAction
-import com.android.calculator.feature.calculator.main.presentation.CalculatorOperation
+import com.android.calculator.feature.calculatormain.presentation.main.CalculatorOperation
 import com.android.calculator.utils.CalculatorButtonInfo
 import com.android.calculator.utils.ScreenType
 

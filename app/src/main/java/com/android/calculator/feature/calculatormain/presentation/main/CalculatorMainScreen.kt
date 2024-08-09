@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.main.presentation
+package com.android.calculator.feature.calculatormain.presentation.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,25 +9,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.utils.ScreenType
-import com.android.calculator.feature.calculator.main.presentation.components.ActionIconRow
+import com.android.calculator.CalculatorApplication
+import com.android.calculator.feature.calculatormain.presentation.main.components.ActionIconRow
+import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationResult
+import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationView
 import com.android.calculator.ui.common.components.BottomSheetContainer
-import com.android.calculator.feature.calculator.main.presentation.components.CalculationResult
-import com.android.calculator.feature.calculator.main.presentation.components.CalculationView
 import com.android.calculator.ui.common.components.CalculatorGrid
 import com.android.calculator.ui.common.factory.ButtonFactory
+import com.android.calculator.utils.ScreenType
 
 @Composable
 fun CalculatorMainScreen(
+    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier,
     isDarkTheme: Boolean,
     onThemeUpdated: () -> Unit
 
 ) {
-    val viewModel = viewModel<CalculatorMainViewModel>()
+    val viewModel = app.calculatorMainViewModel
     val state = viewModel.calculatorState
 
     Column(

@@ -9,9 +9,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.android.calculator.feature.calculator.history.presentation.historyScreenComposable
+import com.android.calculator.feature.calculatormain.presentation.history.historyScreenComposable
 import com.android.calculator.utils.ScreenType
-import com.android.calculator.feature.calculator.main.presentation.calculatorMainScreenComposable
+import com.android.calculator.feature.calculatormain.presentation.main.calculatorMainScreenComposable
 import com.android.calculator.feature.discount.presentation.discountScreenComposable
 import com.android.calculator.feature.lenghtconverter.presentation.lengthScreenComposable
 import com.android.calculator.feature.massconverter.presentation.massScreenComposable
@@ -21,7 +21,7 @@ import com.android.calculator.feature.tipcalculator.presentation.tipCalculatorSc
 import com.android.calculator.ui.theme.CalculatorTheme
 
 @Composable
-fun CalculatorApp() {
+fun CalculatorApp(app: CalculatorApplication) {
     val navController = rememberNavController()
     var isDarkTheme by remember { mutableStateOf(false) }
 
@@ -32,7 +32,7 @@ fun CalculatorApp() {
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
         ) {
-            calculatorMainScreenComposable(navController, isDarkTheme) {
+            calculatorMainScreenComposable(app, navController, isDarkTheme) {
                 isDarkTheme = isDarkTheme.not()
             }
             lengthScreenComposable(navController)
@@ -41,7 +41,7 @@ fun CalculatorApp() {
             numeralSystemScreenComposable(navController)
             tipCalculatorScreenComposable(navController)
             settingsScreenComposable(navController)
-            historyScreenComposable(navController)
+            historyScreenComposable(app, navController)
         }
     }
 }
