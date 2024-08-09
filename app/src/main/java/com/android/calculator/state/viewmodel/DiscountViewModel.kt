@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.DiscountAction
 import com.android.calculator.state.DiscountState
-import com.android.calculator.state.DiscountView
 
 class DiscountViewModel : ViewModel() {
 
@@ -27,41 +26,27 @@ class DiscountViewModel : ViewModel() {
 
     private fun handleDiscountAction(action: DiscountAction) {
         when (action) {
-            is DiscountAction.ChangeView -> changeView()
+            is DiscountAction.EnterDiscountPercent -> enterDiscountPercent(action.percent)
         }
     }
 
     private fun clear() {
-        discountState = if (discountState.currentView == DiscountView.INPUT) {
-            discountState.copy(inputValue = "0")
-        } else {
-            discountState.copy(discountValue = "0")
-        }
-        calculate()
+        discountState = discountState.copy(price = "0")
+        calculateDiscount()
     }
 
     private fun delete() {
-        discountState = if (discountState.currentView == DiscountView.INPUT) {
-            discountState.copy(
-                inputValue =
-                if (discountState.inputValue == "0") discountState.inputValue
-                else if (discountState.inputValue.length == 1) "0"
-                else discountState.inputValue.dropLast(1)
-            )
-        } else {
-            discountState.copy(
-                discountValue =
-                if (discountState.discountValue == "0") discountState.discountValue
-                else if (discountState.discountValue.length == 1) "0"
-                else discountState.discountValue.dropLast(1)
-            )
-        }
-        calculate()
+        discountState = discountState.copy(
+            price = if (discountState.price == "0") discountState.price
+            else if (discountState.price.length == 1) "0"
+            else discountState.price.dropLast(1)
+        )
+        calculateDiscount()
     }
 
-    private fun calculate() {
-        val originalPrice = discountState.inputValue.toDoubleOrNull() ?: 0.0
-        val discountPercentage = discountState.discountValue.toDoubleOrNull() ?: 0.0
+    private fun calculateDiscount() {
+        val originalPrice = discountState.price.toDoubleOrNull() ?: 0.0
+        val discountPercentage = discountState.discountPercent
 
         val discountAmount = (originalPrice * discountPercentage) / 100
         val discountedPrice = originalPrice - discountAmount
@@ -79,78 +64,51 @@ class DiscountViewModel : ViewModel() {
         }
 
         discountState = discountState.copy(
-            finalValue = formattedDiscountedPrice,
-            savedValue = formattedDiscountAmount
+            finalPrice = formattedDiscountedPrice, saved = formattedDiscountAmount
         )
     }
 
     private fun enterNumber(number: Int) {
-        discountState = if (discountState.currentView == DiscountView.INPUT) {
-            discountState.copy(
-                inputValue =
-                if (discountState.inputValue == "0") number.toString()
-                else if (discountState.inputValue.contains(".")) {
-                    val parts = discountState.inputValue.split(".")
-                    if (parts[1].length < 5 && discountState.inputValue.length < 21) {
-                        discountState.inputValue + number.toString()
-                    } else {
-                        discountState.inputValue
-                    }
+        discountState = discountState.copy(
+            price = if (discountState.price == "0") number.toString()
+            else if (discountState.price.contains(".")) {
+                val parts = discountState.price.split(".")
+                if (parts[1].length < 5 && discountState.price.length < 21) {
+                    discountState.price + number.toString()
                 } else {
-                    if (discountState.inputValue.length < 21) {
-                        discountState.inputValue + number.toString()
-                    } else {
-                        discountState.inputValue
-                    }
+                    discountState.price
                 }
-            )
-        } else {
-            discountState.copy(
-                discountValue =
-                if (discountState.discountValue == "0") number.toString()
-                else if (discountState.discountValue.length == 2) discountState.discountValue
-                else discountState.discountValue + number.toString()
-            )
-        }
-        calculate()
+            } else {
+                if (discountState.price.length < 21) {
+                    discountState.price + number.toString()
+                } else {
+                    discountState.price
+                }
+            }
+        )
+        calculateDiscount()
     }
 
     private fun enterDoubleZero(number: String) {
-        if (discountState.currentView == DiscountView.INPUT) {
-            discountState = discountState.copy(
-                inputValue =
-                if (discountState.inputValue == "0") discountState.inputValue
-                else if (discountState.inputValue.length == 24) discountState.inputValue
-                else discountState.inputValue + number
-            )
-        }
-        calculate()
+        discountState = discountState.copy(
+            price = if (discountState.price == "0") discountState.price
+            else if (discountState.price.length == 24) discountState.price
+            else discountState.price + number
+        )
+        calculateDiscount()
+    }
+
+    private fun enterDiscountPercent(percent: Int) {
+        discountState = discountState.copy(discountPercent = percent)
+        calculateDiscount()
     }
 
     private fun enterDecimal() {
-        if (discountState.currentView == DiscountView.INPUT &&
-            !discountState.inputValue.contains(".")
-        ) {
+        if (!discountState.price.contains(".")) {
             discountState = discountState.copy(
-                inputValue =
-                if (discountState.inputValue.length < 21) discountState.inputValue + "."
-                else discountState.inputValue
+                price = if (discountState.price.length < 21) discountState.price + "."
+                else discountState.price
             )
-        }
-    }
-
-    private fun changeView() {
-        discountState = if (discountState.currentView == DiscountView.INPUT) {
-            if (discountState.inputValue.last() == '.') {
-                discountState.copy(
-                    currentView = DiscountView.DISCOUNT,
-                    inputValue = discountState.inputValue.dropLast(1)
-                )
-            } else {
-                discountState.copy(currentView = DiscountView.DISCOUNT)
-            }
-        } else {
-            discountState.copy(currentView = DiscountView.INPUT)
         }
     }
 }

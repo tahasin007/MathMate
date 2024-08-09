@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AnimatedSlider(
     modifier: Modifier = Modifier,
+    label: String,
     value: Int,
     onValueChange: (Float) -> Unit,
     valueRange: ClosedFloatingPointRange<Float> = 0f..100f, // Range of slider values
@@ -108,7 +109,7 @@ fun AnimatedSlider(
         ) {
             val progress =
                 (sliderPosition * (valueRange.endInclusive - valueRange.start) + valueRange.start).toInt()
-            SliderInfoBox("Tip $progress%")
+            SliderInfoBox("$label $progress%")
         }
     }
 

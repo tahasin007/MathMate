@@ -12,19 +12,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.android.calculator.actions.DiscountAction
-import com.android.calculator.state.DiscountView
 import com.android.calculator.state.ScreenType
 import com.android.calculator.state.viewmodel.DiscountViewModel
+import com.android.calculator.ui.components.AnimatedSlider
 import com.android.calculator.ui.components.AppBar
 import com.android.calculator.ui.components.CalculatorGridSimple
+import com.android.calculator.ui.components.InfoCard
 import com.android.calculator.ui.components.SimpleUnitView
 import com.android.calculator.ui.factory.ButtonFactory
 
@@ -50,7 +50,7 @@ fun DiscountScreen(
                 modifier = modifier.fillMaxSize()
             ) {
                 val totalHeight = maxHeight
-                val firstColumnHeight = totalHeight * 0.35f
+                val firstColumnHeight = totalHeight * 0.4f
                 val secondColumnHeight = totalHeight * 0.50f
                 Column(
                     modifier = Modifier.fillMaxSize()
@@ -70,57 +70,52 @@ fun DiscountScreen(
                         ) {
                             SimpleUnitView(
                                 label = "Original price",
-                                value = state.inputValue,
-                                onClick = {
-                                    if (state.currentView != DiscountView.INPUT) {
-                                        viewModel.onAction(DiscountAction.ChangeView(DiscountView.INPUT))
-                                    }
-                                },
-                                isCurrentView = state.currentView == DiscountView.INPUT
-                            )
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            SimpleUnitView(
-                                label = "Discount (%)",
-                                value = state.discountValue,
-                                onClick = {
-                                    if (state.currentView != DiscountView.DISCOUNT) {
-                                        viewModel.onAction(DiscountAction.ChangeView(DiscountView.DISCOUNT))
-                                    }
-                                },
-                                isCurrentView = state.currentView == DiscountView.DISCOUNT
-                            )
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            SimpleUnitView(
-                                label = "Final price",
-                                value = state.finalValue,
+                                value = state.price,
                                 onClick = null,
-                                isCurrentView = false
+                                isCurrentView = true
                             )
                         }
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
+                        Box(
+                            modifier = Modifier
+                                .weight(1.5f)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                fontSize = 12.sp,
-                                text = "YOU SAVED ${state.savedValue}"
+                            AnimatedSlider(
+                                label = "Discount",
+                                value = state.discountPercent,
+                                onValueChange = {
+                                    viewModel.onAction(DiscountAction.EnterDiscountPercent(it.toInt()))
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth(0.85f)
+                                    .padding(16.dp)
                             )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .weight(1.25f)
+                                .fillMaxWidth()
+                                .padding(5.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(5.dp)
+                            ) {
+                                InfoCard(
+                                    modifier = Modifier.weight(0.5f),
+                                    label = "FINAL PRICE",
+                                    value = state.finalPrice
+                                )
+                                InfoCard(
+                                    modifier = Modifier.weight(0.5f),
+                                    label = "YOU SAVED",
+                                    value = state.saved
+                                )
+                            }
                         }
                     }
 

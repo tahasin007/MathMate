@@ -29,7 +29,8 @@ fun SliderInfoBox(label: String) {
             Text(
                 text = label,
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = 16.sp
+                fontSize = 14.sp,
+                maxLines = 1
             )
         }
 

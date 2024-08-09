@@ -113,6 +113,7 @@ fun TipCalculatorScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             AnimatedSlider(
+                                label = "Tip",
                                 value = state.tipPercentage,
                                 onValueChange = {
                                     viewModel.onAction(TipCalculatorAction.EnterTipPercent(it.toInt()))

@@ -1,14 +1,8 @@
 package com.android.calculator.state
 
 data class DiscountState(
-    val inputValue: String = "0",
-    val discountValue: String = "0",
-    val finalValue: String = "0",
-    val savedValue: String = "0",
-    val currentView: DiscountView = DiscountView.INPUT
+    val price: String = "0",
+    val discountPercent: Int = 0,
+    val finalPrice: String = "0",
+    val saved: String = "0"
 )
-
-enum class DiscountView {
-    INPUT,
-    DISCOUNT
-}
