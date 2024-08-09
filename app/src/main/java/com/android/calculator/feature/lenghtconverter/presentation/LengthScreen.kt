@@ -33,7 +33,7 @@ fun LengthScreen(
     Scaffold(
         topBar = {
             AppBar(screen = ScreenType.Length.screen) {
-                navController.navigate(ScreenType.Calculator.route)
+                navController.navigate(ScreenType.CalculatorMain.route)
             }
         }
     ) { innerPadding ->

@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.presentation
+package com.android.calculator.feature.calculator.main.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,22 +12,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.android.calculator.utils.ScreenType
-import com.android.calculator.ui.common.components.ActionIconRow
+import com.android.calculator.feature.calculator.main.presentation.components.ActionIconRow
 import com.android.calculator.ui.common.components.BottomSheetContainer
-import com.android.calculator.ui.common.components.CalculationResult
-import com.android.calculator.ui.common.components.CalculationView
+import com.android.calculator.feature.calculator.main.presentation.components.CalculationResult
+import com.android.calculator.feature.calculator.main.presentation.components.CalculationView
 import com.android.calculator.ui.common.components.CalculatorGrid
 import com.android.calculator.ui.common.factory.ButtonFactory
 
 @Composable
-fun CalculatorScreen(
+fun CalculatorMainScreen(
     navController: NavHostController,
     modifier: Modifier,
     isDarkTheme: Boolean,
     onThemeUpdated: () -> Unit
 
 ) {
-    val viewModel = viewModel<CalculatorViewModel>()
+    val viewModel = viewModel<CalculatorMainViewModel>()
     val state = viewModel.calculatorState
 
     Column(
@@ -41,7 +41,10 @@ fun CalculatorScreen(
             state = state,
             onAction = viewModel::onAction,
             isDarkTheme = isDarkTheme,
-            onThemeUpdated = onThemeUpdated
+            onThemeUpdated = onThemeUpdated,
+            onNavigate = {
+                navController.navigate(it)
+            }
         )
         Spacer(modifier = Modifier.height(15.dp))
         BottomSheetContainer(state = state, onAction = viewModel::onAction) {
@@ -52,7 +55,7 @@ fun CalculatorScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp, start = 7.5.dp, end = 7.5.dp),
-            buttons = buttons.getButtons(ScreenType.Calculator),
+            buttons = buttons.getButtons(ScreenType.CalculatorMain),
             onAction = viewModel::onAction
         )
     }

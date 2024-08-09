@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.MassAction
-import com.android.calculator.feature.calculator.presentation.CalculatorOperation
+import com.android.calculator.feature.calculator.main.presentation.CalculatorOperation
 import com.android.calculator.utils.CommonUtils
 import com.android.calculator.utils.Constants.MASS_UNITS
 import com.android.calculator.utils.ExpressionEvaluator

@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.presentation
+package com.android.calculator.feature.settings.presentaiton
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
@@ -18,13 +18,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.android.calculator.utils.ScreenType
 
-fun NavGraphBuilder.calculatorScreenComposable(
-    navController: NavHostController,
-    isDarkTheme: Boolean,
-    onThemeUpdated: () -> Unit
-) {
+fun NavGraphBuilder.settingsScreenComposable(navController: NavHostController) {
     composable(
-        route = ScreenType.Calculator.route,
+        route = ScreenType.Settings.route,
         enterTransition = {
             fadeIn(
                 animationSpec = tween(
@@ -46,14 +42,12 @@ fun NavGraphBuilder.calculatorScreenComposable(
             )
         }
     ) {
-        CalculatorScreen(
+        SettingsScreen(
             navController = navController,
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(all = 10.dp),
-            isDarkTheme = isDarkTheme,
-            onThemeUpdated = onThemeUpdated
+                .padding(all = 10.dp)
         )
     }
 }

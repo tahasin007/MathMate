@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.presentation
+package com.android.calculator.feature.calculator.main.presentation
 
 sealed class CalculatorOperation(val symbol: String) {
     data object Add : CalculatorOperation("+")

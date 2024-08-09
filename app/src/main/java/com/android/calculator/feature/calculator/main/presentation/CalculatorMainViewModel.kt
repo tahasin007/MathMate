@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculator.presentation
+package com.android.calculator.feature.calculator.main.presentation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,9 +9,9 @@ import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.utils.CommonUtils
 import com.android.calculator.utils.ExpressionEvaluator
 
-class CalculatorViewModel : ViewModel() {
+class CalculatorMainViewModel : ViewModel() {
 
-    var calculatorState by mutableStateOf(CalculatorState())
+    var calculatorState by mutableStateOf(CalculatorMainState())
 
     fun onAction(action: BaseAction) {
         when (action) {
@@ -68,7 +68,7 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun clear() {
-        calculatorState = CalculatorState()
+        calculatorState = CalculatorMainState()
     }
 
     private fun enterDecimal() {

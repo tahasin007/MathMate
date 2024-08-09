@@ -33,7 +33,7 @@ fun MassScreen(
     Scaffold(
         topBar = {
             AppBar(screen = ScreenType.Mass.screen) {
-                navController.navigate(ScreenType.Calculator.route)
+                navController.navigate(ScreenType.CalculatorMain.route)
             }
         }
     ) { innerPadding ->

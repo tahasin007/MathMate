@@ -37,7 +37,7 @@ fun NumeralSystemScreen(
     Scaffold(
         topBar = {
             AppBar(screen = ScreenType.NumeralSystem.screen) {
-                navController.navigate(ScreenType.Calculator.route)
+                navController.navigate(ScreenType.CalculatorMain.route)
             }
         }
     ) { innerPadding ->

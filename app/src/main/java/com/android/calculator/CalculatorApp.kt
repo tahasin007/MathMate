@@ -9,12 +9,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.android.calculator.feature.calculator.history.presentation.historyScreenComposable
 import com.android.calculator.utils.ScreenType
-import com.android.calculator.feature.calculator.presentation.calculatorScreenComposable
+import com.android.calculator.feature.calculator.main.presentation.calculatorMainScreenComposable
 import com.android.calculator.feature.discount.presentation.discountScreenComposable
 import com.android.calculator.feature.lenghtconverter.presentation.lengthScreenComposable
 import com.android.calculator.feature.massconverter.presentation.massScreenComposable
 import com.android.calculator.feature.numeralsystem.presentation.numeralSystemScreenComposable
+import com.android.calculator.feature.settings.presentaiton.settingsScreenComposable
 import com.android.calculator.feature.tipcalculator.presentation.tipCalculatorScreenComposable
 import com.android.calculator.ui.theme.CalculatorTheme
 
@@ -26,11 +28,11 @@ fun CalculatorApp() {
     CalculatorTheme(darkTheme = isDarkTheme) {
         NavHost(
             navController = navController,
-            startDestination = ScreenType.Calculator.route,
+            startDestination = ScreenType.CalculatorMain.route,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None }
         ) {
-            calculatorScreenComposable(navController, isDarkTheme) {
+            calculatorMainScreenComposable(navController, isDarkTheme) {
                 isDarkTheme = isDarkTheme.not()
             }
             lengthScreenComposable(navController)
@@ -38,6 +40,8 @@ fun CalculatorApp() {
             discountScreenComposable(navController)
             numeralSystemScreenComposable(navController)
             tipCalculatorScreenComposable(navController)
+            settingsScreenComposable(navController)
+            historyScreenComposable(navController)
         }
     }
 }

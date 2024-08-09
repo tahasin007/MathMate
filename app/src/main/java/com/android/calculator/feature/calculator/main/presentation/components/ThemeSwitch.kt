@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.components
+package com.android.calculator.feature.calculator.main.presentation.components
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState

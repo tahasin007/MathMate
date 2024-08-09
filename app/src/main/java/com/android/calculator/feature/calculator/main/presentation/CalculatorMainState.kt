@@ -1,6 +1,6 @@
-package com.android.calculator.feature.calculator.presentation
+package com.android.calculator.feature.calculator.main.presentation
 
-data class CalculatorState(
+data class CalculatorMainState(
     val expression: String = "",
     val result: String = "0.0",
     val isBottomSheetOpen: Boolean = false

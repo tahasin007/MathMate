@@ -42,7 +42,7 @@ fun TipCalculatorScreen(
     Scaffold(
         topBar = {
             AppBar(screen = ScreenType.TipCalculator.screen) {
-                navController.navigate(ScreenType.Calculator.route)
+                navController.navigate(ScreenType.CalculatorMain.route)
             }
         }
     ) { innerPadding ->
