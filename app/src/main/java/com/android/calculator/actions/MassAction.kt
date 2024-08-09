@@ -1,6 +1,6 @@
 package com.android.calculator.actions
 
-import com.android.calculator.state.MassView
+import com.android.calculator.feature.massconverter.presentation.MassView
 
 sealed class MassAction : BaseAction {
     data class ChangeInputUnit(val unit: String) : MassAction()

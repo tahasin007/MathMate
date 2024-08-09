@@ -1,6 +1,6 @@
 package com.android.calculator.actions
 
-import com.android.calculator.operations.CalculatorOperation
+import com.android.calculator.feature.calculator.presentation.CalculatorOperation
 
 sealed interface BaseAction {
     data class Number(val number: Int) : BaseAction
