@@ -32,6 +32,12 @@ class HistoryViewModel(private val calculationUseCases: CalculationUseCases) : V
         }
     }
 
+    fun deleteSelectedCalculations(calculations: List<Calculation>) {
+        viewModelScope.launch {
+            calculationUseCases.deleteSelectedCalculations(calculations)
+        }
+    }
+
     fun deleteAllCalculations() {
         viewModelScope.launch {
             calculationUseCases.deleteAllCalculations()

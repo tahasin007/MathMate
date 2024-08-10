@@ -17,4 +17,8 @@ class CalculationRepositoryImpl(private val dao: CalculationDao) : CalculationRe
     override suspend fun deleteAllCalculations() {
         dao.deleteAllCalculations()
     }
+
+    override suspend fun deleteCalculations(calculations: List<Calculation>) {
+        dao.deleteCalculations(calculations.map { it.id })
+    }
 }

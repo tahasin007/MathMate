@@ -17,4 +17,7 @@ interface CalculationDao {
 
     @Query("DELETE FROM calculations")
     suspend fun deleteAllCalculations()
+
+    @Query("DELETE FROM calculations WHERE id IN (:calculationIds)")
+    suspend fun deleteCalculations(calculationIds: List<Int>)
 }

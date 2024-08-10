@@ -5,6 +5,7 @@ import com.android.calculator.feature.calculatormain.data.repository.Calculation
 import com.android.calculator.feature.calculatormain.data.source.CalculatorDatabase
 import com.android.calculator.feature.calculatormain.domain.usecase.CalculationUseCases
 import com.android.calculator.feature.calculatormain.domain.usecase.DeleteAllCalculationsUseCase
+import com.android.calculator.feature.calculatormain.domain.usecase.DeleteSelectedCalculationsUseCase
 import com.android.calculator.feature.calculatormain.domain.usecase.GetCalculationsUseCase
 import com.android.calculator.feature.calculatormain.domain.usecase.InsertCalculationUseCase
 import com.android.calculator.feature.calculatormain.presentation.history.HistoryViewModel
@@ -24,7 +25,8 @@ class CalculatorApplication : Application() {
         val calculationUseCases = CalculationUseCases(
             insertCalculation = InsertCalculationUseCase(calculationRepository),
             getCalculations = GetCalculationsUseCase(calculationRepository),
-            deleteAllCalculations = DeleteAllCalculationsUseCase(calculationRepository)
+            deleteAllCalculations = DeleteAllCalculationsUseCase(calculationRepository),
+            deleteSelectedCalculations = DeleteSelectedCalculationsUseCase(calculationRepository)
         )
 
         historyViewModel = HistoryViewModel(calculationUseCases)
