@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.components
+package com.android.calculator.ui.shared.components
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -41,7 +41,7 @@ fun AnimatedSlider(
     thumbRadius: Dp = 16.dp,
     trackHeight: Dp = 4.dp,
     trackColor: Color = MaterialTheme.colorScheme.onSecondary,
-    thumbColor: Color = MaterialTheme.colorScheme.secondary,
+    thumbColor: Color = MaterialTheme.colorScheme.onSecondary.copy(alpha = .1f),
     progressBoxColor: Color = MaterialTheme.colorScheme.primary
 ) {
     val coroutineScope = rememberCoroutineScope()

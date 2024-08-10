@@ -17,12 +17,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.android.calculator.CalculatorApplication
+import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.utils.ScreenType
 
 fun NavGraphBuilder.calculatorMainScreenComposable(
     app: CalculatorApplication,
     navController: NavHostController,
     isDarkTheme: Boolean,
+    configuration: SettingsState,
     onThemeUpdated: () -> Unit
 ) {
     composable(
@@ -56,7 +58,8 @@ fun NavGraphBuilder.calculatorMainScreenComposable(
                 .background(MaterialTheme.colorScheme.primary)
                 .padding(all = 10.dp),
             isDarkTheme = isDarkTheme,
-            onThemeUpdated = onThemeUpdated
+            onThemeUpdated = onThemeUpdated,
+            configuration = configuration
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.components
+package com.android.calculator.feature.tipcalculator.presentation.component
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInVertically

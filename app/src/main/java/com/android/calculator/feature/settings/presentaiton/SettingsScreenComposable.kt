@@ -16,9 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.android.calculator.CalculatorApplication
 import com.android.calculator.utils.ScreenType
 
-fun NavGraphBuilder.settingsScreenComposable(navController: NavHostController) {
+fun NavGraphBuilder.settingsScreenComposable(
+    app: CalculatorApplication,
+    navController: NavHostController
+) {
     composable(
         route = ScreenType.Settings.route,
         enterTransition = {
@@ -43,6 +47,7 @@ fun NavGraphBuilder.settingsScreenComposable(navController: NavHostController) {
         }
     ) {
         SettingsScreen(
+            app = app,
             navController = navController,
             modifier = Modifier
                 .fillMaxSize()

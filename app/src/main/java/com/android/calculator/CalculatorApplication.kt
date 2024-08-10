@@ -13,6 +13,9 @@ import com.android.calculator.feature.calculatormain.presentation.main.Calculato
 import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
 import com.android.calculator.feature.discountcalculator.data.source.DiscountCalculatorPreferences
 import com.android.calculator.feature.discountcalculator.presentation.DiscountCalculatorViewModel
+import com.android.calculator.feature.settings.data.repository.SettingsRepositoryImpl
+import com.android.calculator.feature.settings.data.source.SettingsPreferences
+import com.android.calculator.feature.settings.presentaiton.SettingsViewModel
 import com.android.calculator.feature.tipcalculator.data.repository.TipCalculatorRepositoryImpl
 import com.android.calculator.feature.tipcalculator.data.source.TipCalculatorPreferences
 import com.android.calculator.feature.tipcalculator.presentation.TipCalculatorViewModel
@@ -23,6 +26,7 @@ class CalculatorApplication : Application() {
     lateinit var calculatorMainViewModel: CalculatorMainViewModel
     lateinit var tipCalculatorViewModel: TipCalculatorViewModel
     lateinit var discountCalculatorViewModel: DiscountCalculatorViewModel
+    lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -40,10 +44,13 @@ class CalculatorApplication : Application() {
             TipCalculatorRepositoryImpl(TipCalculatorPreferences(applicationContext))
         val discountCalculatorRepository =
             DiscountCalculatorRepositoryImpl(DiscountCalculatorPreferences(applicationContext))
+        val settingsRepository =
+            SettingsRepositoryImpl(SettingsPreferences(applicationContext))
 
         historyViewModel = HistoryViewModel(calculationUseCases)
         calculatorMainViewModel = CalculatorMainViewModel(calculationUseCases)
         tipCalculatorViewModel = TipCalculatorViewModel(tioCalculatorRepository)
         discountCalculatorViewModel = DiscountCalculatorViewModel(discountCalculatorRepository)
+        settingsViewModel = SettingsViewModel(settingsRepository)
     }
 }

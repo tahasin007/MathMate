@@ -16,9 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.utils.ScreenType
 
-fun NavGraphBuilder.massScreenComposable(navController: NavHostController) {
+fun NavGraphBuilder.massScreenComposable(
+    navController: NavHostController,
+    configuration: SettingsState
+) {
     composable(
         route = ScreenType.Mass.route,
         enterTransition = {
@@ -47,7 +51,8 @@ fun NavGraphBuilder.massScreenComposable(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(all = 10.dp)
+                .padding(all = 10.dp),
+            configuration = configuration
         )
     }
 }

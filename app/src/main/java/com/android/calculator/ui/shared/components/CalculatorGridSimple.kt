@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.components
+package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,13 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.calculator.actions.BaseAction
+import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.utils.CalculatorButtonInfo
 
 @Composable
 fun CalculatorGridSimple(
     buttons: List<List<CalculatorButtonInfo<out BaseAction>>>,
     onAction: (BaseAction) -> Unit,
-    buttonSpacing: Dp = 7.5.dp
+    buttonSpacing: Dp = 7.5.dp,
+    configuration: SettingsState
 ) {
     Row(
         modifier = Modifier
@@ -55,7 +57,8 @@ fun CalculatorGridSimple(
                                 .weight(buttonInfo.weight),
                             onClick = {
                                 onAction(buttonInfo.action)
-                            }
+                            },
+                            configuration = configuration
                         )
                     }
                 }
@@ -84,7 +87,8 @@ fun CalculatorGridSimple(
                             .weight(buttonInfo.weight / 2),
                         onClick = {
                             onAction(buttonInfo.action)
-                        }
+                        },
+                        configuration = configuration
                     )
                 }
             }

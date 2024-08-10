@@ -22,20 +22,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.TipCalculatorAction
-import com.android.calculator.ui.common.components.AnimatedSlider
-import com.android.calculator.ui.common.components.AppBar
-import com.android.calculator.ui.common.components.CalculatorGridSimple
-import com.android.calculator.ui.common.components.InfoCard
-import com.android.calculator.ui.common.components.NumberCounter
-import com.android.calculator.ui.common.components.SimpleUnitView
-import com.android.calculator.ui.common.factory.ButtonFactory
+import com.android.calculator.feature.settings.domain.model.SettingsState
+import com.android.calculator.ui.shared.components.AnimatedSlider
+import com.android.calculator.ui.shared.components.AppBar
+import com.android.calculator.ui.shared.components.CalculatorGridSimple
+import com.android.calculator.ui.shared.components.InfoCard
+import com.android.calculator.feature.tipcalculator.presentation.component.NumberCounter
+import com.android.calculator.ui.shared.components.SimpleUnitView
+import com.android.calculator.ui.shared.factory.ButtonFactory
 import com.android.calculator.utils.ScreenType
 
 @Composable
 fun TipCalculatorScreen(
     app: CalculatorApplication,
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    configuration: SettingsState
 ) {
     val viewModel = app.tipCalculatorViewModel
     val state = viewModel.state
@@ -161,7 +163,8 @@ fun TipCalculatorScreen(
                         val buttons = ButtonFactory()
                         CalculatorGridSimple(
                             buttons = buttons.getButtons(ScreenType.TipCalculator),
-                            onAction = viewModel::onAction
+                            onAction = viewModel::onAction,
+                            configuration = configuration
                         )
                     }
                 }

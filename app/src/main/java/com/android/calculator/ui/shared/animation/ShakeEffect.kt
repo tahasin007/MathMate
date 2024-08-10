@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.animation
+package com.android.calculator.ui.shared.animation
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing

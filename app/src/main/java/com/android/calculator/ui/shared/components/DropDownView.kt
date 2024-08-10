@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.components
+package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -95,7 +95,8 @@ fun DropDownView(
                 },
                 modifier = Modifier
                     .background(
-                        if (item == selectedItem) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+                        if (item == selectedItem) MaterialTheme.colorScheme.onSecondary.copy(alpha = .1f)
+                        else MaterialTheme.colorScheme.primary
                     )
             )
         }

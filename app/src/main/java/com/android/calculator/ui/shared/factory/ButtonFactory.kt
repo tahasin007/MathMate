@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.factory
+package com.android.calculator.ui.shared.factory
 
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction

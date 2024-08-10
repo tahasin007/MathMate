@@ -18,18 +18,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.android.calculator.actions.NumeralSystemAction
+import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.utils.ScreenType
-import com.android.calculator.ui.common.components.AppBar
-import com.android.calculator.ui.common.components.CalculatorGrid
-import com.android.calculator.ui.common.components.UnitView
-import com.android.calculator.ui.common.factory.ButtonFactory
+import com.android.calculator.ui.shared.components.AppBar
+import com.android.calculator.ui.shared.components.CalculatorGrid
+import com.android.calculator.ui.shared.components.UnitView
+import com.android.calculator.ui.shared.factory.ButtonFactory
 import com.android.calculator.utils.Constants
 import com.android.calculator.utils.NumeralSystem
 
 @Composable
 fun NumeralSystemScreen(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    configuration: SettingsState
 ) {
     val viewModel = viewModel<NumeralSystemViewModel>()
     val state = viewModel.numeralSystemState
@@ -142,7 +144,8 @@ fun NumeralSystemScreen(
                         CalculatorGrid(
                             buttons = buttons.getButtons(ScreenType.NumeralSystem),
                             onAction = viewModel::onAction,
-                            numeralSystem = numeralSystem
+                            numeralSystem = numeralSystem,
+                            configuration = configuration
                         )
                     }
                 }

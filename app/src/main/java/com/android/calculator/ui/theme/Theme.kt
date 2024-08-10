@@ -7,35 +7,33 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val LightColorScheme = lightColorScheme(
-    primary = PrimaryLight,
-    onPrimary = OnPrimaryLight,
-    secondary = SecondaryLight,
-    onSecondary = OnSecondaryLight,
-    onBackground = RippleColorLight
-)
-
-private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryDark,
-    onPrimary = OnPrimaryDark,
-    secondary = SecondaryDark,
-    onSecondary = OnSecondaryDark,
-    onBackground = RippleColorDark
-)
-
 @Composable
 fun CalculatorTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    themeColor: Int = ColorRed.toArgb(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colorScheme = if (darkTheme.not()) {
+        lightColorScheme(
+            primary = PrimaryLight,
+            onPrimary = OnPrimaryLight,
+            onSecondary = Color(themeColor),
+            onBackground = RippleColorLight
+        )
+    } else {
+        darkColorScheme(
+            primary = PrimaryDark,
+            onPrimary = OnPrimaryDark,
+            onSecondary = Color(themeColor),
+            onBackground = RippleColorDark
+        )
     }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

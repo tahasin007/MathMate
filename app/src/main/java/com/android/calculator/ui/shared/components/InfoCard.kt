@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.components
+package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

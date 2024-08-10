@@ -1,42 +1,40 @@
 package com.android.calculator.feature.settings.presentaiton
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.android.calculator.feature.settings.presentaiton.component.TextViewWithSwitch
+import com.android.calculator.CalculatorApplication
+import com.android.calculator.actions.SettingsAction
 import com.android.calculator.feature.settings.presentaiton.component.ColorThemePopup
-import com.android.calculator.ui.common.components.AppBar
+import com.android.calculator.feature.settings.presentaiton.component.TextViewWithColorCircle
+import com.android.calculator.feature.settings.presentaiton.component.TextViewWithSwitch
+import com.android.calculator.ui.shared.components.AppBar
 import com.android.calculator.utils.ScreenType
 
 @Composable
 fun SettingsScreen(
+    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     var showPopup by remember { mutableStateOf(false) }
-    var isSwitchOn by remember { mutableStateOf(false) }
-    var shouldVibrate by remember { mutableStateOf(false) }
+    val viewModel = app.settingsViewModel
+    val settingsState by app.settingsViewModel.settingsState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -48,55 +46,75 @@ fun SettingsScreen(
         Surface(
             modifier = Modifier.padding(innerPadding)
         ) {
-            Column(
-                modifier = modifier.padding(horizontal = 10.dp),
-                verticalArrangement = Arrangement.Top
+            Box(
+                modifier = modifier
+                    .padding(horizontal = 10.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 5.dp)
-                        .clickable {
-                            showPopup = true
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween
+                Column(
+                    modifier = Modifier.fillMaxHeight(.45f),
+                    verticalArrangement = Arrangement.Top
                 ) {
-                    Text(
-                        text = "Change Theme",
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    TextViewWithColorCircle(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        showPopup = true
+                    }
+
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 5.dp),
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
 
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.onSecondary)
+                    TextViewWithSwitch(
+                        text = "Rounded button",
+                        isChecked = settingsState.isButtonRounded,
+                        onCheckedChange = {
+                            viewModel.onAction(SettingsAction.ChangeRoundedButton(it))
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 5.dp),
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+
+                    TextViewWithSwitch(
+                        text = "Haptic feedback",
+                        isChecked = settingsState.isHapticFeedbackOn,
+                        onCheckedChange = {
+                            viewModel.onAction(SettingsAction.ChangeHapticFeedback(it))
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 5.dp),
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+
+                    TextViewWithSwitch(
+                        text = "Enable double zero",
+                        isChecked = settingsState.isDoubleZeroEnabled,
+                        onCheckedChange = {
+                            viewModel.onAction(SettingsAction.ChangeEnableDoubleZero(it))
+                        },
+                        modifier = Modifier.weight(1f)
                     )
                 }
-
-                TextViewWithSwitch(
-                    text = "Rounded button",
-                    isChecked = isSwitchOn,
-                    onCheckedChange = { isSwitchOn = it }
-                )
-
-                TextViewWithSwitch(
-                    text = "Vibrate on key press",
-                    isChecked = shouldVibrate,
-                    onCheckedChange = { shouldVibrate = it }
-                )
-
-                TextViewWithSwitch(
-                    text = "Enable double zero",
-                    isChecked = shouldVibrate,
-                    onCheckedChange = { shouldVibrate = it }
-                )
             }
         }
     }
 
     if (showPopup) {
-        ColorThemePopup(onDismiss = { showPopup = false })
+        ColorThemePopup(onDismiss = { color ->
+            showPopup = false
+            color?.let {
+                viewModel.onAction(SettingsAction.ChangeThemeColor(it))
+            }
+        })
     }
 }

@@ -18,24 +18,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import com.android.calculator.ui.theme.ColorBlue
+import com.android.calculator.ui.theme.ColorGreen
+import com.android.calculator.ui.theme.ColorOrange
+import com.android.calculator.ui.theme.ColorRed
+import com.android.calculator.ui.theme.ColorSyeBlue
+import com.android.calculator.ui.theme.ColorYellow
 
 @Composable
 fun ColorThemePopup(
     colors: List<Color> = listOf(
-        Color.Red,
-        Color.Blue,
-        Color.Green,
-        Color.Yellow,
-        Color.Cyan,
-        Color.Magenta
+        ColorRed,
+        ColorBlue,
+        ColorGreen,
+        ColorYellow,
+        ColorOrange,
+        ColorSyeBlue
     ),
-    onDismiss: () -> Unit
+    onDismiss: (Int?) -> Unit
 ) {
     Popup(
         alignment = Alignment.Center,
-        onDismissRequest = onDismiss
+        onDismissRequest = { onDismiss(null) }
     ) {
         Card(
             modifier = Modifier
@@ -60,9 +67,7 @@ fun ColorThemePopup(
                             .size(40.dp)
                             .clip(CircleShape)
                             .background(color)
-                            .clickable {
-                                onDismiss()
-                            }
+                            .clickable { onDismiss(color.toArgb()) }
                     )
                 }
             }

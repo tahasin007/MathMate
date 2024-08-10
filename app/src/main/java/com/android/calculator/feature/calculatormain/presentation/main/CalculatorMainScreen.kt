@@ -14,9 +14,10 @@ import com.android.calculator.CalculatorApplication
 import com.android.calculator.feature.calculatormain.presentation.main.components.ActionIconRow
 import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationResult
 import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationView
-import com.android.calculator.ui.common.components.BottomSheetContainer
-import com.android.calculator.ui.common.components.CalculatorGrid
-import com.android.calculator.ui.common.factory.ButtonFactory
+import com.android.calculator.feature.settings.domain.model.SettingsState
+import com.android.calculator.ui.shared.components.BottomSheetContainer
+import com.android.calculator.ui.shared.components.CalculatorGrid
+import com.android.calculator.ui.shared.factory.ButtonFactory
 import com.android.calculator.utils.ScreenType
 
 @Composable
@@ -25,7 +26,8 @@ fun CalculatorMainScreen(
     navController: NavHostController,
     modifier: Modifier,
     isDarkTheme: Boolean,
-    onThemeUpdated: () -> Unit
+    onThemeUpdated: () -> Unit,
+    configuration: SettingsState
 
 ) {
     val viewModel = app.calculatorMainViewModel
@@ -57,7 +59,8 @@ fun CalculatorMainScreen(
                 .fillMaxWidth()
                 .padding(bottom = 20.dp, start = 7.5.dp, end = 7.5.dp),
             buttons = buttons.getButtons(ScreenType.CalculatorMain),
-            onAction = viewModel::onAction
+            onAction = viewModel::onAction,
+            configuration = configuration
         )
     }
 }

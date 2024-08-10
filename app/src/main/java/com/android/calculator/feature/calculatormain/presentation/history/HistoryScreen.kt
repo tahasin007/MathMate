@@ -28,14 +28,16 @@ import com.android.calculator.feature.calculatormain.domain.model.Calculation
 import com.android.calculator.feature.calculatormain.presentation.history.components.CalculationItem
 import com.android.calculator.feature.calculatormain.presentation.history.components.HistoryBottomBar
 import com.android.calculator.feature.calculatormain.presentation.history.components.HistoryTopBar
-import com.android.calculator.ui.common.components.AppBar
+import com.android.calculator.feature.settings.domain.model.SettingsState
+import com.android.calculator.ui.shared.components.AppBar
 import com.android.calculator.utils.ScreenType
 
 @Composable
 fun HistoryScreen(
     app: CalculatorApplication,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    configuration: SettingsState
 ) {
     val viewModel = app.historyViewModel
     val groupedCalculations = viewModel.groupedCalculations
@@ -83,7 +85,7 @@ fun HistoryScreen(
         Surface(
             modifier = Modifier.padding(innerPadding)
         ) {
-            if (totalItems == 0) {
+            if (totalItems > 0) {
                 LazyColumn(
                     modifier = modifier
                         .padding(horizontal = 10.dp)
@@ -118,10 +120,10 @@ fun HistoryScreen(
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary.copy(alpha = .5f),
+                        tint = MaterialTheme.colorScheme.onPrimary.copy(alpha = .25f),
                         modifier = Modifier
                             .size(64.dp)
-                            .padding(bottom = 24.dp)
+                            .padding(bottom = 16.dp)
                     )
 
                     Text(

@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.components
+package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,17 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
-fun SimpleUnitView(
-    label: String,
+fun UnitView(
     value: String,
-    onClick: (() -> Unit)?,
+    items: Set<String>,
+    selectedUnit: String,
+    onClick: () -> Unit,
+    onSelectedUnitChanged: (String) -> Unit,
     isCurrentView: Boolean
 ) {
     val backgroundColor =
-        if (isCurrentView) MaterialTheme.colorScheme.secondary
+        if (isCurrentView) MaterialTheme.colorScheme.onSecondary.copy(alpha = .1f)
         else MaterialTheme.colorScheme.primary
 
     val textColor =
@@ -46,12 +47,7 @@ fun SimpleUnitView(
             .padding(all = 5.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(backgroundColor)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-            ) {
-                onClick?.invoke()
-            },
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Row(
@@ -61,26 +57,29 @@ fun SimpleUnitView(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var multiplier by remember { mutableFloatStateOf(1.0f) }
-
-            Text(
-                modifier = Modifier.padding(start = 5.dp),
-                text = label,
-                fontSize = 20.sp,
-                color = textColor,
-                onTextLayout = {
-                    if (it.hasVisualOverflow) {
-                        multiplier *= 1.99f
-                    }
-                },
-            )
-
-            Box(contentAlignment = Alignment.CenterEnd) {
+            Box(
+                modifier = Modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {}
+            ) {
+                DropDownView(
+                    selectedUnit = selectedUnit,
+                    items = items,
+                    onSelectedUnitChanged = onSelectedUnitChanged,
+                    textColor = textColor
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                var multiplier by remember { mutableFloatStateOf(1.0f) }
                 Text(
                     text = value,
-                    maxLines = 1,
+                    maxLines = 2,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.padding(end = 2.dp, top = 2.dp),
+                    modifier = Modifier.padding(end = 2.dp),
                     style = LocalTextStyle.current.copy(
                         fontSize = LocalTextStyle.current.fontSize * multiplier
                     ),
@@ -92,10 +91,7 @@ fun SimpleUnitView(
                     color = textColor
                 )
                 if (isCurrentView) {
-                    DrawBlinkingVerticalLine(
-                        color = MaterialTheme.colorScheme.onSecondary,
-                        lineHeight = 20.dp
-                    )
+                    DrawBlinkingVerticalLine(color = MaterialTheme.colorScheme.onSecondary)
                 }
             }
         }

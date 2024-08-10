@@ -52,7 +52,7 @@ fun ThemeSwitch(
         .height(size)
         .clip(shape = parentShape)
         .clickable { onThemeUpdated() }
-        .background(MaterialTheme.colorScheme.secondary)
+        .background(MaterialTheme.colorScheme.onSecondary.copy(alpha = .1f))
     ) {
         Box(
             modifier = Modifier
@@ -80,7 +80,7 @@ fun ThemeSwitch(
                     modifier = Modifier.size(iconSize),
                     imageVector = Icons.Default.Nightlight,
                     contentDescription = "Theme Icon",
-                    tint = if (isDarkTheme) MaterialTheme.colorScheme.secondary
+                    tint = if (isDarkTheme) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSecondary
                 )
             }

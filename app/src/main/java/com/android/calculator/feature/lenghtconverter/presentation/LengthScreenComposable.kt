@@ -16,9 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.utils.ScreenType
 
-fun NavGraphBuilder.lengthScreenComposable(navController: NavHostController) {
+fun NavGraphBuilder.lengthScreenComposable(
+    navController: NavHostController,
+    configuration: SettingsState
+) {
     composable(
         route = ScreenType.Length.route,
         enterTransition = {
@@ -47,7 +51,8 @@ fun NavGraphBuilder.lengthScreenComposable(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(bottom = 20.dp, start = 15.dp, end = 15.dp)
+                .padding(bottom = 20.dp, start = 15.dp, end = 15.dp),
+            configuration = configuration,
         )
     }
 }

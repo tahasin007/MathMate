@@ -17,11 +17,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.android.calculator.CalculatorApplication
+import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.utils.ScreenType
 
 fun NavGraphBuilder.historyScreenComposable(
     app: CalculatorApplication,
-    navController: NavHostController
+    navController: NavHostController,
+    configuration: SettingsState
 ) {
     composable(
         route = ScreenType.History.route,
@@ -52,7 +54,8 @@ fun NavGraphBuilder.historyScreenComposable(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(all = 10.dp)
+                .padding(all = 10.dp),
+            configuration = configuration
         )
     }
 }

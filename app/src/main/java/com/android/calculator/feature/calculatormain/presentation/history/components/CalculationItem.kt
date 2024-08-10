@@ -84,7 +84,7 @@ fun CalculationItem(
                         colors = CheckboxDefaults.colors(
                             checkedColor = MaterialTheme.colorScheme.onSecondary,
                             uncheckedColor = MaterialTheme.colorScheme.onSecondary,
-                            checkmarkColor = MaterialTheme.colorScheme.secondary
+                            checkmarkColor = MaterialTheme.colorScheme.primary
                         )
                     )
                 }

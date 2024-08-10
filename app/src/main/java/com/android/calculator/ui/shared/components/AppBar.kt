@@ -1,4 +1,4 @@
-package com.android.calculator.ui.common.components
+package com.android.calculator.ui.shared.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -22,7 +22,7 @@ fun AppBar(screen: String, onClick: () -> Unit) {
         modifier = Modifier
             .shadow(
                 elevation = 2.5.dp,
-                spotColor = MaterialTheme.colorScheme.secondary
+                spotColor = MaterialTheme.colorScheme.onSecondary.copy(alpha = .1f)
             ),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,

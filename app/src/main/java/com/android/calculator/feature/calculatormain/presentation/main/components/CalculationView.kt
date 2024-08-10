@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainState
-import com.android.calculator.ui.common.components.DrawBlinkingVerticalLine
+import com.android.calculator.ui.shared.components.DrawBlinkingVerticalLine
 
 @Composable
 fun CalculationView(state: CalculatorMainState) {

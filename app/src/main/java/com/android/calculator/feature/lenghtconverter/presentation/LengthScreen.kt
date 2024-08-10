@@ -15,17 +15,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.android.calculator.actions.LengthAction
+import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.utils.ScreenType
-import com.android.calculator.ui.common.components.AppBar
-import com.android.calculator.ui.common.components.CalculatorGrid
-import com.android.calculator.ui.common.components.UnitView
-import com.android.calculator.ui.common.factory.ButtonFactory
+import com.android.calculator.ui.shared.components.AppBar
+import com.android.calculator.ui.shared.components.CalculatorGrid
+import com.android.calculator.ui.shared.components.UnitView
+import com.android.calculator.ui.shared.factory.ButtonFactory
 import com.android.calculator.utils.Constants
 
 @Composable
 fun LengthScreen(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    configuration: SettingsState
 ) {
     val viewModel = viewModel<LengthViewModel>()
     val state = viewModel.lengthState
@@ -101,7 +103,8 @@ fun LengthScreen(
                         .fillMaxWidth()
                         .padding(bottom = 20.dp, start = 7.5.dp, end = 7.5.dp),
                     buttons = buttons.getButtons(ScreenType.Length),
-                    onAction = viewModel::onAction
+                    onAction = viewModel::onAction,
+                    configuration = configuration
                 )
             }
         }
