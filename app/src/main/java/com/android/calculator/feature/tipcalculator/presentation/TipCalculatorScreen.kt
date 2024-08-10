@@ -19,10 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.TipCalculatorAction
-import com.android.calculator.utils.ScreenType
 import com.android.calculator.ui.common.components.AnimatedSlider
 import com.android.calculator.ui.common.components.AppBar
 import com.android.calculator.ui.common.components.CalculatorGridSimple
@@ -30,14 +29,16 @@ import com.android.calculator.ui.common.components.InfoCard
 import com.android.calculator.ui.common.components.NumberCounter
 import com.android.calculator.ui.common.components.SimpleUnitView
 import com.android.calculator.ui.common.factory.ButtonFactory
+import com.android.calculator.utils.ScreenType
 
 @Composable
 fun TipCalculatorScreen(
+    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier
 ) {
-    val viewModel = viewModel<TipCalculatorViewModel>()
-    val state = viewModel.tipCalculatorState
+    val viewModel = app.tipCalculatorViewModel
+    val state = viewModel.state
 
     Scaffold(
         topBar = {
@@ -73,7 +74,7 @@ fun TipCalculatorScreen(
                         ) {
                             SimpleUnitView(
                                 label = "Total Bill",
-                                value = state.bill,
+                                value = state.value.bill,
                                 onClick = null,
                                 isCurrentView = true
                             )
@@ -98,6 +99,7 @@ fun TipCalculatorScreen(
                                 )
                                 NumberCounter(
                                     modifier = Modifier.weight(0.4f),
+                                    initialValue = state.value.headCount,
                                     onValueChange = {
                                         viewModel.onAction(TipCalculatorAction.EnterHeadCount(it))
                                     }
@@ -113,7 +115,7 @@ fun TipCalculatorScreen(
                         ) {
                             AnimatedSlider(
                                 label = "Tip",
-                                value = state.tipPercentage,
+                                value = state.value.tipPercentage,
                                 onValueChange = {
                                     viewModel.onAction(TipCalculatorAction.EnterTipPercent(it.toInt()))
                                 },
@@ -137,12 +139,12 @@ fun TipCalculatorScreen(
                                 InfoCard(
                                     modifier = Modifier.weight(0.5f),
                                     label = "TOTAL",
-                                    value = state.totalBill
+                                    value = state.value.totalBill
                                 )
                                 InfoCard(
                                     modifier = Modifier.weight(0.5f),
                                     label = "P/PERSON",
-                                    value = state.totalPerHead
+                                    value = state.value.totalPerHead
                                 )
                             }
                         }

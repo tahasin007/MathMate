@@ -1,6 +1,6 @@
-package com.android.calculator.feature.discount.presentation
+package com.android.calculator.feature.discountcalculator.domain.model
 
-data class DiscountState(
+data class DiscountCalculatorState(
     val price: String = "0",
     val discountPercent: Int = 0,
     val finalPrice: String = "0",

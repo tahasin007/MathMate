@@ -1,4 +1,4 @@
-package com.android.calculator.feature.discount.presentation
+package com.android.calculator.feature.discountcalculator.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,24 +16,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.DiscountAction
-import com.android.calculator.utils.ScreenType
 import com.android.calculator.ui.common.components.AnimatedSlider
 import com.android.calculator.ui.common.components.AppBar
 import com.android.calculator.ui.common.components.CalculatorGridSimple
 import com.android.calculator.ui.common.components.InfoCard
 import com.android.calculator.ui.common.components.SimpleUnitView
 import com.android.calculator.ui.common.factory.ButtonFactory
+import com.android.calculator.utils.ScreenType
 
 @Composable
 fun DiscountScreen(
+    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier
 ) {
-    val viewModel = viewModel<DiscountViewModel>()
-    val state = viewModel.discountState
+    val viewModel = app.discountCalculatorViewModel
+    val state = viewModel.state
 
     Scaffold(
         topBar = {
@@ -69,7 +70,7 @@ fun DiscountScreen(
                         ) {
                             SimpleUnitView(
                                 label = "Original price",
-                                value = state.price,
+                                value = state.value.price,
                                 onClick = null,
                                 isCurrentView = true
                             )
@@ -83,7 +84,7 @@ fun DiscountScreen(
                         ) {
                             AnimatedSlider(
                                 label = "Discount",
-                                value = state.discountPercent,
+                                value = state.value.discountPercent,
                                 onValueChange = {
                                     viewModel.onAction(DiscountAction.EnterDiscountPercent(it.toInt()))
                                 },
@@ -107,12 +108,12 @@ fun DiscountScreen(
                                 InfoCard(
                                     modifier = Modifier.weight(0.5f),
                                     label = "FINAL PRICE",
-                                    value = state.finalPrice
+                                    value = state.value.finalPrice
                                 )
                                 InfoCard(
                                     modifier = Modifier.weight(0.5f),
                                     label = "YOU SAVED",
-                                    value = state.saved
+                                    value = state.value.saved
                                 )
                             }
                         }

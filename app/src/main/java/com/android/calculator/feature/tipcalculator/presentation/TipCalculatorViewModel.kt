@@ -1,16 +1,18 @@
 package com.android.calculator.feature.tipcalculator.presentation
 
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.TipCalculatorAction
+import com.android.calculator.feature.tipcalculator.domain.model.TipCalculatorState
+import com.android.calculator.feature.tipcalculator.domain.repository.TipCalculatorRepository
 import java.text.DecimalFormat
 
-class TipCalculatorViewModel : ViewModel() {
+class TipCalculatorViewModel(private val repository: TipCalculatorRepository) : ViewModel() {
 
-    var tipCalculatorState by mutableStateOf(TipCalculatorState())
+    private val _state = mutableStateOf(repository.getTipCalculatorState())
+    val state: State<TipCalculatorState> = _state
 
     fun onAction(action: BaseAction) {
         when (action) {
@@ -32,46 +34,46 @@ class TipCalculatorViewModel : ViewModel() {
     }
 
     private fun clear() {
-        tipCalculatorState = tipCalculatorState.copy(bill = "0")
+        _state.value = _state.value.copy(bill = "0")
         calculateBill()
     }
 
     private fun enterDecimal() {
-        if (!tipCalculatorState.bill.contains(".")) {
-            tipCalculatorState = tipCalculatorState.copy(
+        if (!_state.value.bill.contains(".")) {
+            _state.value = _state.value.copy(
                 bill =
-                if (tipCalculatorState.bill.length < 21) tipCalculatorState.bill + "."
-                else tipCalculatorState.bill
+                if (_state.value.bill.length < 21) _state.value.bill + "."
+                else _state.value.bill
             )
         }
     }
 
     private fun delete() {
-        tipCalculatorState = tipCalculatorState.copy(
+        _state.value = _state.value.copy(
             bill =
-            if (tipCalculatorState.bill == "0") tipCalculatorState.bill
-            else if (tipCalculatorState.bill.length == 1) "0"
-            else tipCalculatorState.bill.dropLast(1)
+            if (_state.value.bill == "0") _state.value.bill
+            else if (_state.value.bill.length == 1) "0"
+            else _state.value.bill.dropLast(1)
         )
         calculateBill()
     }
 
     private fun enterNumber(number: Int) {
-        tipCalculatorState = tipCalculatorState.copy(
+        _state.value = _state.value.copy(
             bill =
-            if (tipCalculatorState.bill == "0") number.toString()
-            else if (tipCalculatorState.bill.contains(".")) {
-                val parts = tipCalculatorState.bill.split(".")
-                if (parts[1].length < 5 && tipCalculatorState.bill.length < 21) {
-                    tipCalculatorState.bill + number.toString()
+            if (_state.value.bill == "0") number.toString()
+            else if (_state.value.bill.contains(".")) {
+                val parts = _state.value.bill.split(".")
+                if (parts[1].length < 5 && _state.value.bill.length < 21) {
+                    _state.value.bill + number.toString()
                 } else {
-                    tipCalculatorState.bill
+                    _state.value.bill
                 }
             } else {
-                if (tipCalculatorState.bill.length < 21) {
-                    tipCalculatorState.bill + number.toString()
+                if (_state.value.bill.length < 21) {
+                    _state.value.bill + number.toString()
                 } else {
-                    tipCalculatorState.bill
+                    _state.value.bill
                 }
             }
         )
@@ -79,30 +81,30 @@ class TipCalculatorViewModel : ViewModel() {
     }
 
     private fun enterDoubleZero(number: String) {
-        tipCalculatorState = tipCalculatorState.copy(
+        _state.value = _state.value.copy(
             bill =
-            if (tipCalculatorState.bill == "0") tipCalculatorState.bill
-            else if (tipCalculatorState.bill.length == 24) tipCalculatorState.bill
-            else tipCalculatorState.bill + number
+            if (_state.value.bill == "0") _state.value.bill
+            else if (_state.value.bill.length == 24) _state.value.bill
+            else _state.value.bill + number
         )
 
         calculateBill()
     }
 
     private fun enterHeadCount(count: Int) {
-        tipCalculatorState = tipCalculatorState.copy(headCount = count)
+        _state.value = _state.value.copy(headCount = count)
         calculateBill()
     }
 
     private fun enterTipPercent(percent: Int) {
-        tipCalculatorState = tipCalculatorState.copy(tipPercentage = percent)
+        _state.value = _state.value.copy(tipPercentage = percent)
         calculateBill()
     }
 
     private fun calculateBill() {
-        val billAmount = tipCalculatorState.bill.toDoubleOrNull() ?: 0.0
-        val headCount = tipCalculatorState.headCount
-        val tipPercentage = tipCalculatorState.tipPercentage
+        val billAmount = _state.value.bill.toDoubleOrNull() ?: 0.0
+        val headCount = _state.value.headCount
+        val tipPercentage = _state.value.tipPercentage
 
         val tipAmount = (billAmount * tipPercentage) / 100
         val totalBill = billAmount + tipAmount
@@ -110,9 +112,10 @@ class TipCalculatorViewModel : ViewModel() {
 
         val decimalFormat = DecimalFormat("#.##")
 
-        tipCalculatorState = tipCalculatorState.copy(
+        _state.value = _state.value.copy(
             totalBill = decimalFormat.format(totalBill),
             totalPerHead = decimalFormat.format(totalPerHead)
         )
+        repository.saveTipCalculatorState(_state.value)
     }
 }

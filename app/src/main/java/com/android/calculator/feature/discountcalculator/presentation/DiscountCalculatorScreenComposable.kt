@@ -1,4 +1,4 @@
-package com.android.calculator.feature.discount.presentation
+package com.android.calculator.feature.discountcalculator.presentation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
@@ -16,9 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.android.calculator.CalculatorApplication
 import com.android.calculator.utils.ScreenType
 
-fun NavGraphBuilder.discountScreenComposable(navController: NavHostController) {
+fun NavGraphBuilder.discountScreenComposable(
+    app: CalculatorApplication,
+    navController: NavHostController
+) {
     composable(
         route = ScreenType.Discount.route,
         enterTransition = {
@@ -43,6 +47,7 @@ fun NavGraphBuilder.discountScreenComposable(navController: NavHostController) {
         }
     ) {
         DiscountScreen(
+            app = app,
             navController = navController,
             modifier = Modifier
                 .fillMaxSize()

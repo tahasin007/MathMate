@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.android.calculator.feature.calculatormain.presentation.history.historyScreenComposable
 import com.android.calculator.utils.ScreenType
 import com.android.calculator.feature.calculatormain.presentation.main.calculatorMainScreenComposable
-import com.android.calculator.feature.discount.presentation.discountScreenComposable
+import com.android.calculator.feature.discountcalculator.presentation.discountScreenComposable
 import com.android.calculator.feature.lenghtconverter.presentation.lengthScreenComposable
 import com.android.calculator.feature.massconverter.presentation.massScreenComposable
 import com.android.calculator.feature.numeralsystem.presentation.numeralSystemScreenComposable
@@ -37,9 +37,9 @@ fun CalculatorApp(app: CalculatorApplication) {
             }
             lengthScreenComposable(navController)
             massScreenComposable(navController)
-            discountScreenComposable(navController)
+            discountScreenComposable(app, navController)
             numeralSystemScreenComposable(navController)
-            tipCalculatorScreenComposable(navController)
+            tipCalculatorScreenComposable(app, navController)
             settingsScreenComposable(navController)
             historyScreenComposable(app, navController)
         }

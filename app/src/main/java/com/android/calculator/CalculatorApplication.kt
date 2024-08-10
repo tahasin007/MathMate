@@ -10,11 +10,19 @@ import com.android.calculator.feature.calculatormain.domain.usecase.GetCalculati
 import com.android.calculator.feature.calculatormain.domain.usecase.InsertCalculationUseCase
 import com.android.calculator.feature.calculatormain.presentation.history.HistoryViewModel
 import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainViewModel
+import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
+import com.android.calculator.feature.discountcalculator.data.source.DiscountCalculatorPreferences
+import com.android.calculator.feature.discountcalculator.presentation.DiscountCalculatorViewModel
+import com.android.calculator.feature.tipcalculator.data.repository.TipCalculatorRepositoryImpl
+import com.android.calculator.feature.tipcalculator.data.source.TipCalculatorPreferences
+import com.android.calculator.feature.tipcalculator.presentation.TipCalculatorViewModel
 
 class CalculatorApplication : Application() {
 
     lateinit var historyViewModel: HistoryViewModel
     lateinit var calculatorMainViewModel: CalculatorMainViewModel
+    lateinit var tipCalculatorViewModel: TipCalculatorViewModel
+    lateinit var discountCalculatorViewModel: DiscountCalculatorViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -28,8 +36,14 @@ class CalculatorApplication : Application() {
             deleteAllCalculations = DeleteAllCalculationsUseCase(calculationRepository),
             deleteSelectedCalculations = DeleteSelectedCalculationsUseCase(calculationRepository)
         )
+        val tioCalculatorRepository =
+            TipCalculatorRepositoryImpl(TipCalculatorPreferences(applicationContext))
+        val discountCalculatorRepository =
+            DiscountCalculatorRepositoryImpl(DiscountCalculatorPreferences(applicationContext))
 
         historyViewModel = HistoryViewModel(calculationUseCases)
         calculatorMainViewModel = CalculatorMainViewModel(calculationUseCases)
+        tipCalculatorViewModel = TipCalculatorViewModel(tioCalculatorRepository)
+        discountCalculatorViewModel = DiscountCalculatorViewModel(discountCalculatorRepository)
     }
 }

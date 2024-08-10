@@ -1,4 +1,4 @@
-package com.android.calculator.feature.tipcalculator.presentation
+package com.android.calculator.feature.tipcalculator.domain.model
 
 data class TipCalculatorState(
     val bill: String = "0",

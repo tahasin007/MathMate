@@ -16,9 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.android.calculator.CalculatorApplication
 import com.android.calculator.utils.ScreenType
 
-fun NavGraphBuilder.tipCalculatorScreenComposable(navController: NavHostController) {
+fun NavGraphBuilder.tipCalculatorScreenComposable(
+    app: CalculatorApplication,
+    navController: NavHostController
+) {
     composable(
         route = ScreenType.TipCalculator.route,
         enterTransition = {
@@ -43,6 +47,7 @@ fun NavGraphBuilder.tipCalculatorScreenComposable(navController: NavHostControll
         }
     ) {
         TipCalculatorScreen(
+            app = app,
             navController = navController,
             modifier = Modifier
                 .fillMaxSize()
