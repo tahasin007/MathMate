@@ -39,15 +39,17 @@ fun DropDownView(
     var selectedItem by remember { mutableStateOf(selectedUnit) }
     var expanded by remember { mutableStateOf(false) }
 
-    Row(modifier = Modifier
-        .clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null
-        ) {
-            expanded = !expanded
-        },
+    Row(
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                expanded = !expanded
+            },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         Text(
             text = selectedItem,
             fontSize = 20.sp,

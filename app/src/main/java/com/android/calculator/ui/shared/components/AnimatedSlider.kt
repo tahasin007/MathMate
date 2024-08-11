@@ -71,9 +71,11 @@ fun AnimatedSlider(
                 sliderWidth = size.width.toFloat()
             }
     ) {
-        Canvas(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = thumbRadius)) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = thumbRadius)
+        ) {
             val centerY = size.height / 2 + thumbRadius.toPx() / 2
             val start = Offset(0f, centerY)
             val end = Offset(size.width, centerY)
@@ -100,7 +102,7 @@ fun AnimatedSlider(
             modifier = Modifier
                 .offset {
                     IntOffset(
-                        x = (animatedPosition * sliderWidth - with(density) { thumbRadius.toPx() + 88}).toInt(),
+                        x = (animatedPosition * sliderWidth - with(density) { thumbRadius.toPx() + 88 }).toInt(),
                         y = (-with(density) { thumbRadius.toPx() * 2.25f }).toInt()
                     )
                 }

@@ -23,11 +23,11 @@ import androidx.navigation.NavHostController
 import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.TipCalculatorAction
 import com.android.calculator.feature.settings.domain.model.SettingsState
+import com.android.calculator.feature.tipcalculator.presentation.component.NumberCounter
 import com.android.calculator.ui.shared.components.AnimatedSlider
 import com.android.calculator.ui.shared.components.AppBar
 import com.android.calculator.ui.shared.components.CalculatorGridSimple
 import com.android.calculator.ui.shared.components.InfoCard
-import com.android.calculator.feature.tipcalculator.presentation.component.NumberCounter
 import com.android.calculator.ui.shared.components.SimpleUnitView
 import com.android.calculator.ui.shared.factory.ButtonFactory
 import com.android.calculator.utils.ScreenType

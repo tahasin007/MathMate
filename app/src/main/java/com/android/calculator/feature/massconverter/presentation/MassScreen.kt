@@ -16,12 +16,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.android.calculator.actions.MassAction
 import com.android.calculator.feature.settings.domain.model.SettingsState
-import com.android.calculator.utils.ScreenType
 import com.android.calculator.ui.shared.components.AppBar
 import com.android.calculator.ui.shared.components.CalculatorGrid
 import com.android.calculator.ui.shared.components.UnitView
 import com.android.calculator.ui.shared.factory.ButtonFactory
 import com.android.calculator.utils.Constants
+import com.android.calculator.utils.ScreenType
 
 @Composable
 fun MassScreen(
