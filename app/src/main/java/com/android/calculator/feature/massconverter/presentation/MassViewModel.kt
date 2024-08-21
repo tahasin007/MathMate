@@ -26,6 +26,7 @@ class MassViewModel : ViewModel() {
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Operation -> enterOperation(action.operation)
             is BaseAction.Calculate -> calculate()
+            is BaseAction.DoubleZero -> enterDoubleZero(action.number)
             else -> {}
         }
     }
@@ -202,6 +203,20 @@ class MassViewModel : ViewModel() {
             )
         }
         convert()
+    }
+
+    private fun enterDoubleZero(number: String) {
+        massState = if(massState.currentView == MassView.INPUT) {
+            val inputValue = if (massState.inputValue == "0") massState.inputValue
+            else if (massState.inputValue.length == 24) massState.inputValue
+            else massState.inputValue + number
+            massState.copy(inputValue = inputValue)
+        } else {
+            val outputValue = if (massState.outputValue == "0") massState.outputValue
+            else if (massState.outputValue.length == 24) massState.outputValue
+            else massState.outputValue + number
+            massState.copy(outputValue = outputValue)
+        }
     }
 
     private fun calculate(expression: String): String? {

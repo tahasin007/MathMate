@@ -27,7 +27,7 @@ fun TextViewWithSwitch(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.05f),
                 shape = MaterialTheme.shapes.medium
             )
             .padding(10.dp),

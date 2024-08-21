@@ -26,6 +26,7 @@ class LengthViewModel : ViewModel() {
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Operation -> enterOperation(action.operation)
             is BaseAction.Calculate -> calculate()
+            is BaseAction.DoubleZero -> enterDoubleZero(action.number)
             else -> {}
         }
     }
@@ -200,6 +201,21 @@ class LengthViewModel : ViewModel() {
                     } else lengthState.outputValue + operation.symbol
                 }
             )
+        }
+        convert()
+    }
+
+    private fun enterDoubleZero(number: String) {
+        lengthState = if (lengthState.currentView == LengthView.INPUT) {
+            val inputValue = if (lengthState.inputValue == "0") lengthState.inputValue
+            else if (lengthState.inputValue.length == 24) lengthState.inputValue
+            else lengthState.inputValue + number
+            lengthState.copy(inputValue = inputValue)
+        } else {
+            val outputValue = if (lengthState.outputValue == "0") lengthState.outputValue
+            else if (lengthState.outputValue.length == 24) lengthState.outputValue
+            else lengthState.outputValue + number
+            lengthState.copy(outputValue = outputValue)
         }
         convert()
     }

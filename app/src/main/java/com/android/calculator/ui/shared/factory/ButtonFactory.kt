@@ -85,8 +85,9 @@ class ButtonFactory {
             ),
             listOf(
                 CalculatorButtonInfo("0", BaseAction.Number(0), true),
+                CalculatorButtonInfo("00", BaseAction.DoubleZero("00"), true),
                 CalculatorButtonInfo(".", BaseAction.Decimal),
-                CalculatorButtonInfo("=", BaseAction.Calculate, aspectRatio = 2f, weight = 2f)
+                CalculatorButtonInfo("=", BaseAction.Calculate)
             )
         )
     }
@@ -110,8 +111,8 @@ class ButtonFactory {
                 CalculatorButtonInfo("3", BaseAction.Number(3), true)
             ),
             listOf(
-                CalculatorButtonInfo("00", BaseAction.DoubleZero("00"), true),
                 CalculatorButtonInfo("0", BaseAction.Number(0), true),
+                CalculatorButtonInfo("00", BaseAction.DoubleZero("00"), true),
                 CalculatorButtonInfo(".", BaseAction.Decimal)
             ),
             listOf(
