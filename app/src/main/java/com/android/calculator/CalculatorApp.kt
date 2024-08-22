@@ -1,13 +1,17 @@
 package com.android.calculator
 
+import android.app.Activity
+import android.view.WindowManager
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.android.calculator.feature.calculatormain.presentation.history.historyScreenComposable
@@ -27,6 +31,22 @@ fun CalculatorApp(app: CalculatorApplication) {
     var isDarkTheme by remember { mutableStateOf(false) }
     val configuration by app.settingsViewModel.settingsState.collectAsState()
     val themeColor = configuration.themeColor
+
+    val activity = LocalContext.current as Activity
+
+    // Keep the device awake based on configuration
+    DisposableEffect(configuration.keepDeviceAwake) {
+        if (configuration.keepDeviceAwake) {
+            activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        onDispose {
+            if (configuration.keepDeviceAwake) {
+                activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
+        }
+    }
 
     CalculatorTheme(darkTheme = isDarkTheme, themeColor = themeColor) {
         NavHost(

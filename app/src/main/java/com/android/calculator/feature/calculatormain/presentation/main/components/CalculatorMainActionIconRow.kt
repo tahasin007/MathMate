@@ -67,7 +67,7 @@ fun ActionIconRow(
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 ) {
-                    onAction(CalculatorAction.BottomSheetVisibility(state.isBottomSheetOpen.not()))
+                    onAction(CalculatorAction.ConverterMenuVisibility(state.isConverterSheetOpen.not()))
                 }
         )
 

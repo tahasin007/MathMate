@@ -104,6 +104,21 @@ fun SettingsScreen(
                         },
                         modifier = Modifier.weight(1f)
                     )
+
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 5.dp),
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+
+                    TextViewWithSwitch(
+                        text = "Keep device awake",
+                        isChecked = settingsState.keepDeviceAwake,
+                        onCheckedChange = {
+                            viewModel.onAction(SettingsAction.ChangeKeepDeviceAwake(it))
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }

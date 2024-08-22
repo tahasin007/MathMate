@@ -22,11 +22,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.android.calculator.CalculatorApplication
+import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.feature.calculatormain.presentation.main.components.ActionIconRow
 import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationResult
 import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationView
+import com.android.calculator.feature.calculatormain.presentation.main.components.ConverterBottomSheet
+import com.android.calculator.feature.calculatormain.presentation.main.components.SaveCalculationBottomSheet
 import com.android.calculator.feature.settings.domain.model.SettingsState
-import com.android.calculator.ui.shared.components.BottomSheetContainer
 import com.android.calculator.ui.shared.components.CalculatorGrid
 import com.android.calculator.ui.shared.factory.ButtonFactory
 import com.android.calculator.utils.ScreenType
@@ -67,6 +69,7 @@ fun CalculatorMainScreen(
         ) {
             Spacer(modifier = Modifier.height(35.dp))
             CalculationResult(result = state.result)
+
             CalculationView(
                 state = state,
                 onCopyClick = {
@@ -80,8 +83,11 @@ fun CalculatorMainScreen(
                     }
                 },
                 onBookmarkClick = {
-
+                    viewModel.onAction(CalculatorAction.SaveCalculationMenuVisibility(true))
                 })
+
+            SaveCalculationBottomSheet(state = state, onAction = viewModel::onAction)
+
             ActionIconRow(
                 state = state,
                 onAction = viewModel::onAction,
@@ -91,10 +97,12 @@ fun CalculatorMainScreen(
                     navController.navigate(it)
                 }
             )
+
             Spacer(modifier = Modifier.height(15.dp))
-            BottomSheetContainer(state = state, onAction = viewModel::onAction) {
+            ConverterBottomSheet(state = state, onAction = viewModel::onAction) {
                 navController.navigate(it)
             }
+
             val buttons = ButtonFactory()
             CalculatorGrid(
                 modifier = Modifier

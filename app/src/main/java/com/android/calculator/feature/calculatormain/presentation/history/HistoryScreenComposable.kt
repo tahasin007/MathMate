@@ -54,8 +54,7 @@ fun NavGraphBuilder.historyScreenComposable(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(all = 10.dp),
-            configuration = configuration
+                .padding(all = 10.dp)
         )
     }
 }

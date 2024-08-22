@@ -34,7 +34,8 @@ class CalculatorMainViewModel(private val calculationUseCases: CalculationUseCas
     private fun handleCalculatorAction(action: CalculatorAction) {
         when (action) {
             is CalculatorAction.Parenthesis -> enterParenthesis()
-            is CalculatorAction.BottomSheetVisibility -> openConverterBottomSheet(action.isSheetOpen)
+            is CalculatorAction.ConverterMenuVisibility -> openConverterBottomSheet(action.isSheetOpen)
+            is CalculatorAction.SaveCalculationMenuVisibility -> openSaveCalculationBottomSheet(action.isSheetOpen)
             else -> {}
         }
     }
@@ -160,7 +161,13 @@ class CalculatorMainViewModel(private val calculationUseCases: CalculationUseCas
 
     private fun openConverterBottomSheet(sheetOpen: Boolean) {
         calculatorState = calculatorState.copy(
-            isBottomSheetOpen = sheetOpen
+            isConverterSheetOpen = sheetOpen
+        )
+    }
+
+    private fun openSaveCalculationBottomSheet(sheetOpen: Boolean) {
+        calculatorState = calculatorState.copy(
+            isSaveCalculationSheetOpen = sheetOpen
         )
     }
 

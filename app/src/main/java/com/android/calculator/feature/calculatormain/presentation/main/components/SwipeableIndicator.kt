@@ -37,7 +37,7 @@ fun SwipeableIndicator(
 ) {
     Box(
         modifier = modifier
-            .width(7.5.dp + swipeableState.offset.value.roundToInt().dp)
+            .width(5.dp + swipeableState.offset.value.roundToInt().dp)
             .height(50.dp)
             .clip(RoundedCornerShape(topEnd = 15.dp, bottomEnd = 15.dp))
             .background(MaterialTheme.colorScheme.onSecondary)

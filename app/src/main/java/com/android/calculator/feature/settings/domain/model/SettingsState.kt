@@ -7,5 +7,6 @@ data class SettingsState(
     val isButtonRounded: Boolean = false,
     val isHapticFeedbackOn: Boolean = false,
     val isDoubleZeroEnabled: Boolean = true,
+    val keepDeviceAwake: Boolean = false,
     val themeColor: Int = ColorRed.toArgb()
 )

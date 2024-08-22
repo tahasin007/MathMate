@@ -1,4 +1,4 @@
-package com.android.calculator.ui.shared.components
+package com.android.calculator.feature.calculatormain.presentation.main.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,33 +22,38 @@ import com.android.calculator.R
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainState
+import com.android.calculator.ui.shared.components.ConverterIconView
 import com.android.calculator.utils.ScreenType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetContainer(
+fun ConverterBottomSheet(
     state: CalculatorMainState,
     onAction: (BaseAction) -> Unit,
     onNavigate: (screen: String) -> Unit
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
 
-    if (state.isBottomSheetOpen) {
+    if (state.isConverterSheetOpen) {
         ModalBottomSheet(
             onDismissRequest = {
-                onAction(CalculatorAction.BottomSheetVisibility(false))
+                onAction(CalculatorAction.ConverterMenuVisibility(false))
             },
             sheetState = bottomSheetState,
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            dragHandle = {
+                Spacer(modifier = Modifier)
+            }
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 30.dp, start = 10.dp, end = 10.dp)
+                    .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "Unit Converter",
@@ -69,11 +73,11 @@ fun BottomSheetContainer(
                         Modifier.weight(1f)
                     ) {
                         onNavigate.invoke(ScreenType.Length.route)
-                        onAction(CalculatorAction.BottomSheetVisibility(false))
+                        onAction(CalculatorAction.ConverterMenuVisibility(false))
                     }
                     ConverterIconView(R.drawable.ic_mass, ScreenType.Mass, Modifier.weight(1f)) {
                         onNavigate.invoke(ScreenType.Mass.route)
-                        onAction(CalculatorAction.BottomSheetVisibility(false))
+                        onAction(CalculatorAction.ConverterMenuVisibility(false))
                     }
                     ConverterIconView(
                         R.drawable.ic_discount,
@@ -81,7 +85,7 @@ fun BottomSheetContainer(
                         Modifier.weight(1f)
                     ) {
                         onNavigate.invoke(ScreenType.Discount.route)
-                        onAction(CalculatorAction.BottomSheetVisibility(false))
+                        onAction(CalculatorAction.ConverterMenuVisibility(false))
                     }
                 }
                 Spacer(modifier = Modifier.height(15.dp))
@@ -95,7 +99,7 @@ fun BottomSheetContainer(
                         Modifier.weight(1f)
                     ) {
                         onNavigate.invoke(ScreenType.TipCalculator.route)
-                        onAction(CalculatorAction.BottomSheetVisibility(false))
+                        onAction(CalculatorAction.ConverterMenuVisibility(false))
                     }
                     ConverterIconView(
                         R.drawable.ic_binary,
@@ -103,7 +107,7 @@ fun BottomSheetContainer(
                         Modifier.weight(1f)
                     ) {
                         onNavigate.invoke(ScreenType.NumeralSystem.route)
-                        onAction(CalculatorAction.BottomSheetVisibility(false))
+                        onAction(CalculatorAction.ConverterMenuVisibility(false))
                     }
                     ConverterIconView(
                         R.drawable.ic_currency_convert,

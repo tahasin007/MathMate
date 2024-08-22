@@ -13,6 +13,7 @@ class SettingsViewModel(private val repository: SettingsRepositoryImpl) : ViewMo
             is SettingsAction.ChangeHapticFeedback -> changeHapticFeedback(action.status)
             is SettingsAction.ChangeRoundedButton -> changeRoundedButton(action.status)
             is SettingsAction.ChangeThemeColor -> changeThemeColor(action.color)
+            is SettingsAction.ChangeKeepDeviceAwake -> changeKeepDeviceAwake(action.status)
         }
     }
 
@@ -37,6 +38,12 @@ class SettingsViewModel(private val repository: SettingsRepositoryImpl) : ViewMo
     private fun changeThemeColor(color: Int) {
         repository.saveSettingsState(
             settingsState.value.copy(themeColor = color)
+        )
+    }
+
+    private fun changeKeepDeviceAwake(status: Boolean) {
+        repository.saveSettingsState(
+            settingsState.value.copy(keepDeviceAwake = status)
         )
     }
 }

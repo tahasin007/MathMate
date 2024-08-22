@@ -15,6 +15,7 @@ class SettingsPreferences(context: Context) {
             putBoolean("isButtonRounded", state.isButtonRounded)
             putBoolean("isHapticFeedbackOn", state.isHapticFeedbackOn)
             putBoolean("isDoubleZeroEnabled", state.isDoubleZeroEnabled)
+            putBoolean("keepDeviceAwake", state.keepDeviceAwake)
             putInt("themeColor", state.themeColor)
             apply()
         }
@@ -25,6 +26,7 @@ class SettingsPreferences(context: Context) {
             isButtonRounded = sharedPreferences.getBoolean("isButtonRounded", false),
             isHapticFeedbackOn = sharedPreferences.getBoolean("isHapticFeedbackOn", false),
             isDoubleZeroEnabled = sharedPreferences.getBoolean("isDoubleZeroEnabled", true),
+            keepDeviceAwake = sharedPreferences.getBoolean("keepDeviceAwake", false),
             themeColor = sharedPreferences.getInt("themeColor", ColorRed.toArgb())
         )
     }

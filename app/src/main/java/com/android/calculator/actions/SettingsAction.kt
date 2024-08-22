@@ -5,4 +5,5 @@ sealed class SettingsAction {
     data class ChangeRoundedButton(val status: Boolean) : SettingsAction()
     data class ChangeHapticFeedback(val status: Boolean) : SettingsAction()
     data class ChangeEnableDoubleZero(val status: Boolean) : SettingsAction()
+    data class ChangeKeepDeviceAwake(val status: Boolean) : SettingsAction()
 }
