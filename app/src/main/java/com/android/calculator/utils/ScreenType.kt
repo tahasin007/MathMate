@@ -10,4 +10,5 @@ sealed class ScreenType(val route: String, val screen: String) {
     data object Currency : ScreenType("currency", "Currency")
     data object Settings : ScreenType("settings", "Settings")
     data object History : ScreenType("history", "History")
+    data object Bookmark : ScreenType("bookmark", "Bookmark")
 }

@@ -26,7 +26,7 @@ import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.feature.calculatormain.presentation.main.components.ActionIconRow
 import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationResult
 import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationView
-import com.android.calculator.feature.calculatormain.presentation.main.components.ConverterBottomSheet
+import com.android.calculator.feature.calculatormain.presentation.main.components.CalculatorMainMenuBottomSheet
 import com.android.calculator.feature.calculatormain.presentation.main.components.SaveCalculationBottomSheet
 import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.ui.shared.components.CalculatorGrid
@@ -99,7 +99,7 @@ fun CalculatorMainScreen(
             )
 
             Spacer(modifier = Modifier.height(15.dp))
-            ConverterBottomSheet(state = state, onAction = viewModel::onAction) {
+            CalculatorMainMenuBottomSheet(state = state, onAction = viewModel::onAction) {
                 navController.navigate(it)
             }
 

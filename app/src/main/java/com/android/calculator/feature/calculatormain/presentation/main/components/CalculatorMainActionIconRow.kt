@@ -32,29 +32,29 @@ fun ActionIconRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceAround,
+        horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            modifier = Modifier
-                .weight(1f)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
-                        bounded = false,
-                        radius = 30.dp,
-                        color = MaterialTheme.colorScheme.onSecondary
-                    )
-                ) {
-                    onNavigate?.invoke(ScreenType.History.route)
-                },
-            painter = painterResource(id = R.drawable.ic_history),
-            contentDescription = "Delete",
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary)
-        )
+//        Image(
+//            modifier = Modifier
+//                .weight(1f)
+//                .clickable(
+//                    interactionSource = remember { MutableInteractionSource() },
+//                    indication = rememberRipple(
+//                        bounded = false,
+//                        radius = 30.dp,
+//                        color = MaterialTheme.colorScheme.onSecondary
+//                    )
+//                ) {
+//                    onNavigate?.invoke(ScreenType.History.route)
+//                },
+//            painter = painterResource(id = R.drawable.ic_history),
+//            contentDescription = "Delete",
+//            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary)
+//        )
 
         Image(
-            painter = painterResource(id = R.drawable.ic_convert),
+            painter = painterResource(id = R.drawable.ic_menu),
             contentDescription = "Delete",
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
             modifier = Modifier

@@ -16,7 +16,7 @@ class ButtonFactory {
             ScreenType.TipCalculator -> getSimpleGridButtons()
             ScreenType.NumeralSystem -> getNumeralSystemButtons()
             ScreenType.Currency -> getBasicButtons()
-            ScreenType.Settings, ScreenType.History -> emptyList()
+            ScreenType.Settings, ScreenType.History, ScreenType.Bookmark -> emptyList()
         }
     }
 
