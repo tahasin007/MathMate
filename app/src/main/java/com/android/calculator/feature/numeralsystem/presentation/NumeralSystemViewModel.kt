@@ -1,6 +1,5 @@
 package com.android.calculator.feature.numeralsystem.presentation
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,13 +27,11 @@ class NumeralSystemViewModel : ViewModel() {
         when (action) {
             is NumeralSystemAction.ChangeInputUnit -> {
                 numeralSystemState = numeralSystemState.copy(inputUnit = action.unit)
-                Log.i("NumeralSystemViewModel", "$numeralSystemState")
                 convert()
             }
 
             is NumeralSystemAction.ChangeOutputUnit -> {
                 numeralSystemState = numeralSystemState.copy(outputUnit = action.unit)
-                Log.i("NumeralSystemViewModel", "$numeralSystemState")
                 convert()
             }
 

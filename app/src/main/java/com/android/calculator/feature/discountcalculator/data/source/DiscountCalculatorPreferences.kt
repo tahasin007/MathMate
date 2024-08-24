@@ -1,12 +1,14 @@
 package com.android.calculator.feature.discountcalculator.data.source
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.android.calculator.feature.discountcalculator.domain.model.DiscountCalculatorState
 
 class DiscountCalculatorPreferences(context: Context) {
 
-    private val sharedPreferences =
+    private val sharedPreferences: SharedPreferences by lazy {
         context.getSharedPreferences("discount_prefs", Context.MODE_PRIVATE)
+    }
 
     fun saveDiscountCalculatorState(state: DiscountCalculatorState) {
         with(sharedPreferences.edit()) {

@@ -12,10 +12,8 @@ class ButtonFactory {
         return when (screenType) {
             ScreenType.CalculatorMain -> getCalculatorButtons()
             ScreenType.Length, ScreenType.Mass -> getBasicButtons()
-            ScreenType.Discount -> getSimpleGridButtons()
-            ScreenType.TipCalculator -> getSimpleGridButtons()
+            ScreenType.Discount, ScreenType.TipCalculator, ScreenType.Currency -> getSimpleGridButtons()
             ScreenType.NumeralSystem -> getNumeralSystemButtons()
-            ScreenType.Currency -> getBasicButtons()
             ScreenType.Settings, ScreenType.History, ScreenType.Bookmark -> emptyList()
         }
     }

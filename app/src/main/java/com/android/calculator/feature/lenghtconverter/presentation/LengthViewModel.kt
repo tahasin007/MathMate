@@ -89,7 +89,10 @@ class LengthViewModel : ViewModel() {
                     lengthState.copy(outputValue = CommonUtils.convertScientificToNormal(outputValue))
             } else {
                 val outputValue =
-                    if (lengthState.outputValue.isBlank() || CommonUtils.isLastCharOperator(lengthState.outputValue)) return@launch
+                    if (lengthState.outputValue.isBlank() || CommonUtils.isLastCharOperator(
+                            lengthState.outputValue
+                        )
+                    ) return@launch
                     else calculate(lengthState.outputValue)?.toDoubleOrNull()
                 if (outputValue == null) return@launch
 

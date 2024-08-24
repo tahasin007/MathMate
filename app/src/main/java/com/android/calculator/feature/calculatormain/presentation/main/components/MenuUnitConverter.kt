@@ -87,7 +87,8 @@ fun MenuUnitConverter(
             ScreenType.Currency,
             Modifier.weight(1f)
         ) {
-
+            onNavigate.invoke(ScreenType.Currency.route)
+            onAction(CalculatorAction.ConverterMenuVisibility(false))
         }
     }
 }

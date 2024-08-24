@@ -10,6 +10,9 @@ import com.android.calculator.feature.calculatormain.domain.usecase.GetCalculati
 import com.android.calculator.feature.calculatormain.domain.usecase.InsertCalculationUseCase
 import com.android.calculator.feature.calculatormain.presentation.history.HistoryViewModel
 import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainViewModel
+import com.android.calculator.feature.currencyconverter.data.repository.CurrencyRepositoryImpl
+import com.android.calculator.feature.currencyconverter.data.source.CurrencyRatePreference
+import com.android.calculator.feature.currencyconverter.presentation.CurrencyConverterViewModel
 import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
 import com.android.calculator.feature.discountcalculator.data.source.DiscountCalculatorPreferences
 import com.android.calculator.feature.discountcalculator.presentation.DiscountCalculatorViewModel
@@ -27,6 +30,7 @@ class CalculatorApplication : Application() {
     lateinit var tipCalculatorViewModel: TipCalculatorViewModel
     lateinit var discountCalculatorViewModel: DiscountCalculatorViewModel
     lateinit var settingsViewModel: SettingsViewModel
+    lateinit var currencyConverterViewModel: CurrencyConverterViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -46,11 +50,14 @@ class CalculatorApplication : Application() {
             DiscountCalculatorRepositoryImpl(DiscountCalculatorPreferences(applicationContext))
         val settingsRepository =
             SettingsRepositoryImpl(SettingsPreferences(applicationContext))
+        val currencyConverterRepository =
+            CurrencyRepositoryImpl(CurrencyRatePreference(applicationContext))
 
         historyViewModel = HistoryViewModel(calculationUseCases)
         calculatorMainViewModel = CalculatorMainViewModel(calculationUseCases)
         tipCalculatorViewModel = TipCalculatorViewModel(tioCalculatorRepository)
         discountCalculatorViewModel = DiscountCalculatorViewModel(discountCalculatorRepository)
         settingsViewModel = SettingsViewModel(settingsRepository)
+        currencyConverterViewModel = CurrencyConverterViewModel(currencyConverterRepository)
     }
 }
