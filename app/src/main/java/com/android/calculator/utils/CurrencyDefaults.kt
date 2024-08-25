@@ -345,9 +345,46 @@ object CurrencyDefaults {
 
     fun getFlagDrawable(currencyCode: String): Int {
         return when (currencyCode) {
-            "BDT" -> R.drawable.ic_flag_bangladesh
             "USD" -> R.drawable.ic_flag_us
-            else -> R.drawable.ic_flag_us
+            "AED" -> R.drawable.ic_flag_uae
+            "ALL" -> R.drawable.ic_flag_al
+            "AMD" -> R.drawable.ic_flag_am
+            "ANG" -> R.drawable.ic_flag_sx
+            "AOA" -> R.drawable.ic_flag_ao
+            "ARS" -> R.drawable.ic_flag_arg
+            "AUD" -> R.drawable.ic_flag_au
+            "AFN" -> R.drawable.ic_flag_afg
+            "AWG" -> R.drawable.ic_flag_aw
+            "AZN" -> R.drawable.ic_flag_az
+            "BAM" -> R.drawable.ic_flag_bih
+            "BBD" -> R.drawable.ic_flag_bb
+            "BDT" -> R.drawable.ic_flag_bd
+            "BGN" -> R.drawable.ic_flag_bg
+            "BHD" -> R.drawable.ic_flag_bh
+            "BIF" -> R.drawable.ic_flag_bi
+            "BMD" -> R.drawable.ic_flag_bm
+            "BND" -> R.drawable.ic_flag_bn
+            "BOB" -> R.drawable.ic_flag_bo
+            "BRL" -> R.drawable.ic_flag_br
+            "BSD" -> R.drawable.ic_flag_bhs
+            "BTN" -> R.drawable.ic_flag_btn
+            "BWP" -> R.drawable.ic_flag_bw
+            "BYN" -> R.drawable.ic_flag_by
+            "BZD" -> R.drawable.ic_flag_bz
+            "CAD" -> R.drawable.ic_flag_ca
+            "CDF" -> R.drawable.ic_flag_cd
+            "CHF" -> R.drawable.ic_flag_ch
+            "CLP" -> R.drawable.ic_flag_cl
+            "CNY" -> R.drawable.ic_flag_cn
+            "COP" -> R.drawable.ic_flag_co
+            "CRC" -> R.drawable.ic_flag_cr
+            "CUP" -> R.drawable.ic_flag_cu
+            "CVE" -> R.drawable.ic_flag_cv
+            "CZK" -> R.drawable.ic_flag_cz
+            "DJF" -> R.drawable.ic_flag_dj
+            "DKK" -> R.drawable.ic_flag_fro
+            "DOP" -> R.drawable.ic_flag_do
+            else -> R.drawable.ic_flag_white
         }
     }
 }
