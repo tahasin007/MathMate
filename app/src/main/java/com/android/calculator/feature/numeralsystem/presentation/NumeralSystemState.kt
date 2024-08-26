@@ -1,6 +1,6 @@
 package com.android.calculator.feature.numeralsystem.presentation
 
-import com.android.calculator.utils.NumeralSystem
+import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystem
 
 data class NumeralSystemState(
     val inputUnit: String = NumeralSystem.Binary::class.simpleName.toString(),

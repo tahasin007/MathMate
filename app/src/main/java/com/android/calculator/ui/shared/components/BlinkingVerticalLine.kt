@@ -53,7 +53,7 @@ fun DrawBlinkingVerticalLine(
                     color = color,
                     start = Offset(size.width / 2, -lineHeight.toPx() / 2),
                     end = Offset(size.width / 2, lineHeight.toPx() / 2),
-                    strokeWidth = 2.dp.toPx(),
+                    strokeWidth = 3.dp.toPx(),
                     cap = StrokeCap.Round
                 )
             }

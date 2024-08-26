@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.calculator.utils.ScreenType
@@ -30,6 +32,7 @@ fun ConverterIconView(
 ) {
     Column(
         modifier = modifier
+            .fillMaxWidth()
             .clip(CircleShape)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -49,6 +52,11 @@ fun ConverterIconView(
             contentDescription = screen.route,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
         )
-        Text(text = screen.screen, color = MaterialTheme.colorScheme.onSecondary, fontSize = 14.sp)
+        Text(
+            text = screen.screen,
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
+        )
     }
 }

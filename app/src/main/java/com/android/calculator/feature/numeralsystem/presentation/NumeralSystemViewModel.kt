@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.NumeralSystemAction
-import com.android.calculator.utils.NumeralSystemConverter
+import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystemConverter
 
 class NumeralSystemViewModel : ViewModel() {
 

@@ -7,6 +7,7 @@ data class CurrencyState(
     val toValue: String = "0",
     val fromToExchangeRate: String = "",
     val toFromExchangeRate: String = "",
+    val lastUpdatedInLocalTime: String = "",
     val currentView: CurrencyView = CurrencyView.FROM
 )
 

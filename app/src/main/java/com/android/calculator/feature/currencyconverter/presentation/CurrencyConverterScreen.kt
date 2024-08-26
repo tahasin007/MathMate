@@ -13,11 +13,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.CurrencyAction
@@ -63,6 +69,21 @@ fun CurrencyConverterScreen(
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+
+                        Text(
+                            text = buildAnnotatedString {
+                                append("Last Updated: ")
+                                withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
+                                    append(state.value.lastUpdatedInLocalTime)
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp),
+                            color = MaterialTheme.colorScheme.onSecondary.copy(alpha = .75f),
+                            fontSize = 18.sp,
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -87,7 +108,7 @@ fun CurrencyConverterScreen(
                                 }
                             )
 
-                            Spacer(modifier = Modifier.height(35.dp))
+                            Spacer(modifier = Modifier.height(30.dp))
                             CurrencySwapIcon(onSwapClicked = {
                                 viewModel.onAction(CurrencyAction.SwitchView)
                             })

@@ -25,11 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.calculator.ui.shared.components.DrawBlinkingVerticalLine
-import com.android.calculator.utils.CurrencyDefaults
+import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
 
 @Composable
 fun CurrencyInfoItem(
-    items: List<String> = CurrencyDefaults.defaultCurrencyRate.conversion_rates.keys.toList()
+    items: List<String> = CurrencyUtils.defaultCurrencyRate.conversion_rates.keys.toList()
         .sorted(),
     selectedCurrency: String,
     currencyValue: String,
@@ -62,7 +62,7 @@ fun CurrencyInfoItem(
             onSelectedUnitChanged = onSelectedUnitChanged
         )
 
-        Spacer(modifier = Modifier.height(2.5.dp))
+        Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = exchangeRate,
             fontSize = 14.sp,
@@ -92,7 +92,7 @@ fun CurrencyInfoItem(
                 color = MaterialTheme.colorScheme.onPrimary
             )
             if (isCurrentView) {
-                Spacer(modifier = Modifier.width(2.dp))
+                Spacer(modifier = Modifier.width(1.dp))
                 DrawBlinkingVerticalLine(
                     color = MaterialTheme.colorScheme.onSecondary,
                     lineHeight = 30.dp

@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.android.calculator.utils.CurrencyDefaults
+import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
 
 @Composable
 fun CurrencyInfoHeader(
@@ -59,7 +59,7 @@ fun CurrencyInfoHeader(
         Row(modifier = Modifier.weight(0.75f)) {
             Image(
                 painter = painterResource(
-                    id = CurrencyDefaults.getFlagDrawable(selectedCurrency)
+                    id = CurrencyUtils.getFlagDrawable(selectedCurrency)
                 ),
                 contentDescription = selectedCurrency,
                 modifier = Modifier
@@ -77,7 +77,7 @@ fun CurrencyInfoHeader(
                 )
                 Text(
                     text = "$selectedCurrency - ${
-                        CurrencyDefaults.getCurrencyFullName(selectedCurrency)
+                        CurrencyUtils.getCurrencyFullName(selectedCurrency)
                     }",
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onPrimary,

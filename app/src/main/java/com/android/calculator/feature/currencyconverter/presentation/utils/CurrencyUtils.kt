@@ -1,9 +1,12 @@
-package com.android.calculator.utils
+package com.android.calculator.feature.currencyconverter.presentation.utils
 
 import com.android.calculator.R
 import com.android.calculator.feature.currencyconverter.domain.model.CurrencyRate
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
-object CurrencyDefaults {
+object CurrencyUtils {
 
     val defaultCurrencyRate = CurrencyRate(
         time_last_update_utc = "Sat, 24 Aug 2024 00:00:02 +0000",
@@ -137,7 +140,7 @@ object CurrencyDefaults {
             "SGD" to 1.3046,
             "SHP" to 0.759,
             "SLE" to 22.4148,
-            "SLL" to 22414.795,
+//            "SLL" to 22414.795,
             "SOS" to 571.368,
             "SRD" to 29.1458,
             "SSP" to 2912.3522,
@@ -164,7 +167,7 @@ object CurrencyDefaults {
             "WST" to 2.6968,
             "XAF" to 587.5112,
             "XCD" to 2.7,
-            "XDR" to 0.7428,
+//            "XDR" to 0.7428,
             "XOF" to 587.5112,
             "XPF" to 106.8803,
             "YER" to 250.1678,
@@ -304,7 +307,7 @@ object CurrencyDefaults {
             "SGD" to "Singapore Dollar",
             "SHP" to "Saint Helena Pound",
             "SLE" to "Sierra Leonean Leone",
-            "SLL" to "Sierra Leonean Leone",
+//            "SLL" to "Sierra Leonean Leone",
             "SOS" to "Somali Shilling",
             "SRD" to "Surinamese Dollar",
             "SSP" to "South Sudanese Pound",
@@ -331,7 +334,7 @@ object CurrencyDefaults {
             "WST" to "Samoan Tālā",
             "XAF" to "Central African CFA Franc",
             "XCD" to "East Caribbean Dollar",
-            "XDR" to "Special Drawing Rights",
+//            "XDR" to "Special Drawing Rights",
             "XOF" to "West African CFA Franc",
             "XPF" to "CFP Franc",
             "YER" to "Yemeni Rial",
@@ -346,17 +349,17 @@ object CurrencyDefaults {
     fun getFlagDrawable(currencyCode: String): Int {
         return when (currencyCode) {
             "USD" -> R.drawable.ic_flag_us
-            "AED" -> R.drawable.ic_flag_uae
+            "AED" -> R.drawable.ic_flag_ae
             "ALL" -> R.drawable.ic_flag_al
             "AMD" -> R.drawable.ic_flag_am
             "ANG" -> R.drawable.ic_flag_sx
             "AOA" -> R.drawable.ic_flag_ao
-            "ARS" -> R.drawable.ic_flag_arg
+            "ARS" -> R.drawable.ic_flag_ar
             "AUD" -> R.drawable.ic_flag_au
-            "AFN" -> R.drawable.ic_flag_afg
+            "AFN" -> R.drawable.ic_flag_af
             "AWG" -> R.drawable.ic_flag_aw
             "AZN" -> R.drawable.ic_flag_az
-            "BAM" -> R.drawable.ic_flag_bih
+            "BAM" -> R.drawable.ic_flag_ba
             "BBD" -> R.drawable.ic_flag_bb
             "BDT" -> R.drawable.ic_flag_bd
             "BGN" -> R.drawable.ic_flag_bg
@@ -384,7 +387,148 @@ object CurrencyDefaults {
             "DJF" -> R.drawable.ic_flag_dj
             "DKK" -> R.drawable.ic_flag_fro
             "DOP" -> R.drawable.ic_flag_do
+            "DZD" -> R.drawable.ic_flag_dz
+            "EGP" -> R.drawable.ic_flag_eg
+            "ERN" -> R.drawable.ic_flag_er
+            "ETB" -> R.drawable.ic_flag_et
+            "EUR" -> R.drawable.ic_flag_eu
+            "FJD" -> R.drawable.ic_flag_fj
+            "FKP" -> R.drawable.ic_flag_fk
+            "FOK" -> R.drawable.ic_flag_fo
+            "GBP" -> R.drawable.ic_flag_gb
+            "GEL" -> R.drawable.ic_flag_ge
+            "GGP" -> R.drawable.ic_flag_gg
+            "GHS" -> R.drawable.ic_flag_gh
+            "GIP" -> R.drawable.ic_flag_gi
+            "GMD" -> R.drawable.ic_flag_gm
+            "GNF" -> R.drawable.ic_flag_gn
+            "GTQ" -> R.drawable.ic_flag_gt
+            "GYD" -> R.drawable.ic_flag_gy
+            "HKD" -> R.drawable.ic_flag_hk
+            "HNL" -> R.drawable.ic_flag_hn
+            "HRK" -> R.drawable.ic_flag_hr
+            "HTG" -> R.drawable.ic_flag_ht
+            "HUF" -> R.drawable.ic_flag_hu
+            "IDR" -> R.drawable.ic_flag_id
+            "ILS" -> R.drawable.ic_flag_il
+            "IMP" -> R.drawable.ic_flag_im
+            "INR" -> R.drawable.ic_flag_in
+            "IQD" -> R.drawable.ic_flag_iq
+            "IRR" -> R.drawable.ic_flag_ir
+            "ISK" -> R.drawable.ic_flag_is
+            "JEP" -> R.drawable.ic_flag_je
+            "JMD" -> R.drawable.ic_flag_jm
+            "JOD" -> R.drawable.ic_flag_jo
+            "JPY" -> R.drawable.ic_flag_jp
+            "KES" -> R.drawable.ic_flag_ke
+            "KGS" -> R.drawable.ic_flag_kg
+            "KHR" -> R.drawable.ic_flag_kh
+            "KID" -> R.drawable.ic_flag_ki
+            "KMF" -> R.drawable.ic_flag_km
+            "KRW" -> R.drawable.ic_flag_kr
+            "KWD" -> R.drawable.ic_flag_kw
+            "KYD" -> R.drawable.ic_flag_ky
+            "KZT" -> R.drawable.ic_flag_kz
+            "LAK" -> R.drawable.ic_flag_la
+            "LBP" -> R.drawable.ic_flag_lb
+            "LKR" -> R.drawable.ic_flag_lk
+            "LRD" -> R.drawable.ic_flag_lr
+            "LSL" -> R.drawable.ic_flag_ls
+            "LYD" -> R.drawable.ic_flag_ly
+            "MAD" -> R.drawable.ic_flag_ma
+            "MDL" -> R.drawable.ic_flag_md
+            "MGA" -> R.drawable.ic_flag_mg
+            "MKD" -> R.drawable.ic_flag_mk
+            "MMK" -> R.drawable.ic_flag_mm
+            "MNT" -> R.drawable.ic_flag_mn
+            "MOP" -> R.drawable.ic_flag_mo
+            "MRU" -> R.drawable.ic_flag_mr
+            "MUR" -> R.drawable.ic_flag_mu
+            "MVR" -> R.drawable.ic_flag_mv
+            "MWK" -> R.drawable.ic_flag_mw
+            "MXN" -> R.drawable.ic_flag_mx
+            "MYR" -> R.drawable.ic_flag_my
+            "MZN" -> R.drawable.ic_flag_mz
+            "NAD" -> R.drawable.ic_flag_na
+            "NGN" -> R.drawable.ic_flag_ng
+            "NIO" -> R.drawable.ic_flag_ni
+            "NOK" -> R.drawable.ic_flag_no
+            "NPR" -> R.drawable.ic_flag_np
+            "NZD" -> R.drawable.ic_flag_nz
+            "OMR" -> R.drawable.ic_flag_om
+            "PAB" -> R.drawable.ic_flag_pa
+            "PEN" -> R.drawable.ic_flag_pe
+            "PGK" -> R.drawable.ic_flag_pg
+            "PHP" -> R.drawable.ic_flag_ph
+            "PKR" -> R.drawable.ic_flag_pk
+            "PLN" -> R.drawable.ic_flag_pl
+            "PYG" -> R.drawable.ic_flag_py
+            "RON" -> R.drawable.ic_flag_ro
+            "RSD" -> R.drawable.ic_flag_rs
+            "RUB" -> R.drawable.ic_flag_ru
+            "RWF" -> R.drawable.ic_flag_rw
+            "SAR" -> R.drawable.ic_flag_sa
+            "SBD" -> R.drawable.ic_flag_sb
+            "SCR" -> R.drawable.ic_flag_sc
+            "SDG" -> R.drawable.ic_flag_sd
+            "SEK" -> R.drawable.ic_flag_se
+            "SGD" -> R.drawable.ic_flag_sg
+            "SHP" -> R.drawable.ic_flag_sh
+            "SLE" -> R.drawable.ic_flag_sl
+//            "SLL" -> R.drawable.ic_flag_sn
+            "SOS" -> R.drawable.ic_flag_so
+            "SRD" -> R.drawable.ic_flag_sr
+            "SSP" -> R.drawable.ic_flag_ss
+            "STN" -> R.drawable.ic_flag_st
+            "SYP" -> R.drawable.ic_flag_sy
+            "SZL" -> R.drawable.ic_flag_sz
+            "THB" -> R.drawable.ic_flag_th
+            "TJS" -> R.drawable.ic_flag_tj
+            "TMT" -> R.drawable.ic_flag_tm
+            "TND" -> R.drawable.ic_flag_tn
+            "TOP" -> R.drawable.ic_flag_to
+            "TRY" -> R.drawable.ic_flag_tr
+            "TTD" -> R.drawable.ic_flag_tt
+            "TVD" -> R.drawable.ic_flag_tv
+            "TWD" -> R.drawable.ic_flag_tw
+            "TZS" -> R.drawable.ic_flag_tz
+            "UAH" -> R.drawable.ic_flag_ua
+            "UGX" -> R.drawable.ic_flag_ug
+            "UYU" -> R.drawable.ic_flag_uy
+            "UZS" -> R.drawable.ic_flag_uz
+            "VES" -> R.drawable.ic_flag_ve
+            "VND" -> R.drawable.ic_flag_vn
+            "VUV" -> R.drawable.ic_flag_vu
+            "WST" -> R.drawable.ic_flag_ws
+            "XAF" -> R.drawable.ic_flag_cm
+            "XCD" -> R.drawable.ic_flag_al
+//            "XDR" -> R.drawable.ic_flag_xd
+            "XOF" -> R.drawable.ic_flag_ml
+            "XPF" -> R.drawable.ic_flag_pf
+            "YER" -> R.drawable.ic_flag_ye
+            "ZAR" -> R.drawable.ic_flag_za
+            "ZMW" -> R.drawable.ic_flag_zm
+            "ZWL" -> R.drawable.ic_flag_zw
             else -> R.drawable.ic_flag_white
+        }
+    }
+
+    fun convertToLocalTime(utcTime: String): String {
+        return try {
+            // Parse the UTC time string
+            val inputFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z")
+            val utcDateTime = ZonedDateTime.parse(utcTime, inputFormatter)
+
+            // Convert to local time zone
+            val timeZone = ZoneId.systemDefault().id
+            val localDateTime = utcDateTime.withZoneSameInstant(ZoneId.of(timeZone))
+
+            // Format the local time
+            val outputFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm")
+            localDateTime.format(outputFormatter)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            utcTime
         }
     }
 }

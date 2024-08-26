@@ -1,4 +1,4 @@
-package com.android.calculator.utils
+package com.android.calculator.feature.numeralsystem.presentation.utils
 
 sealed class NumeralSystem {
     data object Binary : NumeralSystem()

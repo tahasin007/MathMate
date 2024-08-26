@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CurrencyAction
 import com.android.calculator.feature.currencyconverter.data.repository.CurrencyRepositoryImpl
+import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
 import com.android.calculator.utils.CommonUtils
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -15,7 +16,7 @@ class CurrencyConverterViewModel(
     private val repository: CurrencyRepositoryImpl
 ) : ViewModel() {
 
-    private val _currencyRate = mutableStateOf(repository.getCurrencyRates())
+//    private val _currencyRate = mutableStateOf(repository.getCurrencyRates())
 //    val currencyRate: State<CurrencyRate> = _currencyRate
 
     private val _currencyState = mutableStateOf(CurrencyState())
@@ -24,7 +25,7 @@ class CurrencyConverterViewModel(
     init {
         viewModelScope.launch {
             try {
-//                repository.fetchAndSaveCurrencyRates("USD")
+                repository.fetchAndSaveCurrencyRates("USD")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -181,7 +182,7 @@ class CurrencyConverterViewModel(
 
     private fun convert() {
         // Get the current state values
-        val currentRate = _currencyRate.value
+        val currentRate = repository.getCurrencyRates()
         val currentState = _currencyState.value
 
         val fromCurrency = currentState.fromCurrency
@@ -220,7 +221,7 @@ class CurrencyConverterViewModel(
     private fun updateExchangeRates() {
         val fromCurrency = _currencyState.value.fromCurrency
         val toCurrency = _currencyState.value.toCurrency
-        val rate = _currencyRate.value
+        val rate = repository.getCurrencyRates()
 
         val fromRate = rate.conversion_rates[fromCurrency]
         val toRate = rate.conversion_rates[toCurrency]
@@ -234,6 +235,10 @@ class CurrencyConverterViewModel(
                 toFromExchangeRate = "1 $toCurrency = ${formatExchangeRate(toFromExchangeRate)} $fromCurrency"
             )
         }
+
+        _currencyState.value = _currencyState.value.copy(
+            lastUpdatedInLocalTime = CurrencyUtils.convertToLocalTime(rate.time_last_update_utc)
+        )
     }
 
     private fun formatExchangeRate(rate: Double): String {
