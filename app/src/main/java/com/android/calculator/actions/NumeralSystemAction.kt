@@ -1,6 +1,6 @@
 package com.android.calculator.actions
 
-import com.android.calculator.feature.numeralsystem.presentation.NumeralSystemView
+import com.android.calculator.feature.numeralsystem.domain.model.NumeralSystemView
 
 sealed class NumeralSystemAction : BaseAction {
     data class HexSymbol(val symbol: String) : NumeralSystemAction()

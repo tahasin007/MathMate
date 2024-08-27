@@ -141,6 +141,7 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 NumeralSystemScreen(
+                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()

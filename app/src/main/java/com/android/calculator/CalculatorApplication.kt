@@ -16,6 +16,9 @@ import com.android.calculator.feature.currencyconverter.presentation.CurrencyCon
 import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
 import com.android.calculator.feature.discountcalculator.data.source.DiscountCalculatorPreferences
 import com.android.calculator.feature.discountcalculator.presentation.DiscountCalculatorViewModel
+import com.android.calculator.feature.numeralsystem.data.repository.NumeralSystemRepositoryImpl
+import com.android.calculator.feature.numeralsystem.data.source.NumeralSystemPreferences
+import com.android.calculator.feature.numeralsystem.presentation.NumeralSystemViewModel
 import com.android.calculator.feature.settings.data.repository.SettingsRepositoryImpl
 import com.android.calculator.feature.settings.data.source.SettingsPreferences
 import com.android.calculator.feature.settings.presentaiton.SettingsViewModel
@@ -31,6 +34,7 @@ class CalculatorApplication : Application() {
     lateinit var discountCalculatorViewModel: DiscountCalculatorViewModel
     lateinit var settingsViewModel: SettingsViewModel
     lateinit var currencyConverterViewModel: CurrencyConverterViewModel
+    lateinit var numeralSystemViewModel: NumeralSystemViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -52,6 +56,8 @@ class CalculatorApplication : Application() {
             SettingsRepositoryImpl(SettingsPreferences(applicationContext))
         val currencyConverterRepository =
             CurrencyRepositoryImpl(CurrencyRatePreference(applicationContext))
+        val numberSystemRepository =
+            NumeralSystemRepositoryImpl(NumeralSystemPreferences(applicationContext))
 
         historyViewModel = HistoryViewModel(calculationUseCases)
         calculatorMainViewModel = CalculatorMainViewModel(calculationUseCases)
@@ -59,5 +65,6 @@ class CalculatorApplication : Application() {
         discountCalculatorViewModel = DiscountCalculatorViewModel(discountCalculatorRepository)
         settingsViewModel = SettingsViewModel(settingsRepository)
         currencyConverterViewModel = CurrencyConverterViewModel(currencyConverterRepository)
+        numeralSystemViewModel = NumeralSystemViewModel(numberSystemRepository)
     }
 }

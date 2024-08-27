@@ -1,4 +1,4 @@
-package com.android.calculator.feature.numeralsystem.presentation
+package com.android.calculator.feature.numeralsystem.domain.model
 
 import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystem
 
@@ -9,8 +9,3 @@ data class NumeralSystemState(
     val outputValue: String = "0",
     val currentView: NumeralSystemView = NumeralSystemView.INPUT
 )
-
-enum class NumeralSystemView {
-    INPUT,
-    OUTPUT
-}

@@ -1,16 +1,19 @@
 package com.android.calculator.feature.numeralsystem.presentation
 
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.NumeralSystemAction
+import com.android.calculator.feature.numeralsystem.data.repository.NumeralSystemRepositoryImpl
+import com.android.calculator.feature.numeralsystem.domain.model.NumeralSystemState
+import com.android.calculator.feature.numeralsystem.domain.model.NumeralSystemView
 import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystemConverter
 
-class NumeralSystemViewModel : ViewModel() {
+class NumeralSystemViewModel(private val repository: NumeralSystemRepositoryImpl) : ViewModel() {
 
-    var numeralSystemState by mutableStateOf(NumeralSystemState())
+    private val _numeralSystemState = mutableStateOf(repository.getNumeralSystemState())
+    val numeralSystemState: State<NumeralSystemState> = _numeralSystemState
 
     fun onAction(action: BaseAction) {
         when (action) {
@@ -26,12 +29,12 @@ class NumeralSystemViewModel : ViewModel() {
     private fun handleNumeralSystemAction(action: NumeralSystemAction) {
         when (action) {
             is NumeralSystemAction.ChangeInputUnit -> {
-                numeralSystemState = numeralSystemState.copy(inputUnit = action.unit)
+                _numeralSystemState.value = _numeralSystemState.value.copy(inputUnit = action.unit)
                 convert()
             }
 
             is NumeralSystemAction.ChangeOutputUnit -> {
-                numeralSystemState = numeralSystemState.copy(outputUnit = action.unit)
+                _numeralSystemState.value = _numeralSystemState.value.copy(outputUnit = action.unit)
                 convert()
             }
 
@@ -41,47 +44,49 @@ class NumeralSystemViewModel : ViewModel() {
     }
 
     private fun clear() {
-        numeralSystemState = numeralSystemState.copy(
+        _numeralSystemState.value = _numeralSystemState.value.copy(
             inputValue = "0",
             outputValue = "0"
         )
+        repository.saveNumeralSystemState(_numeralSystemState.value)
     }
 
     private fun delete() {
-        numeralSystemState = if (numeralSystemState.currentView == NumeralSystemView.INPUT) {
-            numeralSystemState.copy(
+        _numeralSystemState.value = if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
+            _numeralSystemState.value.copy(
                 inputValue =
-                if (numeralSystemState.inputValue == "0") numeralSystemState.inputValue
-                else if (numeralSystemState.inputValue.length == 1) "0"
-                else numeralSystemState.inputValue.dropLast(1)
+                if (_numeralSystemState.value.inputValue == "0") _numeralSystemState.value.inputValue
+                else if (_numeralSystemState.value.inputValue.length == 1) "0"
+                else _numeralSystemState.value.inputValue.dropLast(1)
             )
         } else {
-            numeralSystemState.copy(
+            _numeralSystemState.value.copy(
                 outputValue =
-                if (numeralSystemState.outputValue == "0") numeralSystemState.outputValue
-                else if (numeralSystemState.outputValue.length == 1) "0"
-                else numeralSystemState.outputValue.dropLast(1)
+                if (_numeralSystemState.value.outputValue == "0") _numeralSystemState.value.outputValue
+                else if (_numeralSystemState.value.outputValue.length == 1) "0"
+                else _numeralSystemState.value.outputValue.dropLast(1)
             )
         }
         convert()
     }
 
     private fun changeView() {
-        numeralSystemState = if (numeralSystemState.currentView == NumeralSystemView.INPUT) {
-            if (numeralSystemState.inputValue.last() == '.') {
-                numeralSystemState.copy(
+        _numeralSystemState.value = if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
+            if (_numeralSystemState.value.inputValue.last() == '.') {
+                _numeralSystemState.value.copy(
                     currentView = NumeralSystemView.OUTPUT,
-                    inputValue = numeralSystemState.inputValue.dropLast(1)
+                    inputValue = _numeralSystemState.value.inputValue.dropLast(1)
                 )
-            } else numeralSystemState.copy(currentView = NumeralSystemView.OUTPUT)
+            } else _numeralSystemState.value.copy(currentView = NumeralSystemView.OUTPUT)
         } else {
-            if (numeralSystemState.outputValue.last() == '.') {
-                numeralSystemState.copy(
+            if (_numeralSystemState.value.outputValue.last() == '.') {
+                _numeralSystemState.value.copy(
                     currentView = NumeralSystemView.INPUT,
-                    inputValue = numeralSystemState.outputValue.dropLast(1)
+                    inputValue = _numeralSystemState.value.outputValue.dropLast(1)
                 )
-            } else numeralSystemState.copy(currentView = NumeralSystemView.INPUT)
+            } else _numeralSystemState.value.copy(currentView = NumeralSystemView.INPUT)
         }
+        repository.saveNumeralSystemState(_numeralSystemState.value)
     }
 
     private fun enterDecimal() {
@@ -89,40 +94,41 @@ class NumeralSystemViewModel : ViewModel() {
     }
 
     private fun enterNumber(number: String) {
-        numeralSystemState = if (numeralSystemState.currentView == NumeralSystemView.INPUT) {
-            val inputValue = if (numeralSystemState.inputValue == "0") number
-            else if (numeralSystemState.inputValue.length == 50) numeralSystemState.inputValue
-            else if (numeralSystemState.inputValue.last() == '.') numeralSystemState.inputValue + number
+        _numeralSystemState.value = if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
+            val inputValue = if (_numeralSystemState.value.inputValue == "0") number
+            else if (_numeralSystemState.value.inputValue.length == 50) _numeralSystemState.value.inputValue
+            else if (_numeralSystemState.value.inputValue.last() == '.') _numeralSystemState.value.inputValue + number
             else {
-                numeralSystemState.inputValue + number
+                _numeralSystemState.value.inputValue + number
             }
-            numeralSystemState.copy(inputValue = inputValue)
+            _numeralSystemState.value.copy(inputValue = inputValue)
         } else {
-            val outputValue = if (numeralSystemState.outputValue == "0") number
-            else if (numeralSystemState.outputValue.length == 50) numeralSystemState.outputValue
-            else if (numeralSystemState.outputValue.last() == '.') numeralSystemState.outputValue + number
+            val outputValue = if (_numeralSystemState.value.outputValue == "0") number
+            else if (_numeralSystemState.value.outputValue.length == 50) _numeralSystemState.value.outputValue
+            else if (_numeralSystemState.value.outputValue.last() == '.') _numeralSystemState.value.outputValue + number
             else {
-                numeralSystemState.outputValue + number
+                _numeralSystemState.value.outputValue + number
             }
-            numeralSystemState.copy(outputValue = outputValue)
+            _numeralSystemState.value.copy(outputValue = outputValue)
         }
         convert()
     }
 
     private fun convert() {
-        val inputValue = numeralSystemState.inputValue
-        val outputValue = numeralSystemState.outputValue
-        val inputUnit = numeralSystemState.inputUnit
-        val outputUnit = numeralSystemState.outputUnit
+        val inputValue = _numeralSystemState.value.inputValue
+        val outputValue = _numeralSystemState.value.outputValue
+        val inputUnit = _numeralSystemState.value.inputUnit
+        val outputUnit = _numeralSystemState.value.outputUnit
 
-        numeralSystemState = if (numeralSystemState.currentView == NumeralSystemView.INPUT) {
+        _numeralSystemState.value = if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
             val convertedOutputValue =
                 NumeralSystemConverter.convert(inputValue, inputUnit, outputUnit)
-            numeralSystemState.copy(outputValue = convertedOutputValue)
+            _numeralSystemState.value.copy(outputValue = convertedOutputValue)
         } else {
             val convertedInputValue =
                 NumeralSystemConverter.convert(outputValue, outputUnit, inputUnit)
-            numeralSystemState.copy(inputValue = convertedInputValue)
+            _numeralSystemState.value.copy(inputValue = convertedInputValue)
         }
+        repository.saveNumeralSystemState(_numeralSystemState.value)
     }
 }
