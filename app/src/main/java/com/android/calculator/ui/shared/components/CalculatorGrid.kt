@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.calculator.actions.BaseAction
+import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystem
 import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.utils.CalculatorButtonInfo
-import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystem
 
 @Composable
 fun CalculatorGrid(

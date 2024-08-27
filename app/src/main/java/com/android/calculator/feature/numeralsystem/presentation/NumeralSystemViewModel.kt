@@ -3,17 +3,25 @@ package com.android.calculator.feature.numeralsystem.presentation
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.NumeralSystemAction
 import com.android.calculator.feature.numeralsystem.data.repository.NumeralSystemRepositoryImpl
 import com.android.calculator.feature.numeralsystem.domain.model.NumeralSystemState
 import com.android.calculator.feature.numeralsystem.domain.model.NumeralSystemView
 import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystemConverter
+import kotlinx.coroutines.launch
 
 class NumeralSystemViewModel(private val repository: NumeralSystemRepositoryImpl) : ViewModel() {
 
-    private val _numeralSystemState = mutableStateOf(repository.getNumeralSystemState())
+    private val _numeralSystemState = mutableStateOf(NumeralSystemState())
     val numeralSystemState: State<NumeralSystemState> = _numeralSystemState
+
+    init {
+        viewModelScope.launch {
+            _numeralSystemState.value = repository.getNumeralSystemState()
+        }
+    }
 
     fun onAction(action: BaseAction) {
         when (action) {
@@ -48,45 +56,51 @@ class NumeralSystemViewModel(private val repository: NumeralSystemRepositoryImpl
             inputValue = "0",
             outputValue = "0"
         )
-        repository.saveNumeralSystemState(_numeralSystemState.value)
+        viewModelScope.launch {
+            repository.saveNumeralSystemState(_numeralSystemState.value)
+        }
     }
 
     private fun delete() {
-        _numeralSystemState.value = if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
-            _numeralSystemState.value.copy(
-                inputValue =
-                if (_numeralSystemState.value.inputValue == "0") _numeralSystemState.value.inputValue
-                else if (_numeralSystemState.value.inputValue.length == 1) "0"
-                else _numeralSystemState.value.inputValue.dropLast(1)
-            )
-        } else {
-            _numeralSystemState.value.copy(
-                outputValue =
-                if (_numeralSystemState.value.outputValue == "0") _numeralSystemState.value.outputValue
-                else if (_numeralSystemState.value.outputValue.length == 1) "0"
-                else _numeralSystemState.value.outputValue.dropLast(1)
-            )
-        }
+        _numeralSystemState.value =
+            if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
+                _numeralSystemState.value.copy(
+                    inputValue =
+                    if (_numeralSystemState.value.inputValue == "0") _numeralSystemState.value.inputValue
+                    else if (_numeralSystemState.value.inputValue.length == 1) "0"
+                    else _numeralSystemState.value.inputValue.dropLast(1)
+                )
+            } else {
+                _numeralSystemState.value.copy(
+                    outputValue =
+                    if (_numeralSystemState.value.outputValue == "0") _numeralSystemState.value.outputValue
+                    else if (_numeralSystemState.value.outputValue.length == 1) "0"
+                    else _numeralSystemState.value.outputValue.dropLast(1)
+                )
+            }
         convert()
     }
 
     private fun changeView() {
-        _numeralSystemState.value = if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
-            if (_numeralSystemState.value.inputValue.last() == '.') {
-                _numeralSystemState.value.copy(
-                    currentView = NumeralSystemView.OUTPUT,
-                    inputValue = _numeralSystemState.value.inputValue.dropLast(1)
-                )
-            } else _numeralSystemState.value.copy(currentView = NumeralSystemView.OUTPUT)
-        } else {
-            if (_numeralSystemState.value.outputValue.last() == '.') {
-                _numeralSystemState.value.copy(
-                    currentView = NumeralSystemView.INPUT,
-                    inputValue = _numeralSystemState.value.outputValue.dropLast(1)
-                )
-            } else _numeralSystemState.value.copy(currentView = NumeralSystemView.INPUT)
+        _numeralSystemState.value =
+            if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
+                if (_numeralSystemState.value.inputValue.last() == '.') {
+                    _numeralSystemState.value.copy(
+                        currentView = NumeralSystemView.OUTPUT,
+                        inputValue = _numeralSystemState.value.inputValue.dropLast(1)
+                    )
+                } else _numeralSystemState.value.copy(currentView = NumeralSystemView.OUTPUT)
+            } else {
+                if (_numeralSystemState.value.outputValue.last() == '.') {
+                    _numeralSystemState.value.copy(
+                        currentView = NumeralSystemView.INPUT,
+                        inputValue = _numeralSystemState.value.outputValue.dropLast(1)
+                    )
+                } else _numeralSystemState.value.copy(currentView = NumeralSystemView.INPUT)
+            }
+        viewModelScope.launch {
+            repository.saveNumeralSystemState(_numeralSystemState.value)
         }
-        repository.saveNumeralSystemState(_numeralSystemState.value)
     }
 
     private fun enterDecimal() {
@@ -94,23 +108,24 @@ class NumeralSystemViewModel(private val repository: NumeralSystemRepositoryImpl
     }
 
     private fun enterNumber(number: String) {
-        _numeralSystemState.value = if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
-            val inputValue = if (_numeralSystemState.value.inputValue == "0") number
-            else if (_numeralSystemState.value.inputValue.length == 50) _numeralSystemState.value.inputValue
-            else if (_numeralSystemState.value.inputValue.last() == '.') _numeralSystemState.value.inputValue + number
-            else {
-                _numeralSystemState.value.inputValue + number
+        _numeralSystemState.value =
+            if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
+                val inputValue = if (_numeralSystemState.value.inputValue == "0") number
+                else if (_numeralSystemState.value.inputValue.length == 50) _numeralSystemState.value.inputValue
+                else if (_numeralSystemState.value.inputValue.last() == '.') _numeralSystemState.value.inputValue + number
+                else {
+                    _numeralSystemState.value.inputValue + number
+                }
+                _numeralSystemState.value.copy(inputValue = inputValue)
+            } else {
+                val outputValue = if (_numeralSystemState.value.outputValue == "0") number
+                else if (_numeralSystemState.value.outputValue.length == 50) _numeralSystemState.value.outputValue
+                else if (_numeralSystemState.value.outputValue.last() == '.') _numeralSystemState.value.outputValue + number
+                else {
+                    _numeralSystemState.value.outputValue + number
+                }
+                _numeralSystemState.value.copy(outputValue = outputValue)
             }
-            _numeralSystemState.value.copy(inputValue = inputValue)
-        } else {
-            val outputValue = if (_numeralSystemState.value.outputValue == "0") number
-            else if (_numeralSystemState.value.outputValue.length == 50) _numeralSystemState.value.outputValue
-            else if (_numeralSystemState.value.outputValue.last() == '.') _numeralSystemState.value.outputValue + number
-            else {
-                _numeralSystemState.value.outputValue + number
-            }
-            _numeralSystemState.value.copy(outputValue = outputValue)
-        }
         convert()
     }
 
@@ -120,15 +135,18 @@ class NumeralSystemViewModel(private val repository: NumeralSystemRepositoryImpl
         val inputUnit = _numeralSystemState.value.inputUnit
         val outputUnit = _numeralSystemState.value.outputUnit
 
-        _numeralSystemState.value = if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
-            val convertedOutputValue =
-                NumeralSystemConverter.convert(inputValue, inputUnit, outputUnit)
-            _numeralSystemState.value.copy(outputValue = convertedOutputValue)
-        } else {
-            val convertedInputValue =
-                NumeralSystemConverter.convert(outputValue, outputUnit, inputUnit)
-            _numeralSystemState.value.copy(inputValue = convertedInputValue)
+        _numeralSystemState.value =
+            if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
+                val convertedOutputValue =
+                    NumeralSystemConverter.convert(inputValue, inputUnit, outputUnit)
+                _numeralSystemState.value.copy(outputValue = convertedOutputValue)
+            } else {
+                val convertedInputValue =
+                    NumeralSystemConverter.convert(outputValue, outputUnit, inputUnit)
+                _numeralSystemState.value.copy(inputValue = convertedInputValue)
+            }
+        viewModelScope.launch {
+            repository.saveNumeralSystemState(_numeralSystemState.value)
         }
-        repository.saveNumeralSystemState(_numeralSystemState.value)
     }
 }

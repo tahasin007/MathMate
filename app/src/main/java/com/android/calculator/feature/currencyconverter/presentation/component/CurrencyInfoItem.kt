@@ -24,8 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.android.calculator.ui.shared.components.DrawBlinkingVerticalLine
 import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
+import com.android.calculator.ui.shared.components.DrawBlinkingVerticalLine
 
 @Composable
 fun CurrencyInfoItem(

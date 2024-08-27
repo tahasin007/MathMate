@@ -6,11 +6,11 @@ import com.android.calculator.feature.discountcalculator.domain.repository.Disco
 
 class DiscountCalculatorRepositoryImpl(private val preferences: DiscountCalculatorPreferences) :
     DiscountCalculatorRepository {
-    override fun saveDiscountCalculatorState(state: DiscountCalculatorState) {
+    override suspend fun saveDiscountCalculatorState(state: DiscountCalculatorState) {
         preferences.saveDiscountCalculatorState(state)
     }
 
-    override fun getDiscountCalculatorState(): DiscountCalculatorState {
+    override suspend fun getDiscountCalculatorState(): DiscountCalculatorState {
         return preferences.getDiscountCalculatorState()
     }
 }

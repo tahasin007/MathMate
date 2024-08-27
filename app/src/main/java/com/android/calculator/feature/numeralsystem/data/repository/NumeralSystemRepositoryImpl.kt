@@ -6,11 +6,11 @@ import com.android.calculator.feature.numeralsystem.domain.repository.NumeralSys
 
 class NumeralSystemRepositoryImpl(private val preferences: NumeralSystemPreferences) :
     NumeralSystemRepository {
-    override fun saveNumeralSystemState(state: NumeralSystemState) {
+    override suspend fun saveNumeralSystemState(state: NumeralSystemState) {
         preferences.saveNumeralSystemState(state)
     }
 
-    override fun getNumeralSystemState(): NumeralSystemState {
+    override suspend fun getNumeralSystemState(): NumeralSystemState {
         return preferences.getNumeralSystemState()
     }
 }

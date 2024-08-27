@@ -7,11 +7,11 @@ import com.android.calculator.feature.tipcalculator.domain.repository.TipCalcula
 class TipCalculatorRepositoryImpl(private val preferences: TipCalculatorPreferences) :
     TipCalculatorRepository {
 
-    override fun saveTipCalculatorState(state: TipCalculatorState) {
+    override suspend fun saveTipCalculatorState(state: TipCalculatorState) {
         preferences.saveTipCalculatorState(state)
     }
 
-    override fun getTipCalculatorState(): TipCalculatorState {
+    override suspend fun getTipCalculatorState(): TipCalculatorState {
         return preferences.getTipCalculatorState()
     }
 }

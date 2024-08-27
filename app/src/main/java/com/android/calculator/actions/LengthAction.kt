@@ -1,6 +1,6 @@
 package com.android.calculator.actions
 
-import com.android.calculator.feature.lenghtconverter.presentation.LengthView
+import com.android.calculator.feature.lenghtconverter.domain.model.LengthView
 
 sealed class LengthAction : BaseAction {
     data class ChangeInputUnit(val unit: String) : LengthAction()

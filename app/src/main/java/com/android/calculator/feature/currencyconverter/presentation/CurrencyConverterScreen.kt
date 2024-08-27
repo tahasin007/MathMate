@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.CurrencyAction
+import com.android.calculator.feature.currencyconverter.domain.model.CurrencyView
 import com.android.calculator.feature.currencyconverter.presentation.component.CurrencyInfoItem
 import com.android.calculator.feature.currencyconverter.presentation.component.CurrencySwapIcon
 import com.android.calculator.feature.settings.domain.model.SettingsState

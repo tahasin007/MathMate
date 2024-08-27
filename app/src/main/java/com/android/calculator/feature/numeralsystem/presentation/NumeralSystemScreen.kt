@@ -127,21 +127,22 @@ fun NumeralSystemScreen(
                             .padding(bottom = 20.dp, start = 10.dp, end = 10.dp),
                         verticalArrangement = Arrangement.Bottom
                     ) {
-                        val numeralSystem = if (state.value.currentView == NumeralSystemView.INPUT) {
-                            when (state.value.inputUnit) {
-                                NumeralSystem.Binary::class.simpleName.toString() -> NumeralSystem.Binary
-                                NumeralSystem.Octal::class.simpleName.toString() -> NumeralSystem.Octal
-                                NumeralSystem.Decimal::class.simpleName.toString() -> NumeralSystem.Decimal
-                                else -> NumeralSystem.Hexadecimal
+                        val numeralSystem =
+                            if (state.value.currentView == NumeralSystemView.INPUT) {
+                                when (state.value.inputUnit) {
+                                    NumeralSystem.Binary::class.simpleName.toString() -> NumeralSystem.Binary
+                                    NumeralSystem.Octal::class.simpleName.toString() -> NumeralSystem.Octal
+                                    NumeralSystem.Decimal::class.simpleName.toString() -> NumeralSystem.Decimal
+                                    else -> NumeralSystem.Hexadecimal
+                                }
+                            } else {
+                                when (state.value.outputUnit) {
+                                    NumeralSystem.Binary::class.simpleName.toString() -> NumeralSystem.Binary
+                                    NumeralSystem.Octal::class.simpleName.toString() -> NumeralSystem.Octal
+                                    NumeralSystem.Decimal::class.simpleName.toString() -> NumeralSystem.Decimal
+                                    else -> NumeralSystem.Hexadecimal
+                                }
                             }
-                        } else {
-                            when (state.value.outputUnit) {
-                                NumeralSystem.Binary::class.simpleName.toString() -> NumeralSystem.Binary
-                                NumeralSystem.Octal::class.simpleName.toString() -> NumeralSystem.Octal
-                                NumeralSystem.Decimal::class.simpleName.toString() -> NumeralSystem.Decimal
-                                else -> NumeralSystem.Hexadecimal
-                            }
-                        }
                         val buttons = ButtonFactory()
                         CalculatorGrid(
                             buttons = buttons.getButtons(ScreenType.NumeralSystem),

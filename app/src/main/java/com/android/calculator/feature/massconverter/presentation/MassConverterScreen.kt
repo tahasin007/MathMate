@@ -12,9 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.MassAction
+import com.android.calculator.feature.massconverter.domain.model.MassView
 import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.ui.shared.components.AppBar
 import com.android.calculator.ui.shared.components.CalculatorGrid
@@ -24,12 +25,13 @@ import com.android.calculator.utils.Constants
 import com.android.calculator.utils.ScreenType
 
 @Composable
-fun MassScreen(
+fun MassConverterScreen(
+    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier,
     configuration: SettingsState
 ) {
-    val viewModel = viewModel<MassViewModel>()
+    val viewModel = app.massConverterViewModel
     val state = viewModel.massState
 
     Scaffold(
@@ -61,12 +63,12 @@ fun MassScreen(
                         val unitList = Constants.MASS_UNITS.keys.toMutableSet()
 
                         UnitView(
-                            items = unitList - state.outputUnit,
-                            value = state.inputValue,
-                            selectedUnit = state.inputUnit,
-                            isCurrentView = state.currentView == MassView.INPUT,
+                            items = unitList - state.value.outputUnit,
+                            value = state.value.inputValue,
+                            selectedUnit = state.value.inputUnit,
+                            isCurrentView = state.value.currentView == MassView.INPUT,
                             onClick = {
-                                if (state.currentView != MassView.INPUT) {
+                                if (state.value.currentView != MassView.INPUT) {
                                     viewModel.onAction(MassAction.ChangeView(MassView.INPUT))
                                 }
                             },
@@ -84,12 +86,12 @@ fun MassScreen(
                         val unitList = Constants.MASS_UNITS.keys.toMutableSet()
 
                         UnitView(
-                            value = state.outputValue,
-                            items = unitList - state.inputUnit,
-                            selectedUnit = state.outputUnit,
-                            isCurrentView = state.currentView == MassView.OUTPUT,
+                            value = state.value.outputValue,
+                            items = unitList - state.value.inputUnit,
+                            selectedUnit = state.value.outputUnit,
+                            isCurrentView = state.value.currentView == MassView.OUTPUT,
                             onClick = {
-                                if (state.currentView != MassView.OUTPUT) {
+                                if (state.value.currentView != MassView.OUTPUT) {
                                     viewModel.onAction(MassAction.ChangeView(MassView.OUTPUT))
                                 }
                             },

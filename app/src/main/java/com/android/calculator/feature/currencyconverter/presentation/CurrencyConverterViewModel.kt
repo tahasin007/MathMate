@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CurrencyAction
 import com.android.calculator.feature.currencyconverter.data.repository.CurrencyRepositoryImpl
+import com.android.calculator.feature.currencyconverter.domain.model.CurrencyState
+import com.android.calculator.feature.currencyconverter.domain.model.CurrencyView
 import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
 import com.android.calculator.utils.CommonUtils
 import kotlinx.coroutines.launch
@@ -16,7 +18,7 @@ class CurrencyConverterViewModel(
     private val repository: CurrencyRepositoryImpl
 ) : ViewModel() {
 
-//    private val _currencyRate = mutableStateOf(repository.getCurrencyRates())
+    private val _currencyRate = mutableStateOf(CurrencyUtils.defaultCurrencyRate)
 //    val currencyRate: State<CurrencyRate> = _currencyRate
 
     private val _currencyState = mutableStateOf(CurrencyState())
@@ -26,6 +28,8 @@ class CurrencyConverterViewModel(
         viewModelScope.launch {
             try {
                 repository.fetchAndSaveCurrencyRates("USD")
+                _currencyRate.value = repository.getCurrencyRates()
+                _currencyState.value = repository.getCurrencyState()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -52,11 +56,13 @@ class CurrencyConverterViewModel(
                 convert()
                 updateExchangeRates()
             }
-            is CurrencyAction.ChangeToUnit ->{
+
+            is CurrencyAction.ChangeToUnit -> {
                 _currencyState.value = _currencyState.value.copy(toCurrency = action.unit)
                 convert()
                 updateExchangeRates()
             }
+
             is CurrencyAction.ChangeView -> changeView()
             is CurrencyAction.SwitchView -> switchView()
             is CurrencyAction.Convert -> TODO()
@@ -91,6 +97,9 @@ class CurrencyConverterViewModel(
             fromValue = "0",
             toValue = "0"
         )
+        viewModelScope.launch {
+            repository.saveCurrencyState(_currencyState.value)
+        }
     }
 
     private fun delete() {
@@ -132,6 +141,9 @@ class CurrencyConverterViewModel(
                     _currencyState.value.copy(toValue = _currencyState.value.toValue + ".")
                 }
         }
+        viewModelScope.launch {
+            repository.saveCurrencyState(_currencyState.value)
+        }
     }
 
     private fun enterDoubleZero(number: String) {
@@ -166,6 +178,9 @@ class CurrencyConverterViewModel(
                 )
             } else _currencyState.value.copy(currentView = CurrencyView.FROM)
         }
+        viewModelScope.launch {
+            repository.saveCurrencyState(_currencyState.value)
+        }
     }
 
     private fun switchView() {
@@ -177,12 +192,15 @@ class CurrencyConverterViewModel(
             fromToExchangeRate = _currencyState.value.toFromExchangeRate,
             toFromExchangeRate = _currencyState.value.fromToExchangeRate
         )
+        viewModelScope.launch {
+            repository.saveCurrencyState(_currencyState.value)
+        }
     }
 
 
     private fun convert() {
         // Get the current state values
-        val currentRate = repository.getCurrencyRates()
+        val currentRate = _currencyRate.value
         val currentState = _currencyState.value
 
         val fromCurrency = currentState.fromCurrency
@@ -216,12 +234,15 @@ class CurrencyConverterViewModel(
                 fromValue = "0"
             )
         }
+        viewModelScope.launch {
+            repository.saveCurrencyState(_currencyState.value)
+        }
     }
 
     private fun updateExchangeRates() {
         val fromCurrency = _currencyState.value.fromCurrency
         val toCurrency = _currencyState.value.toCurrency
-        val rate = repository.getCurrencyRates()
+        val rate = _currencyRate.value
 
         val fromRate = rate.conversion_rates[fromCurrency]
         val toRate = rate.conversion_rates[toCurrency]

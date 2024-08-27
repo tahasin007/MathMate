@@ -3,18 +3,26 @@ package com.android.calculator.feature.discountcalculator.presentation
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.DiscountAction
 import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
 import com.android.calculator.feature.discountcalculator.domain.model.DiscountCalculatorState
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 class DiscountCalculatorViewModel(
     private val repository: DiscountCalculatorRepositoryImpl
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(repository.getDiscountCalculatorState())
+    private val _state = mutableStateOf(DiscountCalculatorState())
     val state: State<DiscountCalculatorState> = _state
+
+    init {
+        viewModelScope.launch {
+            _state.value = repository.getDiscountCalculatorState()
+        }
+    }
 
     fun onAction(action: BaseAction) {
         when (action) {
@@ -105,6 +113,8 @@ class DiscountCalculatorViewModel(
             finalPrice = decimalFormat.format(discountedPrice),
             saved = decimalFormat.format(discountAmount)
         )
-        repository.saveDiscountCalculatorState(_state.value)
+        viewModelScope.launch {
+            repository.saveDiscountCalculatorState(_state.value)
+        }
     }
 }

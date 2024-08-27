@@ -1,4 +1,4 @@
-package com.android.calculator.feature.lenghtconverter.presentation
+package com.android.calculator.feature.lenghtconverter.domain.model
 
 data class LengthState(
     val inputUnit: String = "Meter",
@@ -7,8 +7,3 @@ data class LengthState(
     val outputValue: String = "0",
     val currentView: LengthView = LengthView.INPUT
 )
-
-enum class LengthView {
-    INPUT,
-    OUTPUT
-}

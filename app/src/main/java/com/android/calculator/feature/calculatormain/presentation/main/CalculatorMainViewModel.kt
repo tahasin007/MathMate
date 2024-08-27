@@ -35,7 +35,10 @@ class CalculatorMainViewModel(private val calculationUseCases: CalculationUseCas
         when (action) {
             is CalculatorAction.Parenthesis -> enterParenthesis()
             is CalculatorAction.ConverterMenuVisibility -> openConverterBottomSheet(action.isSheetOpen)
-            is CalculatorAction.SaveCalculationMenuVisibility -> openSaveCalculationBottomSheet(action.isSheetOpen)
+            is CalculatorAction.SaveCalculationMenuVisibility -> openSaveCalculationBottomSheet(
+                action.isSheetOpen
+            )
+
             else -> {}
         }
     }

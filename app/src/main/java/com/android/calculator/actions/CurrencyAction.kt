@@ -1,6 +1,6 @@
 package com.android.calculator.actions
 
-import com.android.calculator.feature.currencyconverter.presentation.CurrencyView
+import com.android.calculator.feature.currencyconverter.domain.model.CurrencyView
 
 sealed class CurrencyAction : BaseAction {
     data class ChangeFromUnit(val unit: String) : CurrencyAction()

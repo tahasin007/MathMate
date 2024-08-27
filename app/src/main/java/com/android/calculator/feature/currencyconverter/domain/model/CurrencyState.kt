@@ -1,4 +1,4 @@
-package com.android.calculator.feature.currencyconverter.presentation
+package com.android.calculator.feature.currencyconverter.domain.model
 
 data class CurrencyState(
     val fromCurrency: String = "USD",
@@ -10,8 +10,3 @@ data class CurrencyState(
     val lastUpdatedInLocalTime: String = "",
     val currentView: CurrencyView = CurrencyView.FROM
 )
-
-enum class CurrencyView {
-    FROM,
-    TO
-}

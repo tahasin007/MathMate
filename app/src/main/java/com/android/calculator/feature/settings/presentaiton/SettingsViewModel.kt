@@ -1,8 +1,10 @@
 package com.android.calculator.feature.settings.presentaiton
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.SettingsAction
 import com.android.calculator.feature.settings.data.repository.SettingsRepositoryImpl
+import kotlinx.coroutines.launch
 
 class SettingsViewModel(private val repository: SettingsRepositoryImpl) : ViewModel() {
     val settingsState = repository.settingsStateFlow
@@ -18,32 +20,42 @@ class SettingsViewModel(private val repository: SettingsRepositoryImpl) : ViewMo
     }
 
     private fun changeEnableDoubleZero(status: Boolean) {
-        repository.saveSettingsState(
-            settingsState.value.copy(isDoubleZeroEnabled = status)
-        )
+        viewModelScope.launch {
+            repository.saveSettingsState(
+                settingsState.value.copy(isDoubleZeroEnabled = status)
+            )
+        }
     }
 
     private fun changeHapticFeedback(status: Boolean) {
-        repository.saveSettingsState(
-            settingsState.value.copy(isHapticFeedbackOn = status)
-        )
+        viewModelScope.launch {
+            repository.saveSettingsState(
+                settingsState.value.copy(isHapticFeedbackOn = status)
+            )
+        }
     }
 
     private fun changeRoundedButton(status: Boolean) {
-        repository.saveSettingsState(
-            settingsState.value.copy(isButtonRounded = status)
-        )
+        viewModelScope.launch {
+            repository.saveSettingsState(
+                settingsState.value.copy(isButtonRounded = status)
+            )
+        }
     }
 
     private fun changeThemeColor(color: Int) {
-        repository.saveSettingsState(
-            settingsState.value.copy(themeColor = color)
-        )
+        viewModelScope.launch {
+            repository.saveSettingsState(
+                settingsState.value.copy(themeColor = color)
+            )
+        }
     }
 
     private fun changeKeepDeviceAwake(status: Boolean) {
-        repository.saveSettingsState(
-            settingsState.value.copy(keepDeviceAwake = status)
-        )
+        viewModelScope.launch {
+            repository.saveSettingsState(
+                settingsState.value.copy(keepDeviceAwake = status)
+            )
+        }
     }
 }

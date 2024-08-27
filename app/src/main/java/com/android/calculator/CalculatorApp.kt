@@ -34,7 +34,7 @@ import com.android.calculator.feature.calculatormain.presentation.main.Calculato
 import com.android.calculator.feature.currencyconverter.presentation.CurrencyConverterScreen
 import com.android.calculator.feature.discountcalculator.presentation.DiscountScreen
 import com.android.calculator.feature.lenghtconverter.presentation.LengthScreen
-import com.android.calculator.feature.massconverter.presentation.MassScreen
+import com.android.calculator.feature.massconverter.presentation.MassConverterScreen
 import com.android.calculator.feature.numeralsystem.presentation.NumeralSystemScreen
 import com.android.calculator.feature.settings.presentaiton.SettingsScreen
 import com.android.calculator.feature.tipcalculator.presentation.TipCalculatorScreen
@@ -109,7 +109,8 @@ fun CalculatorApp(app: CalculatorApplication) {
                 enterTransition = { enterTransition() },
                 exitTransition = { exitTransition() }
             ) {
-                MassScreen(
+                MassConverterScreen(
+                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.android.calculator.actions.LengthAction
+import com.android.calculator.feature.lenghtconverter.domain.model.LengthView
 import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.ui.shared.components.AppBar
 import com.android.calculator.ui.shared.components.CalculatorGrid
@@ -29,7 +30,7 @@ fun LengthScreen(
     modifier: Modifier,
     configuration: SettingsState
 ) {
-    val viewModel = viewModel<LengthViewModel>()
+    val viewModel = viewModel<LengthConverterViewModel>()
     val state = viewModel.lengthState
 
     Scaffold(
@@ -61,12 +62,12 @@ fun LengthScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         UnitView(
-                            items = unitList - state.outputUnit,
-                            value = state.inputValue,
-                            selectedUnit = state.inputUnit,
-                            isCurrentView = state.currentView == LengthView.INPUT,
+                            items = unitList - state.value.outputUnit,
+                            value = state.value.inputValue,
+                            selectedUnit = state.value.inputUnit,
+                            isCurrentView = state.value.currentView == LengthView.INPUT,
                             onClick = {
-                                if (state.currentView != LengthView.INPUT) {
+                                if (state.value.currentView != LengthView.INPUT) {
                                     viewModel.onAction(LengthAction.ChangeView(LengthView.INPUT))
                                 }
                             },
@@ -82,12 +83,12 @@ fun LengthScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         UnitView(
-                            value = state.outputValue,
-                            items = unitList - state.inputUnit,
-                            selectedUnit = state.outputUnit,
-                            isCurrentView = state.currentView == LengthView.OUTPUT,
+                            value = state.value.outputValue,
+                            items = unitList - state.value.inputUnit,
+                            selectedUnit = state.value.outputUnit,
+                            isCurrentView = state.value.currentView == LengthView.OUTPUT,
                             onClick = {
-                                if (state.currentView != LengthView.OUTPUT) {
+                                if (state.value.currentView != LengthView.OUTPUT) {
                                     viewModel.onAction(LengthAction.ChangeView(LengthView.OUTPUT))
                                 }
                             },

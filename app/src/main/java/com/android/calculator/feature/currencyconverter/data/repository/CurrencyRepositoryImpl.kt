@@ -5,6 +5,7 @@ import com.android.calculator.feature.currencyconverter.data.network.RetrofitCli
 import com.android.calculator.feature.currencyconverter.data.source.CurrencyRatePreference
 import com.android.calculator.feature.currencyconverter.domain.model.CurrencyRate
 import com.android.calculator.feature.currencyconverter.domain.repository.CurrencyRepository
+import com.android.calculator.feature.currencyconverter.domain.model.CurrencyState
 import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
 
 class CurrencyRepositoryImpl(
@@ -25,8 +26,16 @@ class CurrencyRepositoryImpl(
         }
     }
 
-    override fun getCurrencyRates(): CurrencyRate {
+    override suspend fun getCurrencyRates(): CurrencyRate {
         return sharedPreferencesHelper.getRates()
+    }
+
+    override suspend fun saveCurrencyState(currencyState: CurrencyState) {
+        sharedPreferencesHelper.saveCurrencyState(currencyState)
+    }
+
+    override suspend fun getCurrencyState(): CurrencyState {
+        return sharedPreferencesHelper.getCurrencyState()
     }
 
     companion object {

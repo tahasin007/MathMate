@@ -3,16 +3,24 @@ package com.android.calculator.feature.tipcalculator.presentation
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.TipCalculatorAction
 import com.android.calculator.feature.tipcalculator.domain.model.TipCalculatorState
 import com.android.calculator.feature.tipcalculator.domain.repository.TipCalculatorRepository
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 class TipCalculatorViewModel(private val repository: TipCalculatorRepository) : ViewModel() {
 
-    private val _state = mutableStateOf(repository.getTipCalculatorState())
+    private val _state = mutableStateOf(TipCalculatorState())
     val state: State<TipCalculatorState> = _state
+
+    init {
+        viewModelScope.launch {
+            _state.value = repository.getTipCalculatorState()
+        }
+    }
 
     fun onAction(action: BaseAction) {
         when (action) {
@@ -116,6 +124,8 @@ class TipCalculatorViewModel(private val repository: TipCalculatorRepository) : 
             totalBill = decimalFormat.format(totalBill),
             totalPerHead = decimalFormat.format(totalPerHead)
         )
-        repository.saveTipCalculatorState(_state.value)
+        viewModelScope.launch {
+            repository.saveTipCalculatorState(_state.value)
+        }
     }
 }

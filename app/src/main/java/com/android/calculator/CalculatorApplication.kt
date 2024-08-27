@@ -16,6 +16,12 @@ import com.android.calculator.feature.currencyconverter.presentation.CurrencyCon
 import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
 import com.android.calculator.feature.discountcalculator.data.source.DiscountCalculatorPreferences
 import com.android.calculator.feature.discountcalculator.presentation.DiscountCalculatorViewModel
+import com.android.calculator.feature.lenghtconverter.data.repository.LengthConverterRepositoryImpl
+import com.android.calculator.feature.lenghtconverter.data.source.LengthPreference
+import com.android.calculator.feature.lenghtconverter.presentation.LengthConverterViewModel
+import com.android.calculator.feature.massconverter.data.repository.MassConverterRepositoryImpl
+import com.android.calculator.feature.massconverter.data.source.MassPreferences
+import com.android.calculator.feature.massconverter.presentation.MassConverterViewModel
 import com.android.calculator.feature.numeralsystem.data.repository.NumeralSystemRepositoryImpl
 import com.android.calculator.feature.numeralsystem.data.source.NumeralSystemPreferences
 import com.android.calculator.feature.numeralsystem.presentation.NumeralSystemViewModel
@@ -35,6 +41,8 @@ class CalculatorApplication : Application() {
     lateinit var settingsViewModel: SettingsViewModel
     lateinit var currencyConverterViewModel: CurrencyConverterViewModel
     lateinit var numeralSystemViewModel: NumeralSystemViewModel
+    lateinit var massConverterViewModel: MassConverterViewModel
+    lateinit var lengthConverterViewModel: LengthConverterViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -58,6 +66,10 @@ class CalculatorApplication : Application() {
             CurrencyRepositoryImpl(CurrencyRatePreference(applicationContext))
         val numberSystemRepository =
             NumeralSystemRepositoryImpl(NumeralSystemPreferences(applicationContext))
+        val massConverterRepository =
+            MassConverterRepositoryImpl(MassPreferences(applicationContext))
+        val lengthConverterRepository =
+            LengthConverterRepositoryImpl(LengthPreference(applicationContext))
 
         historyViewModel = HistoryViewModel(calculationUseCases)
         calculatorMainViewModel = CalculatorMainViewModel(calculationUseCases)
@@ -66,5 +78,7 @@ class CalculatorApplication : Application() {
         settingsViewModel = SettingsViewModel(settingsRepository)
         currencyConverterViewModel = CurrencyConverterViewModel(currencyConverterRepository)
         numeralSystemViewModel = NumeralSystemViewModel(numberSystemRepository)
+        massConverterViewModel = MassConverterViewModel(massConverterRepository)
+        lengthConverterViewModel = LengthConverterViewModel(lengthConverterRepository)
     }
 }

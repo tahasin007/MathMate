@@ -1,4 +1,4 @@
-package com.android.calculator.feature.massconverter.presentation
+package com.android.calculator.feature.massconverter.domain.model
 
 data class MassState(
     val inputUnit: String = "Gram",
@@ -7,8 +7,3 @@ data class MassState(
     val outputValue: String = "0",
     val currentView: MassView = MassView.INPUT
 )
-
-enum class MassView {
-    INPUT,
-    OUTPUT
-}

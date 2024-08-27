@@ -11,12 +11,12 @@ class SettingsRepositoryImpl(private val preferences: SettingsPreferences) : Set
     private val _settingsStateFlow = MutableStateFlow(preferences.getSettingsState())
     override val settingsStateFlow: StateFlow<SettingsState> = _settingsStateFlow
 
-    override fun saveSettingsState(state: SettingsState) {
+    override suspend fun saveSettingsState(state: SettingsState) {
         preferences.saveSettingsState(state)
         _settingsStateFlow.value = state
     }
 
-    override fun getSettingsState(): SettingsState {
+    override suspend fun getSettingsState(): SettingsState {
         return preferences.getSettingsState()
     }
 }
