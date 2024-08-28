@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.MassAction
 import com.android.calculator.feature.massconverter.domain.model.MassView
 import com.android.calculator.feature.settings.domain.model.SettingsState
@@ -26,12 +26,11 @@ import com.android.calculator.utils.ScreenType
 
 @Composable
 fun MassConverterScreen(
-    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier,
-    configuration: SettingsState
+    configuration: SettingsState,
+    viewModel: MassConverterViewModel = hiltViewModel()
 ) {
-    val viewModel = app.massConverterViewModel
     val state = viewModel.massState
 
     Scaffold(

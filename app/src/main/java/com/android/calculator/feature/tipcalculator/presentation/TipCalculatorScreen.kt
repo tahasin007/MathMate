@@ -19,8 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.TipCalculatorAction
 import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.feature.tipcalculator.presentation.component.NumberCounter
@@ -34,12 +34,11 @@ import com.android.calculator.utils.ScreenType
 
 @Composable
 fun TipCalculatorScreen(
-    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier,
-    configuration: SettingsState
+    configuration: SettingsState,
+    viewModel: TipCalculatorViewModel = hiltViewModel(),
 ) {
-    val viewModel = app.tipCalculatorViewModel
     val state = viewModel.state
 
     Scaffold(

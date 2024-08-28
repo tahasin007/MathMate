@@ -11,10 +11,13 @@ import com.android.calculator.feature.currencyconverter.domain.model.CurrencySta
 import com.android.calculator.feature.currencyconverter.domain.model.CurrencyView
 import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
 import com.android.calculator.utils.CommonUtils
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.Locale
+import javax.inject.Inject
 
-class CurrencyConverterViewModel(
+@HiltViewModel
+class CurrencyConverterViewModel @Inject constructor(
     private val repository: CurrencyRepositoryImpl
 ) : ViewModel() {
 

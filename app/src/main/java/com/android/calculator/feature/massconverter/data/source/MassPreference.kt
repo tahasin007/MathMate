@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import com.android.calculator.feature.massconverter.domain.model.MassState
 import com.android.calculator.feature.massconverter.domain.model.MassView
 
-class MassPreferences(context: Context) {
+class MassPreference(context: Context) {
 
     private val sharedPreferences: SharedPreferences by lazy {
         context.getSharedPreferences("mass_prefs", Context.MODE_PRIVATE)

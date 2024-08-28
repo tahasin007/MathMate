@@ -13,9 +13,14 @@ import com.android.calculator.feature.massconverter.domain.model.MassView
 import com.android.calculator.utils.CommonUtils
 import com.android.calculator.utils.Constants.MASS_UNITS
 import com.android.calculator.utils.ExpressionEvaluator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MassConverterViewModel(private val repository: MassConverterRepositoryImpl) : ViewModel() {
+@HiltViewModel
+class MassConverterViewModel @Inject constructor(
+    private val repository: MassConverterRepositoryImpl
+) : ViewModel() {
 
     private val _massState = mutableStateOf(MassState())
     val massState: State<MassState> = _massState

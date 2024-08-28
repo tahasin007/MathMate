@@ -7,8 +7,9 @@ import com.android.calculator.feature.currencyconverter.domain.model.CurrencyRat
 import com.android.calculator.feature.currencyconverter.domain.repository.CurrencyRepository
 import com.android.calculator.feature.currencyconverter.domain.model.CurrencyState
 import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
+import javax.inject.Inject
 
-class CurrencyRepositoryImpl(
+class CurrencyRepositoryImpl @Inject constructor(
     private val sharedPreferencesHelper: CurrencyRatePreference
 ) : CurrencyRepository {
 

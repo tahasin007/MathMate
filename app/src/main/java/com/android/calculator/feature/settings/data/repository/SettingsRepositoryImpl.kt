@@ -5,8 +5,9 @@ import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.feature.settings.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class SettingsRepositoryImpl(private val preferences: SettingsPreferences) : SettingsRepository {
+class SettingsRepositoryImpl @Inject constructor(private val preferences: SettingsPreferences) : SettingsRepository {
 
     private val _settingsStateFlow = MutableStateFlow(preferences.getSettingsState())
     override val settingsStateFlow: StateFlow<SettingsState> = _settingsStateFlow

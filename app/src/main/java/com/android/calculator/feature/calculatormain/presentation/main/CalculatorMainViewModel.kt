@@ -11,9 +11,14 @@ import com.android.calculator.feature.calculatormain.domain.model.Calculation
 import com.android.calculator.feature.calculatormain.domain.usecase.CalculationUseCases
 import com.android.calculator.utils.CommonUtils
 import com.android.calculator.utils.ExpressionEvaluator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CalculatorMainViewModel(private val calculationUseCases: CalculationUseCases) : ViewModel() {
+@HiltViewModel
+class CalculatorMainViewModel @Inject constructor(
+    private val calculationUseCases: CalculationUseCases
+) : ViewModel() {
 
     var calculatorState by mutableStateOf(CalculatorMainState())
 

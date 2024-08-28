@@ -8,10 +8,13 @@ import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.DiscountAction
 import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
 import com.android.calculator.feature.discountcalculator.domain.model.DiscountCalculatorState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
+import javax.inject.Inject
 
-class DiscountCalculatorViewModel(
+@HiltViewModel
+class DiscountCalculatorViewModel @Inject constructor(
     private val repository: DiscountCalculatorRepositoryImpl
 ) : ViewModel() {
 

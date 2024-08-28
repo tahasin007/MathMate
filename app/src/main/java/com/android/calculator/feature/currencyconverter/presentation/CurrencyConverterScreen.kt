@@ -24,8 +24,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.CurrencyAction
 import com.android.calculator.feature.currencyconverter.domain.model.CurrencyView
 import com.android.calculator.feature.currencyconverter.presentation.component.CurrencyInfoItem
@@ -38,12 +38,11 @@ import com.android.calculator.utils.ScreenType
 
 @Composable
 fun CurrencyConverterScreen(
-    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    configuration: SettingsState
+    configuration: SettingsState,
+    viewModel: CurrencyConverterViewModel = hiltViewModel()
 ) {
-    val viewModel = app.currencyConverterViewModel
     val state = viewModel.currencyState
 
     Scaffold(topBar = {

@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,16 +35,18 @@ import com.android.calculator.feature.discountcalculator.presentation.DiscountSc
 import com.android.calculator.feature.lenghtconverter.presentation.LengthScreen
 import com.android.calculator.feature.massconverter.presentation.MassConverterScreen
 import com.android.calculator.feature.numeralsystem.presentation.NumeralSystemScreen
+import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.feature.settings.presentaiton.SettingsScreen
 import com.android.calculator.feature.tipcalculator.presentation.TipCalculatorScreen
 import com.android.calculator.ui.theme.CalculatorTheme
 import com.android.calculator.utils.ScreenType
 
 @Composable
-fun CalculatorApp(app: CalculatorApplication) {
+fun CalculatorApp() {
     val navController = rememberNavController()
     var isDarkTheme by remember { mutableStateOf(false) }
-    val configuration by app.settingsViewModel.settingsState.collectAsState()
+//    val configuration by app.settingsViewModel.settingsState.collectAsState()
+    val configuration = SettingsState()
     val themeColor = configuration.themeColor
 
     val activity = LocalContext.current as Activity
@@ -77,7 +78,6 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 CalculatorMainScreen(
-                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()
@@ -110,7 +110,6 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 MassConverterScreen(
-                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()
@@ -126,7 +125,6 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 DiscountScreen(
-                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()
@@ -142,7 +140,6 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 NumeralSystemScreen(
-                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()
@@ -158,7 +155,6 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 TipCalculatorScreen(
-                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()
@@ -174,7 +170,6 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 HistoryScreen(
-                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()
@@ -189,7 +184,6 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 SettingsScreen(
-                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()
@@ -204,7 +198,6 @@ fun CalculatorApp(app: CalculatorApplication) {
                 exitTransition = { exitTransition() }
             ) {
                 CurrencyConverterScreen(
-                    app = app,
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()

@@ -13,10 +13,14 @@ import com.android.calculator.feature.lenghtconverter.domain.model.LengthView
 import com.android.calculator.utils.CommonUtils
 import com.android.calculator.utils.Constants.LENGTH_UNITS
 import com.android.calculator.utils.ExpressionEvaluator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LengthConverterViewModel(private val repository: LengthConverterRepositoryImpl) :
-    ViewModel() {
+@HiltViewModel
+class LengthConverterViewModel @Inject constructor(
+    private val repository: LengthConverterRepositoryImpl
+) : ViewModel() {
 
     private val _lengthState = mutableStateOf(LengthState())
     val lengthState: State<LengthState> = _lengthState

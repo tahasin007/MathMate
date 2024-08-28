@@ -7,12 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.calculator.feature.calculatormain.domain.model.Calculation
 import com.android.calculator.feature.calculatormain.domain.usecase.CalculationUseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
-class HistoryViewModel(private val calculationUseCases: CalculationUseCases) : ViewModel() {
+@HiltViewModel
+class HistoryViewModel @Inject constructor(
+    private val calculationUseCases: CalculationUseCases
+) : ViewModel() {
+
     var groupedCalculations by mutableStateOf<Map<String, List<Calculation>>>(emptyMap())
         private set
 

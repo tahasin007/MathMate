@@ -8,8 +8,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.CalculatorApplication
 import com.android.calculator.feature.calculatormain.domain.model.Calculation
 import com.android.calculator.feature.calculatormain.presentation.history.components.CalculationItems
 import com.android.calculator.feature.calculatormain.presentation.history.components.EmptyItemsView
@@ -20,11 +20,10 @@ import com.android.calculator.utils.ScreenType
 
 @Composable
 fun HistoryScreen(
-    app: CalculatorApplication,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: HistoryViewModel = hiltViewModel()
 ) {
-    val viewModel = app.historyViewModel
     val groupedCalculations = viewModel.groupedCalculations
     val (selectionMode, setSelectionMode) = remember { mutableStateOf(false) }
     val selectedItems = remember { mutableStateListOf<Calculation>() }

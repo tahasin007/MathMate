@@ -10,9 +10,14 @@ import com.android.calculator.feature.numeralsystem.data.repository.NumeralSyste
 import com.android.calculator.feature.numeralsystem.domain.model.NumeralSystemState
 import com.android.calculator.feature.numeralsystem.domain.model.NumeralSystemView
 import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystemConverter
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NumeralSystemViewModel(private val repository: NumeralSystemRepositoryImpl) : ViewModel() {
+@HiltViewModel
+class NumeralSystemViewModel @Inject constructor(
+    private val repository: NumeralSystemRepositoryImpl
+) : ViewModel() {
 
     private val _numeralSystemState = mutableStateOf(NumeralSystemState())
     val numeralSystemState: State<NumeralSystemState> = _numeralSystemState

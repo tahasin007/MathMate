@@ -17,8 +17,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.SettingsAction
 import com.android.calculator.feature.settings.presentaiton.component.ColorThemePopup
 import com.android.calculator.feature.settings.presentaiton.component.TextViewWithColorCircle
@@ -28,13 +28,12 @@ import com.android.calculator.utils.ScreenType
 
 @Composable
 fun SettingsScreen(
-    app: CalculatorApplication,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     var showPopup by remember { mutableStateOf(false) }
-    val viewModel = app.settingsViewModel
-    val settingsState by app.settingsViewModel.settingsState.collectAsState()
+    val settingsState by viewModel.settingsState.collectAsState()
 
     Scaffold(
         topBar = {

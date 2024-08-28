@@ -8,10 +8,15 @@ import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.TipCalculatorAction
 import com.android.calculator.feature.tipcalculator.domain.model.TipCalculatorState
 import com.android.calculator.feature.tipcalculator.domain.repository.TipCalculatorRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
+import javax.inject.Inject
 
-class TipCalculatorViewModel(private val repository: TipCalculatorRepository) : ViewModel() {
+@HiltViewModel
+class TipCalculatorViewModel @Inject constructor(
+    private val repository: TipCalculatorRepository
+) : ViewModel() {
 
     private val _state = mutableStateOf(TipCalculatorState())
     val state: State<TipCalculatorState> = _state

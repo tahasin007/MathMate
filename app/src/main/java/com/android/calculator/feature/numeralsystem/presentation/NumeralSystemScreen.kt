@@ -15,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.CalculatorApplication
 import com.android.calculator.actions.NumeralSystemAction
 import com.android.calculator.feature.numeralsystem.domain.model.NumeralSystemView
 import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSystem
@@ -30,12 +30,11 @@ import com.android.calculator.utils.ScreenType
 
 @Composable
 fun NumeralSystemScreen(
-    app: CalculatorApplication,
     navController: NavHostController,
     modifier: Modifier,
-    configuration: SettingsState
+    configuration: SettingsState,
+    viewModel: NumeralSystemViewModel = hiltViewModel()
 ) {
-    val viewModel = app.numeralSystemViewModel
     val state = viewModel.numeralSystemState
 
     Scaffold(
