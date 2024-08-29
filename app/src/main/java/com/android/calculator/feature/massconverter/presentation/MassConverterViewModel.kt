@@ -88,7 +88,9 @@ class MassConverterViewModel @Inject constructor(
 
             if (_massState.value.currentView == MassView.INPUT) {
                 val inputValue =
-                    if (_massState.value.inputValue.isBlank() || CommonUtils.isLastCharOperator(_massState.value.inputValue)) null
+                    if (_massState.value.inputValue.isBlank() ||
+                        CommonUtils.isLastCharOperator(_massState.value.inputValue)
+                    ) null
                     else calculate(_massState.value.inputValue)?.toDoubleOrNull()
                 if (inputValue == null) return@launch
 

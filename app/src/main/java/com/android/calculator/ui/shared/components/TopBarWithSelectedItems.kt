@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculatormain.presentation.history.components
+package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.material.icons.Icons
@@ -17,7 +17,7 @@ import com.android.calculator.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryTopBar(
+fun TopBarWithSelectedItems(
     selectedItemSize: Int,
     totalItemSize: Int,
     onDeleteBtnClick: () -> Unit,

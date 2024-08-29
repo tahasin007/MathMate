@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculatormain.presentation.history.components
+package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HistoryBottomBar(
-    selectionMode: Boolean,
+fun DeleteItemBottomBar(
+    selectionMode: Boolean = false,
     onDelete: () -> Unit
 ) {
     if (selectionMode) {

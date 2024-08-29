@@ -4,8 +4,8 @@ import android.util.Log
 import com.android.calculator.feature.currencyconverter.data.network.RetrofitClient
 import com.android.calculator.feature.currencyconverter.data.source.CurrencyRatePreference
 import com.android.calculator.feature.currencyconverter.domain.model.CurrencyRate
-import com.android.calculator.feature.currencyconverter.domain.repository.CurrencyRepository
 import com.android.calculator.feature.currencyconverter.domain.model.CurrencyState
+import com.android.calculator.feature.currencyconverter.domain.repository.CurrencyRepository
 import com.android.calculator.feature.currencyconverter.presentation.utils.CurrencyUtils
 import javax.inject.Inject
 

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.android.calculator.di.AppModule
+import com.android.calculator.feature.calculatormain.presentation.bookmark.BookmarkScreen
 import com.android.calculator.feature.calculatormain.presentation.history.HistoryScreen
 import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainScreen
 import com.android.calculator.feature.currencyconverter.presentation.CurrencyConverterScreen
@@ -35,18 +38,26 @@ import com.android.calculator.feature.discountcalculator.presentation.DiscountSc
 import com.android.calculator.feature.lenghtconverter.presentation.LengthScreen
 import com.android.calculator.feature.massconverter.presentation.MassConverterScreen
 import com.android.calculator.feature.numeralsystem.presentation.NumeralSystemScreen
-import com.android.calculator.feature.settings.domain.model.SettingsState
 import com.android.calculator.feature.settings.presentaiton.SettingsScreen
 import com.android.calculator.feature.tipcalculator.presentation.TipCalculatorScreen
 import com.android.calculator.ui.theme.CalculatorTheme
 import com.android.calculator.utils.ScreenType
+import dagger.hilt.android.EntryPointAccessors
 
 @Composable
 fun CalculatorApp() {
     val navController = rememberNavController()
     var isDarkTheme by remember { mutableStateOf(false) }
-//    val configuration by app.settingsViewModel.settingsState.collectAsState()
-    val configuration = SettingsState()
+
+    val context = LocalContext.current.applicationContext
+    val settingsRepository = remember {
+        EntryPointAccessors.fromApplication(
+            context,
+            AppModule.SettingsRepositoryEntryPoint::class.java
+        )
+            .settingsRepository()
+    }
+    val configuration by settingsRepository.settingsStateFlow.collectAsState()
     val themeColor = configuration.themeColor
 
     val activity = LocalContext.current as Activity
@@ -170,6 +181,20 @@ fun CalculatorApp() {
                 exitTransition = { exitTransition() }
             ) {
                 HistoryScreen(
+                    navController = navController,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(all = 10.dp)
+                )
+            }
+
+            composable(
+                route = ScreenType.Bookmark.route,
+                enterTransition = { enterTransition() },
+                exitTransition = { exitTransition() }
+            ) {
+                BookmarkScreen(
                     navController = navController,
                     modifier = Modifier
                         .fillMaxSize()

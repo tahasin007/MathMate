@@ -1,6 +1,10 @@
-package com.android.calculator.feature.calculatormain.presentation.history
+package com.android.calculator.feature.calculatormain.presentation.bookmark
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -8,40 +12,40 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.android.calculator.feature.calculatormain.domain.model.Calculation
-import com.android.calculator.feature.calculatormain.presentation.history.components.CalculationItems
-import com.android.calculator.ui.shared.components.DeleteItemBottomBar
-import com.android.calculator.ui.shared.components.TopBarWithSelectedItems
+import com.android.calculator.feature.calculatormain.domain.model.Bookmark
+import com.android.calculator.feature.calculatormain.presentation.bookmark.component.BookmarkItem
 import com.android.calculator.ui.shared.components.AppBar
+import com.android.calculator.ui.shared.components.DeleteItemBottomBar
 import com.android.calculator.ui.shared.components.EmptyItemsView
+import com.android.calculator.ui.shared.components.TopBarWithSelectedItems
 import com.android.calculator.utils.ScreenType
 
 @Composable
-fun HistoryScreen(
+fun BookmarkScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: HistoryViewModel = hiltViewModel()
+    viewModel: BookmarkViewModel = hiltViewModel()
 ) {
-    val groupedCalculations = viewModel.calculations
-    val (selectionMode, setSelectionMode) = remember { mutableStateOf(false) }
-    val selectedItems = remember { mutableStateListOf<Calculation>() }
-    val isAllItemsSelected = remember { mutableStateOf(false) }
+    val bookmarks = viewModel.bookmarks
 
-    val totalItems = groupedCalculations.value.values.sumOf { it.size }
+    val (selectionMode, setSelectionMode) = remember { mutableStateOf(false) }
+    val selectedItems = remember { mutableStateListOf<Bookmark>() }
+    val isAllItemsSelected = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             if (selectionMode) {
                 TopBarWithSelectedItems(
                     selectedItemSize = selectedItems.size,
-                    totalItemSize = totalItems,
+                    totalItemSize = bookmarks.value.size,
                     onDeleteBtnClick = {
                         isAllItemsSelected.value = !isAllItemsSelected.value
                         selectedItems.clear()
                         if (isAllItemsSelected.value) {
-                            selectedItems.addAll(groupedCalculations.value.flatMap { it.value })
+                            selectedItems.addAll(bookmarks.value)
                         }
                     },
                     onNavigationBtnClick = {
@@ -50,7 +54,7 @@ fun HistoryScreen(
                     },
                 )
             } else {
-                AppBar(screen = ScreenType.History.screen) {
+                AppBar(screen = ScreenType.Bookmark.screen) {
                     navController.navigate(ScreenType.CalculatorMain.route)
                 }
             }
@@ -59,7 +63,7 @@ fun HistoryScreen(
             DeleteItemBottomBar(
                 selectionMode = selectionMode,
                 onDelete = {
-                    viewModel.deleteSelectedCalculations(selectedItems)
+                    viewModel.deleteSelectedBookmarks(selectedItems)
                     setSelectionMode(false)
                     selectedItems.clear()
                 }
@@ -67,18 +71,28 @@ fun HistoryScreen(
         }
     ) { innerPadding ->
         Surface(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
         ) {
-            if (totalItems > 0) {
-                CalculationItems(
-                    modifier = modifier,
-                    groupedCalculations = groupedCalculations.value,
-                    selectionMode = selectionMode,
-                    selectedItems = selectedItems,
-                    onLongPress = { setSelectionMode(true) }
-                )
-            } else {
+            if (bookmarks.value.isEmpty()) {
                 EmptyItemsView(modifier = modifier)
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(bookmarks.value.size) { idx ->
+                        BookmarkItem(
+                            bookmark = bookmarks.value[idx],
+                            selectionMode = selectionMode,
+                            selectedItems = selectedItems,
+                            onLongPress = {
+                                setSelectionMode(true)
+                            }
+                        )
+                    }
+                }
             }
         }
     }

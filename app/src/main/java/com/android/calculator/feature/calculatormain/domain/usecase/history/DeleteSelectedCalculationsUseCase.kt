@@ -1,4 +1,4 @@
-package com.android.calculator.feature.calculatormain.domain.usecase
+package com.android.calculator.feature.calculatormain.domain.usecase.history
 
 import com.android.calculator.feature.calculatormain.domain.model.Calculation
 import com.android.calculator.feature.calculatormain.domain.repository.CalculationRepository

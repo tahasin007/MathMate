@@ -71,10 +71,13 @@ fun SaveCalculationBottomSheet(
                         color = MaterialTheme.colorScheme.onSecondary
                     )
 
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = {
+                        onAction(CalculatorAction.SaveBookmark(calculationName))
+                        onAction(CalculatorAction.SaveCalculationMenuVisibility(false))
+                    }, enabled = calculationName.isNotEmpty()) {
                         Icon(
                             Icons.Default.Check,
-                            contentDescription = "Close",
+                            contentDescription = "Save",
                             tint = MaterialTheme.colorScheme.onSecondary
                         )
                     }
@@ -112,6 +115,7 @@ fun SaveCalculationBottomSheet(
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onPrimary.copy(.75f)
                     )
                 )
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }

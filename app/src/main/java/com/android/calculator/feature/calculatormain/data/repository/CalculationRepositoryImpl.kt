@@ -7,15 +7,11 @@ import kotlinx.coroutines.flow.Flow
 
 class CalculationRepositoryImpl(private val dao: CalculationDao) : CalculationRepository {
     override suspend fun insertCalculation(calculations: Calculation) {
-        return dao.insertCalculation(calculations)
+        dao.insertCalculation(calculations)
     }
 
     override fun getCalculations(): Flow<List<Calculation>> {
         return dao.getAllCalculations()
-    }
-
-    override suspend fun deleteAllCalculations() {
-        dao.deleteAllCalculations()
     }
 
     override suspend fun deleteCalculations(calculations: List<Calculation>) {

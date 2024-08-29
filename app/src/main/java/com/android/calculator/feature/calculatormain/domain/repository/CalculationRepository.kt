@@ -8,7 +8,5 @@ interface CalculationRepository {
 
     fun getCalculations(): Flow<List<Calculation>>
 
-    suspend fun deleteAllCalculations()
-
     suspend fun deleteCalculations(calculations: List<Calculation>)
 }

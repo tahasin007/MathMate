@@ -15,9 +15,6 @@ interface CalculationDao {
     @Query("SELECT * FROM calculations ORDER BY date DESC")
     fun getAllCalculations(): Flow<List<Calculation>>
 
-    @Query("DELETE FROM calculations")
-    suspend fun deleteAllCalculations()
-
     @Query("DELETE FROM calculations WHERE id IN (:calculationIds)")
     suspend fun deleteCalculations(calculationIds: List<Int>)
 }

@@ -28,7 +28,7 @@ class CurrencyConverterViewModel @Inject constructor(
     val currencyState: State<CurrencyState> = _currencyState
 
     init {
-        viewModelScope.launch {
+        val job = viewModelScope.launch {
             try {
                 repository.fetchAndSaveCurrencyRates("USD")
                 _currencyRate.value = repository.getCurrencyRates()
@@ -37,7 +37,11 @@ class CurrencyConverterViewModel @Inject constructor(
                 e.printStackTrace()
             }
         }
-        updateExchangeRates()
+        job.invokeOnCompletion { throwable ->
+            if (throwable == null) {
+                updateExchangeRates()
+            }
+        }
     }
 
     fun onAction(action: BaseAction) {

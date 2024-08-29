@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.CalculatorAction
+import com.android.calculator.feature.calculatormain.domain.model.Bookmark
 import com.android.calculator.feature.calculatormain.domain.model.Calculation
 import com.android.calculator.feature.calculatormain.domain.usecase.CalculationUseCases
 import com.android.calculator.utils.CommonUtils
@@ -44,7 +45,7 @@ class CalculatorMainViewModel @Inject constructor(
                 action.isSheetOpen
             )
 
-            else -> {}
+            is CalculatorAction.SaveBookmark -> saveBookmark(action.name)
         }
     }
 
@@ -68,7 +69,8 @@ class CalculatorMainViewModel @Inject constructor(
         val result = ExpressionEvaluator.evaluate(filteredExpression)
         calculatorState = calculatorState.copy(
             expression = CommonUtils.removeZeroAfterDecimalPoint(result),
-            result = CommonUtils.removeZeroAfterDecimalPoint(result)
+            result = CommonUtils.removeZeroAfterDecimalPoint(result),
+            lastExpression = filteredExpression
         )
         saveCalculation(filteredExpression)
     }
@@ -177,6 +179,19 @@ class CalculatorMainViewModel @Inject constructor(
         calculatorState = calculatorState.copy(
             isSaveCalculationSheetOpen = sheetOpen
         )
+    }
+
+    private fun saveBookmark(name: String) {
+        viewModelScope.launch {
+            calculationUseCases.insertBookmark(
+                Bookmark(
+                    name = name,
+                    expression = calculatorState.lastExpression,
+                    result = calculatorState.result,
+                    date = System.currentTimeMillis()
+                )
+            )
+        }
     }
 
     private fun saveCalculation(filteredExpression: String) {

@@ -36,7 +36,7 @@ fun TextViewWithColorCircle(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Change Theme",
+            text = "Accent Color",
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurface

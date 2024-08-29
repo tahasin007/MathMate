@@ -3,6 +3,9 @@ package com.android.calculator.utils
 import java.math.BigDecimal
 import java.math.MathContext
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object CommonUtils {
     private val operators = setOf('+', '-', '*', '/', '%')
@@ -87,5 +90,11 @@ object CommonUtils {
         } else {
             number
         }
+    }
+
+    fun formatDate(dateInMillis: Long): String {
+        val date = Date(dateInMillis)
+        val format = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+        return format.format(date)
     }
 }

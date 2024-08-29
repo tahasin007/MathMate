@@ -55,7 +55,7 @@ fun MenuSavedItem(
             ScreenType.Bookmark,
             Modifier.weight(1f)
         ) {
-            onNavigate.invoke(ScreenType.History.route)
+            onNavigate.invoke(ScreenType.Bookmark.route)
             onAction(CalculatorAction.ConverterMenuVisibility(false))
         }
     }

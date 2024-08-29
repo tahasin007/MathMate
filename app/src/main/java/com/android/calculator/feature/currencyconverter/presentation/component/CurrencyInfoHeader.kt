@@ -122,11 +122,25 @@ fun CurrencyInfoHeader(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    Text(
-                                        text = item,
-                                        color = if (item == selectedItem) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onPrimary,
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.weight(1f)
-                                    )
+                                    ) {
+                                        Image(
+                                            painter = painterResource(
+                                                id = CurrencyUtils.getFlagDrawable(item)
+                                            ),
+                                            contentDescription = item,
+                                            modifier = Modifier
+                                                .size(25.dp)
+                                                .padding(end = 5.dp)
+                                        )
+                                        Text(
+                                            text = item,
+                                            color = if (item == selectedItem) MaterialTheme.colorScheme.onSecondary
+                                            else MaterialTheme.colorScheme.onPrimary,
+                                        )
+                                    }
                                     if (item == selectedItem) {
                                         Icon(
                                             imageVector = Icons.Default.Check,

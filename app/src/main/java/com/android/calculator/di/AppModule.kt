@@ -3,14 +3,19 @@ package com.android.calculator.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.android.calculator.feature.calculatormain.data.repository.BookmarkRepositoryImpl
 import com.android.calculator.feature.calculatormain.data.repository.CalculationRepositoryImpl
 import com.android.calculator.feature.calculatormain.data.source.CalculatorDatabase
+import com.android.calculator.feature.calculatormain.domain.repository.BookmarkRepository
 import com.android.calculator.feature.calculatormain.domain.repository.CalculationRepository
+import com.android.calculator.feature.calculatormain.domain.usecase.BookmarkUseCases
 import com.android.calculator.feature.calculatormain.domain.usecase.CalculationUseCases
-import com.android.calculator.feature.calculatormain.domain.usecase.DeleteAllCalculationsUseCase
-import com.android.calculator.feature.calculatormain.domain.usecase.DeleteSelectedCalculationsUseCase
-import com.android.calculator.feature.calculatormain.domain.usecase.GetCalculationsUseCase
-import com.android.calculator.feature.calculatormain.domain.usecase.InsertCalculationUseCase
+import com.android.calculator.feature.calculatormain.domain.usecase.bookmark.DeleteSelectedBookmarksUseCase
+import com.android.calculator.feature.calculatormain.domain.usecase.bookmark.GetBookmarksUseCase
+import com.android.calculator.feature.calculatormain.domain.usecase.bookmark.InsertBookmarkUseCase
+import com.android.calculator.feature.calculatormain.domain.usecase.history.DeleteSelectedCalculationsUseCase
+import com.android.calculator.feature.calculatormain.domain.usecase.history.GetCalculationsUseCase
+import com.android.calculator.feature.calculatormain.domain.usecase.history.InsertCalculationUseCase
 import com.android.calculator.feature.currencyconverter.data.repository.CurrencyRepositoryImpl
 import com.android.calculator.feature.currencyconverter.data.source.CurrencyRatePreference
 import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
@@ -28,6 +33,7 @@ import com.android.calculator.feature.tipcalculator.data.source.TipCalculatorPre
 import com.android.calculator.feature.tipcalculator.domain.repository.TipCalculatorRepository
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -55,12 +61,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCalculationUseCases(repository: CalculationRepository): CalculationUseCases {
+    fun provideCalculationUseCases(
+        calculationRepository: CalculationRepository,
+        bookmarkRepository: BookmarkRepository,
+    ): CalculationUseCases {
         return CalculationUseCases(
-            insertCalculation = InsertCalculationUseCase(repository),
-            getCalculations = GetCalculationsUseCase(repository),
-            deleteAllCalculations = DeleteAllCalculationsUseCase(repository),
-            deleteSelectedCalculations = DeleteSelectedCalculationsUseCase(repository)
+            insertCalculation = InsertCalculationUseCase(calculationRepository),
+            getCalculations = GetCalculationsUseCase(calculationRepository),
+            deleteSelectedCalculations = DeleteSelectedCalculationsUseCase(calculationRepository),
+            insertBookmark = InsertBookmarkUseCase(bookmarkRepository)
         )
     }
 
@@ -160,5 +169,27 @@ object AppModule {
         preferences: TipCalculatorPreferences
     ): TipCalculatorRepository {
         return TipCalculatorRepositoryImpl(preferences)
+    }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface SettingsRepositoryEntryPoint {
+        fun settingsRepository(): SettingsRepositoryImpl
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookmarkRepository(db: CalculatorDatabase): BookmarkRepository {
+        return BookmarkRepositoryImpl(db.bookmarkDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookmarkUseCases(repository: BookmarkRepository): BookmarkUseCases {
+        return BookmarkUseCases(
+            insertBookmark = InsertBookmarkUseCase(repository),
+            getBookmarks = GetBookmarksUseCase(repository),
+            deleteSelectedBookmarks = DeleteSelectedBookmarksUseCase(repository)
+        )
     }
 }
