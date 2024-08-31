@@ -31,10 +31,11 @@ class NumeralSystemViewModel @Inject constructor(
     fun onAction(action: BaseAction) {
         when (action) {
             is NumeralSystemAction -> handleNumeralSystemAction(action)
-            is BaseAction.Clear -> clear()
+            is BaseAction.Clear -> clearCalculation()
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Delete -> delete()
             is BaseAction.Number -> enterNumber(action.number.toString())
+            is BaseAction.DoubleZero -> enterNumber(action.number)
             else -> {}
         }
     }
@@ -56,7 +57,7 @@ class NumeralSystemViewModel @Inject constructor(
         }
     }
 
-    private fun clear() {
+    private fun clearCalculation() {
         _numeralSystemState.value = _numeralSystemState.value.copy(
             inputValue = "0",
             outputValue = "0"

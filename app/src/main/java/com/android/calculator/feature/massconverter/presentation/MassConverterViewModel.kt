@@ -34,13 +34,13 @@ class MassConverterViewModel @Inject constructor(
     fun onAction(action: BaseAction) {
         when (action) {
             is MassAction -> handleMassAction(action)
-            is BaseAction.Number -> enterNumber(action.number)
-            is BaseAction.Clear -> clear()
+            is BaseAction.Number -> enterNumber(action.number.toString())
+            is BaseAction.Clear -> clearCalculation()
             is BaseAction.Delete -> delete()
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Operation -> enterOperation(action.operation)
             is BaseAction.Calculate -> calculate()
-            is BaseAction.DoubleZero -> enterDoubleZero(action.number)
+            is BaseAction.DoubleZero -> enterNumber(action.number)
             else -> {}
         }
     }
@@ -99,7 +99,6 @@ class MassConverterViewModel @Inject constructor(
 
                 val outputValue =
                     if (convertedValue == 0.0) "0"
-                    else if (convertedValue.toString().length == 50) _massState.value.outputValue
                     else convertedValue.toString()
 
                 _massState.value =
@@ -120,7 +119,6 @@ class MassConverterViewModel @Inject constructor(
 
                 val inputValue =
                     if (convertedValue == 0.0) "0"
-                    else if (convertedValue.toString().length == 50) _massState.value.inputValue
                     else convertedValue.toString()
 
                 _massState.value =
@@ -132,30 +130,28 @@ class MassConverterViewModel @Inject constructor(
         }
     }
 
-    private fun enterNumber(number: Int) {
+    private fun enterNumber(number: String) {
         _massState.value = if (_massState.value.currentView == MassView.INPUT) {
             val inputValue =
-                if (_massState.value.inputValue == "0") number.toString()
-                else if (_massState.value.inputValue.length == 50) _massState.value.inputValue
-                else if (_massState.value.inputValue.last() == '.') _massState.value.inputValue + number.toString()
+                if (_massState.value.inputValue == "0") number
+                else if (_massState.value.inputValue.last() == '.') _massState.value.inputValue + number
                 else {
-                    CommonUtils.convertScientificToNormal(_massState.value.inputValue) + number.toString()
+                    CommonUtils.convertScientificToNormal(_massState.value.inputValue) + number
                 }
             _massState.value.copy(inputValue = inputValue)
         } else {
             val outputValue =
-                if (_massState.value.outputValue == "0") number.toString()
-                else if (_massState.value.outputValue.length == 50) _massState.value.outputValue
-                else if (_massState.value.outputValue.last() == '.') _massState.value.outputValue + number.toString()
+                if (_massState.value.outputValue == "0") number
+                else if (_massState.value.outputValue.last() == '.') _massState.value.outputValue + number
                 else {
-                    CommonUtils.convertScientificToNormal(_massState.value.outputValue) + number.toString()
+                    CommonUtils.convertScientificToNormal(_massState.value.outputValue) + number
                 }
             _massState.value.copy(outputValue = outputValue)
         }
         convert()
     }
 
-    private fun clear() {
+    private fun clearCalculation() {
         _massState.value = _massState.value.copy(
             inputValue = "0",
             outputValue = "0"
@@ -228,21 +224,6 @@ class MassConverterViewModel @Inject constructor(
                     } else _massState.value.outputValue + operation.symbol
                 }
             )
-        }
-        convert()
-    }
-
-    private fun enterDoubleZero(number: String) {
-        _massState.value = if (_massState.value.currentView == MassView.INPUT) {
-            val inputValue = if (_massState.value.inputValue == "0") _massState.value.inputValue
-            else if (_massState.value.inputValue.length == 24) _massState.value.inputValue
-            else _massState.value.inputValue + number
-            _massState.value.copy(inputValue = inputValue)
-        } else {
-            val outputValue = if (_massState.value.outputValue == "0") _massState.value.outputValue
-            else if (_massState.value.outputValue.length == 24) _massState.value.outputValue
-            else _massState.value.outputValue + number
-            _massState.value.copy(outputValue = outputValue)
         }
         convert()
     }

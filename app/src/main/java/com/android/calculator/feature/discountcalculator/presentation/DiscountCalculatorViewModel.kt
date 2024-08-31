@@ -8,9 +8,9 @@ import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.DiscountAction
 import com.android.calculator.feature.discountcalculator.data.repository.DiscountCalculatorRepositoryImpl
 import com.android.calculator.feature.discountcalculator.domain.model.DiscountCalculatorState
+import com.android.calculator.utils.CommonUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,8 +33,8 @@ class DiscountCalculatorViewModel @Inject constructor(
             is BaseAction.Clear -> clear()
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Delete -> delete()
-            is BaseAction.Number -> enterNumber(action.number)
-            is BaseAction.DoubleZero -> enterDoubleZero(action.number)
+            is BaseAction.Number -> enterNumber(action.number.toString())
+            is BaseAction.DoubleZero -> enterNumber(action.number)
             else -> {}
         }
     }
@@ -51,42 +51,49 @@ class DiscountCalculatorViewModel @Inject constructor(
     }
 
     private fun delete() {
+        val normalNotation = CommonUtils.convertScientificToNormal(_state.value.price)
+
+        val newBill = when {
+            normalNotation.length == 1 -> "0"
+            else -> normalNotation.dropLast(1)
+        }
+
+        val isLastCharDecimal = newBill.endsWith('.')
+
         _state.value = _state.value.copy(
-            price = if (_state.value.price == "0") _state.value.price
-            else if (_state.value.price.length == 1) "0"
-            else _state.value.price.dropLast(1)
+            price = CommonUtils.formatValue(newBill.toDouble(), 10)
+                    + if (isLastCharDecimal) "." else ""
         )
+
         calculateDiscount()
     }
 
-    private fun enterNumber(number: Int) {
-        _state.value = _state.value.copy(
-            price = if (_state.value.price == "0") number.toString()
-            else if (_state.value.price.contains(".")) {
-                val parts = _state.value.price.split(".")
-                if (parts[1].length < 5 && _state.value.price.length < 21) {
-                    _state.value.price + number.toString()
-                } else {
-                    _state.value.price
-                }
+    private fun enterNumber(number: String) {
+        val isLastCharDecimal = _state.value.price.endsWith('.')
+        val normalNotation = CommonUtils.convertScientificToNormal2(_state.value.price)
+
+        val decimalPart = normalNotation.substringAfter('.', "")
+        if (decimalPart.length >= 10) {
+            return // Don't add more digits if there are already 10 digits after the decimal
+        }
+
+        val newValueString = if (isLastCharDecimal) "$normalNotation.$number"
+        else normalNotation + number
+
+        val newBill = newValueString.toDoubleOrNull()
+
+        if (newBill != null && newBill <= CommonUtils.MAX_LIMIT && newBill >= CommonUtils.MIN_LIMIT) {
+            val formattedValue = CommonUtils.formatValue(newBill, 10)
+
+            val finalValue = if (newValueString.contains(".") && !newValueString.contains("E")) {
+                newValueString // Keep original string with trailing zeros if it contains a decimal point
             } else {
-                if (_state.value.price.length < 21) {
-                    _state.value.price + number.toString()
-                } else {
-                    _state.value.price
-                }
+                formattedValue
             }
-        )
-        calculateDiscount()
-    }
 
-    private fun enterDoubleZero(number: String) {
-        _state.value = _state.value.copy(
-            price = if (_state.value.price == "0") _state.value.price
-            else if (_state.value.price.length == 24) _state.value.price
-            else _state.value.price + number
-        )
-        calculateDiscount()
+            _state.value = _state.value.copy(price = finalValue)
+            calculateDiscount()
+        }
     }
 
     private fun enterDiscountPercent(percent: Int) {
@@ -95,11 +102,10 @@ class DiscountCalculatorViewModel @Inject constructor(
     }
 
     private fun enterDecimal() {
-        if (!_state.value.price.contains(".")) {
-            _state.value = _state.value.copy(
-                price = if (_state.value.price.length < 21) _state.value.price + "."
-                else _state.value.price
-            )
+        val price = _state.value.price
+
+        if (!price.contains(".")) {
+            _state.value = _state.value.copy(price = "$price.")
         }
     }
 
@@ -110,11 +116,9 @@ class DiscountCalculatorViewModel @Inject constructor(
         val discountAmount = (originalPrice * discountPercentage) / 100
         val discountedPrice = originalPrice - discountAmount
 
-        val decimalFormat = DecimalFormat("#.##")
-
         _state.value = _state.value.copy(
-            finalPrice = decimalFormat.format(discountedPrice),
-            saved = decimalFormat.format(discountAmount)
+            finalPrice = CommonUtils.formatValue(discountedPrice, 2),
+            saved = CommonUtils.formatValue(discountAmount, 2)
         )
         viewModelScope.launch {
             repository.saveDiscountCalculatorState(_state.value)

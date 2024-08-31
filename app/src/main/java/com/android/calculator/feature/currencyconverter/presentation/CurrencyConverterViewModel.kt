@@ -47,11 +47,11 @@ class CurrencyConverterViewModel @Inject constructor(
     fun onAction(action: BaseAction) {
         when (action) {
             is CurrencyAction -> handleCurrencyAction(action)
-            is BaseAction.Number -> enterNumber(action.number)
-            is BaseAction.Clear -> clear()
+            is BaseAction.Number -> enterNumber(action.number.toString())
+            is BaseAction.Clear -> clearCalculation()
             is BaseAction.Delete -> delete()
             is BaseAction.Decimal -> enterDecimal()
-            is BaseAction.DoubleZero -> enterDoubleZero(action.number)
+            is BaseAction.DoubleZero -> enterNumber(action.number)
             else -> {}
         }
     }
@@ -76,30 +76,28 @@ class CurrencyConverterViewModel @Inject constructor(
         }
     }
 
-    private fun enterNumber(number: Int) {
+    private fun enterNumber(number: String) {
         _currencyState.value = if (_currencyState.value.currentView == CurrencyView.FROM) {
             val fromValue =
-                if (_currencyState.value.fromValue == "0") number.toString()
-                else if (_currencyState.value.fromValue.length == 50) _currencyState.value.fromValue
-                else if (_currencyState.value.fromValue.last() == '.') _currencyState.value.fromValue + number.toString()
+                if (_currencyState.value.fromValue == "0") number
+                else if (_currencyState.value.fromValue.last() == '.') _currencyState.value.fromValue + number
                 else {
-                    CommonUtils.convertScientificToNormal(_currencyState.value.fromValue) + number.toString()
+                    CommonUtils.convertScientificToNormal(_currencyState.value.fromValue) + number
                 }
             _currencyState.value.copy(fromValue = fromValue)
         } else {
             val toValue =
-                if (_currencyState.value.toValue == "0") number.toString()
-                else if (_currencyState.value.toValue.length == 50) _currencyState.value.toValue
-                else if (_currencyState.value.toValue.last() == '.') _currencyState.value.toValue + number.toString()
+                if (_currencyState.value.toValue == "0") number
+                else if (_currencyState.value.toValue.last() == '.') _currencyState.value.toValue + number
                 else {
-                    CommonUtils.convertScientificToNormal(_currencyState.value.toValue) + number.toString()
+                    CommonUtils.convertScientificToNormal(_currencyState.value.toValue) + number
                 }
             _currencyState.value.copy(toValue = toValue)
         }
         convert()
     }
 
-    private fun clear() {
+    private fun clearCalculation() {
         _currencyState.value = _currencyState.value.copy(
             fromValue = "0",
             toValue = "0"
@@ -151,22 +149,6 @@ class CurrencyConverterViewModel @Inject constructor(
         viewModelScope.launch {
             repository.saveCurrencyState(_currencyState.value)
         }
-    }
-
-    private fun enterDoubleZero(number: String) {
-        _currencyState.value = if (_currencyState.value.currentView == CurrencyView.FROM) {
-            val fromValue =
-                if (_currencyState.value.fromValue == "0") _currencyState.value.fromValue
-                else if (_currencyState.value.fromValue.length == 24) _currencyState.value.fromValue
-                else _currencyState.value.fromValue + number
-            _currencyState.value.copy(fromValue = fromValue)
-        } else {
-            val toValue = if (_currencyState.value.toValue == "0") _currencyState.value.toValue
-            else if (_currencyState.value.toValue.length == 24) _currencyState.value.toValue
-            else _currencyState.value.toValue + number
-            _currencyState.value.copy(toValue = toValue)
-        }
-        convert()
     }
 
     private fun changeView() {

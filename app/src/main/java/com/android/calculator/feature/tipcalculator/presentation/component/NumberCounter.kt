@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 fun NumberCounter(
     modifier: Modifier,
     initialValue: Int = 1,
-    minValue: Int = 0,
+    minValue: Int = 1,
     maxValue: Int = 99,
     onValueChange: (Int) -> Unit
 ) {

@@ -1,5 +1,6 @@
 package com.android.calculator.feature.tipcalculator.presentation
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,9 +9,9 @@ import com.android.calculator.actions.BaseAction
 import com.android.calculator.actions.TipCalculatorAction
 import com.android.calculator.feature.tipcalculator.domain.model.TipCalculatorState
 import com.android.calculator.feature.tipcalculator.domain.repository.TipCalculatorRepository
+import com.android.calculator.utils.CommonUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,9 +34,11 @@ class TipCalculatorViewModel @Inject constructor(
             is BaseAction.Clear -> clear()
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Delete -> delete()
-            is BaseAction.Number -> enterNumber(action.number)
-            is BaseAction.DoubleZero -> enterDoubleZero(action.number)
-            else -> {}
+            is BaseAction.Number -> enterNumber(action.number.toString())
+            is BaseAction.DoubleZero -> enterNumber(action.number)
+            else -> {
+                Log.i(TAG, "$action not implemented")
+            }
         }
     }
 
@@ -52,56 +55,56 @@ class TipCalculatorViewModel @Inject constructor(
     }
 
     private fun enterDecimal() {
-        if (!_state.value.bill.contains(".")) {
-            _state.value = _state.value.copy(
-                bill =
-                if (_state.value.bill.length < 21) _state.value.bill + "."
-                else _state.value.bill
-            )
+        val bill = _state.value.bill
+
+        if (!bill.contains(".")) {
+            _state.value = _state.value.copy(bill = "$bill.")
         }
     }
 
     private fun delete() {
+        val normalNotation = CommonUtils.convertScientificToNormal(_state.value.bill)
+
+        val newBill = when {
+            normalNotation.length == 1 -> "0"
+            else -> normalNotation.dropLast(1)
+        }
+
+        val isLastCharDecimal = newBill.endsWith('.')
+
         _state.value = _state.value.copy(
-            bill =
-            if (_state.value.bill == "0") _state.value.bill
-            else if (_state.value.bill.length == 1) "0"
-            else _state.value.bill.dropLast(1)
+            bill = CommonUtils.formatValue(newBill.toDouble(), 10)
+                    + if (isLastCharDecimal) "." else ""
         )
         calculateBill()
     }
 
-    private fun enterNumber(number: Int) {
-        _state.value = _state.value.copy(
-            bill =
-            if (_state.value.bill == "0") number.toString()
-            else if (_state.value.bill.contains(".")) {
-                val parts = _state.value.bill.split(".")
-                if (parts[1].length < 5 && _state.value.bill.length < 21) {
-                    _state.value.bill + number.toString()
-                } else {
-                    _state.value.bill
-                }
+    private fun enterNumber(number: String) {
+        val isLastCharDecimal = _state.value.bill.endsWith('.')
+        val normalNotation = CommonUtils.convertScientificToNormal2(_state.value.bill)
+
+        val decimalPart = normalNotation.substringAfter('.', "")
+        if (decimalPart.length >= 10) {
+            return // Don't add more digits if there are already 10 digits after the decimal
+        }
+
+        val newValueString = if (isLastCharDecimal) "$normalNotation.$number"
+        else normalNotation + number
+
+        val newBill = newValueString.toDoubleOrNull()
+
+        if (newBill != null && newBill <= CommonUtils.MAX_LIMIT && newBill >= CommonUtils.MIN_LIMIT) {
+            val formattedValue = CommonUtils.formatValue(newBill, 10)
+
+            val finalValue = if (newValueString.contains(".") && !newValueString.contains("E")) {
+                newValueString // Keep original string with trailing zeros if it contains a decimal point
             } else {
-                if (_state.value.bill.length < 21) {
-                    _state.value.bill + number.toString()
-                } else {
-                    _state.value.bill
-                }
+                formattedValue
             }
-        )
-        calculateBill()
-    }
 
-    private fun enterDoubleZero(number: String) {
-        _state.value = _state.value.copy(
-            bill =
-            if (_state.value.bill == "0") _state.value.bill
-            else if (_state.value.bill.length == 24) _state.value.bill
-            else _state.value.bill + number
-        )
-
-        calculateBill()
+            _state.value = _state.value.copy(bill = finalValue)
+            calculateBill()
+        }
     }
 
     private fun enterHeadCount(count: Int) {
@@ -123,14 +126,16 @@ class TipCalculatorViewModel @Inject constructor(
         val totalBill = billAmount + tipAmount
         val totalPerHead = if (headCount > 0) totalBill / headCount else totalBill
 
-        val decimalFormat = DecimalFormat("#.##")
-
         _state.value = _state.value.copy(
-            totalBill = decimalFormat.format(totalBill),
-            totalPerHead = decimalFormat.format(totalPerHead)
+            totalBill = CommonUtils.formatValue(totalBill, 2),
+            totalPerHead = CommonUtils.formatValue(totalPerHead, 2)
         )
         viewModelScope.launch {
             repository.saveTipCalculatorState(_state.value)
         }
+    }
+
+    companion object {
+        private const val TAG = "TipCalculatorViewModel"
     }
 }

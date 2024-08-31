@@ -2,18 +2,24 @@ package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +38,8 @@ fun SimpleUnitView(
     onClick: (() -> Unit)?,
     isCurrentView: Boolean
 ) {
+    val scrollState = rememberScrollState()
+
     val backgroundColor =
         if (isCurrentView) MaterialTheme.colorScheme.onSecondary.copy(alpha = .1f)
         else MaterialTheme.colorScheme.primary
@@ -39,6 +47,11 @@ fun SimpleUnitView(
     val textColor =
         if (isCurrentView) MaterialTheme.colorScheme.onSecondary
         else MaterialTheme.colorScheme.onPrimary
+
+    // Scroll to the end of the text if it's longer than the view
+    LaunchedEffect(value) {
+        scrollState.animateScrollTo(scrollState.maxValue)
+    }
 
     Box(
         modifier = Modifier
@@ -75,12 +88,21 @@ fun SimpleUnitView(
                 },
             )
 
-            Box(contentAlignment = Alignment.CenterEnd) {
+            Spacer(modifier = Modifier.width(10.dp))
+
+            Box(
+                contentAlignment = Alignment.CenterEnd,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(scrollState) // Enable horizontal scrolling
+            ) {
                 Text(
                     text = value,
                     maxLines = 1,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.padding(end = 2.dp, top = 2.dp),
+                    modifier = Modifier
+                        .padding(end = 2.dp, top = 2.dp)
+                        .wrapContentWidth(), // Ensures the Text takes up only as much space as needed
                     style = LocalTextStyle.current.copy(
                         fontSize = LocalTextStyle.current.fontSize * multiplier
                     ),

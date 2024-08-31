@@ -34,13 +34,13 @@ class LengthConverterViewModel @Inject constructor(
     fun onAction(action: BaseAction) {
         when (action) {
             is LengthAction -> handleLengthAction(action)
-            is BaseAction.Number -> enterNumber(action.number)
-            is BaseAction.Clear -> clear()
+            is BaseAction.Number -> enterNumber(action.number.toString())
+            is BaseAction.Clear -> clearCalculation()
             is BaseAction.Delete -> delete()
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Operation -> enterOperation(action.operation)
             is BaseAction.Calculate -> calculate()
-            is BaseAction.DoubleZero -> enterDoubleZero(action.number)
+            is BaseAction.DoubleZero -> enterNumber(action.number)
             else -> {}
         }
     }
@@ -88,9 +88,8 @@ class LengthConverterViewModel @Inject constructor(
 
             if (_lengthState.value.currentView == LengthView.INPUT) {
                 val inputValue =
-                    if (_lengthState.value.inputValue.isBlank() || CommonUtils.isLastCharOperator(
-                            _lengthState.value.inputValue
-                        )
+                    if (_lengthState.value.inputValue.isBlank() ||
+                        CommonUtils.isLastCharOperator(_lengthState.value.inputValue)
                     ) null
                     else calculate(_lengthState.value.inputValue)?.toDoubleOrNull()
                 if (inputValue == null) return@launch
@@ -111,9 +110,8 @@ class LengthConverterViewModel @Inject constructor(
                     )
             } else {
                 val outputValue =
-                    if (_lengthState.value.outputValue.isBlank() || CommonUtils.isLastCharOperator(
-                            _lengthState.value.outputValue
-                        )
+                    if (_lengthState.value.outputValue.isBlank() ||
+                        CommonUtils.isLastCharOperator(_lengthState.value.outputValue)
                     ) return@launch
                     else calculate(_lengthState.value.outputValue)?.toDoubleOrNull()
                 if (outputValue == null) return@launch
@@ -135,30 +133,28 @@ class LengthConverterViewModel @Inject constructor(
         }
     }
 
-    private fun enterNumber(number: Int) {
+    private fun enterNumber(number: String) {
         _lengthState.value = if (_lengthState.value.currentView == LengthView.INPUT) {
             val inputValue =
-                if (_lengthState.value.inputValue == "0") number.toString()
-                else if (_lengthState.value.inputValue.length == 50) _lengthState.value.inputValue
-                else if (_lengthState.value.inputValue.last() == '.') _lengthState.value.inputValue + number.toString()
+                if (_lengthState.value.inputValue == "0") number
+                else if (_lengthState.value.inputValue.last() == '.') _lengthState.value.inputValue + number
                 else {
-                    CommonUtils.convertScientificToNormal(_lengthState.value.inputValue) + number.toString()
+                    CommonUtils.convertScientificToNormal(_lengthState.value.inputValue) + number
                 }
             _lengthState.value.copy(inputValue = inputValue)
         } else {
             val outputValue =
-                if (_lengthState.value.outputValue == "0") number.toString()
-                else if (_lengthState.value.outputValue.length == 50) _lengthState.value.outputValue
-                else if (_lengthState.value.outputValue.last() == '.') _lengthState.value.outputValue + number.toString()
+                if (_lengthState.value.outputValue == "0") number
+                else if (_lengthState.value.outputValue.last() == '.') _lengthState.value.outputValue + number
                 else {
-                    CommonUtils.convertScientificToNormal(_lengthState.value.outputValue) + number.toString()
+                    CommonUtils.convertScientificToNormal(_lengthState.value.outputValue) + number
                 }
             _lengthState.value.copy(outputValue = outputValue)
         }
         convert()
     }
 
-    private fun clear() {
+    private fun clearCalculation() {
         _lengthState.value = _lengthState.value.copy(
             inputValue = "0",
             outputValue = "0"
@@ -214,7 +210,6 @@ class LengthConverterViewModel @Inject constructor(
             _lengthState.value.copy(
                 inputValue =
                 if (_lengthState.value.inputValue == "0" ||
-                    _lengthState.value.inputValue.length == 50 ||
                     CommonUtils.isLastCharOperator(_lengthState.value.inputValue)
                 ) _lengthState.value.inputValue
                 else {
@@ -227,7 +222,6 @@ class LengthConverterViewModel @Inject constructor(
             _lengthState.value.copy(
                 outputValue =
                 if (_lengthState.value.outputValue == "0" ||
-                    _lengthState.value.outputValue.length == 50 ||
                     CommonUtils.isLastCharOperator(_lengthState.value.outputValue)
                 ) _lengthState.value.outputValue
                 else {
@@ -236,22 +230,6 @@ class LengthConverterViewModel @Inject constructor(
                     } else _lengthState.value.outputValue + operation.symbol
                 }
             )
-        }
-        convert()
-    }
-
-    private fun enterDoubleZero(number: String) {
-        _lengthState.value = if (_lengthState.value.currentView == LengthView.INPUT) {
-            val inputValue = if (_lengthState.value.inputValue == "0") _lengthState.value.inputValue
-            else if (_lengthState.value.inputValue.length == 24) _lengthState.value.inputValue
-            else _lengthState.value.inputValue + number
-            _lengthState.value.copy(inputValue = inputValue)
-        } else {
-            val outputValue =
-                if (_lengthState.value.outputValue == "0") _lengthState.value.outputValue
-                else if (_lengthState.value.outputValue.length == 24) _lengthState.value.outputValue
-                else _lengthState.value.outputValue + number
-            _lengthState.value.copy(outputValue = outputValue)
         }
         convert()
     }

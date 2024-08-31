@@ -8,6 +8,13 @@ import java.util.Date
 import java.util.Locale
 
 object CommonUtils {
+    // Define constants for max and min value
+    const val MAX_LIMIT = 1E99
+    const val MIN_LIMIT = 1E-99
+
+    const val MAX_LIMIT_FOR_NORMAL_NOTATION = 1E10
+    const val MIN_LIMIT_FOR_NORMAL_NOTATION = 1E-10
+
     private val operators = setOf('+', '-', '*', '/', '%')
 
     fun isLastCharOperator(expression: String): Boolean {
@@ -70,8 +77,14 @@ object CommonUtils {
 
     fun convertScientificToNormal(number: String): String {
         return try {
-            val bd = BigDecimal(number, MathContext.DECIMAL64)
-            bd.stripTrailingZeros().toPlainString()
+            if (number.endsWith(".")) {
+                // Keep the trailing decimal point for numbers like "2."
+                val bd = BigDecimal(number.dropLast(1), MathContext.DECIMAL64)
+                bd.stripTrailingZeros().toPlainString() + "."
+            } else {
+                val bd = BigDecimal(number, MathContext.DECIMAL64)
+                bd.stripTrailingZeros().toPlainString()
+            }
         } catch (e: NumberFormatException) {
             number // return the original string if it can't be parsed
         }
@@ -96,5 +109,43 @@ object CommonUtils {
         val date = Date(dateInMillis)
         val format = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
         return format.format(date)
+    }
+
+    fun formatValue(value: Double, precision: Int = 5): String {
+        val pattern = "0.${"#".repeat(precision)}E0"
+        val normalPattern = "#.${"#".repeat(precision)}"
+
+        return when {
+            value >= MAX_LIMIT_FOR_NORMAL_NOTATION -> DecimalFormat(pattern).format(value)
+            value <= MIN_LIMIT_FOR_NORMAL_NOTATION && value != 0.0 -> DecimalFormat(pattern).format(value)
+            else -> DecimalFormat(normalPattern).format(value)
+        }
+    }
+
+    fun convertScientificToNormal2(number: String, removeTrailingZeros: Boolean = false): String {
+        return try {
+            val bd = BigDecimal(number, MathContext.DECIMAL64)
+
+            // Convert to plain string
+            val plainString = bd.toPlainString()
+
+            if (removeTrailingZeros) {
+                // Remove trailing zeros if needed
+                val decimalPointIndex = plainString.indexOf('.')
+                if (decimalPointIndex != -1) {
+                    // Remove trailing zeros after the decimal point
+                    var result = plainString
+                    result = result.replace(Regex("(?<=\\d)0+$"), "") // Remove trailing zeros
+                    result = result.replace(Regex("\\.$"), "") // Remove trailing decimal point if it's the last character
+                    result
+                } else {
+                    plainString
+                }
+            } else {
+                plainString
+            }
+        } catch (e: NumberFormatException) {
+            number // Return the original string if it can't be parsed
+        }
     }
 }

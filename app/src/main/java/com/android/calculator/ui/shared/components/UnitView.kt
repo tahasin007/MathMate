@@ -2,18 +2,24 @@ package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun UnitView(
@@ -40,6 +47,12 @@ fun UnitView(
     val textColor =
         if (isCurrentView) MaterialTheme.colorScheme.onSecondary
         else MaterialTheme.colorScheme.onPrimary
+
+    val scrollState = rememberScrollState()
+    // Scroll to the end of the text if it's longer than the view
+    LaunchedEffect(value) {
+        scrollState.animateScrollTo(scrollState.maxValue)
+    }
 
     Box(
         modifier = Modifier
@@ -70,7 +83,11 @@ fun UnitView(
                     textColor = textColor
                 )
             }
+
+            Spacer(modifier = Modifier.width(10.dp))
+
             Row(
+                modifier = Modifier.horizontalScroll(scrollState), // Enable horizontal scrolling
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
@@ -78,8 +95,11 @@ fun UnitView(
                 Text(
                     text = value,
                     maxLines = 2,
+                    fontSize = 18.sp,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.padding(end = 2.dp),
+                    modifier = Modifier
+                        .padding(end = 2.dp)
+                        .wrapContentWidth(), // Ensures the Text takes up only as much space as needed
                     style = LocalTextStyle.current.copy(
                         fontSize = LocalTextStyle.current.fontSize * multiplier
                     ),
@@ -91,7 +111,10 @@ fun UnitView(
                     color = textColor
                 )
                 if (isCurrentView) {
-                    DrawBlinkingVerticalLine(color = MaterialTheme.colorScheme.onSecondary)
+                    DrawBlinkingVerticalLine(
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        lineHeight = 25.dp
+                    )
                 }
             }
         }
