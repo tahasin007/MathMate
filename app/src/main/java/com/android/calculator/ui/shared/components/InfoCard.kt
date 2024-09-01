@@ -1,9 +1,9 @@
 package com.android.calculator.ui.shared.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -24,15 +24,14 @@ fun InfoCard(modifier: Modifier, label: String, value: String) {
         modifier = modifier.fillMaxSize(),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
-        ), colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
         ),
         shape = RoundedCornerShape(8.dp)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.SpaceBetween,
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.2f)),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
             Text(

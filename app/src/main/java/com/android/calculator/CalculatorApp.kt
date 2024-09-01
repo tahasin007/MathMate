@@ -110,7 +110,7 @@ fun CalculatorApp() {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.primary)
-                        .padding(bottom = 20.dp, start = 15.dp, end = 15.dp),
+                        .padding(all = 10.dp),
                     configuration = configuration,
                 )
             }

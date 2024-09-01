@@ -80,7 +80,8 @@ fun UnitView(
                     selectedUnit = selectedUnit,
                     items = items,
                     onSelectedUnitChanged = onSelectedUnitChanged,
-                    textColor = textColor
+                    textColor = textColor,
+                    menuWidth = 150.dp
                 )
             }
 

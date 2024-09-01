@@ -2,16 +2,17 @@ package com.android.calculator.feature.lenghtconverter.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.android.calculator.actions.LengthAction
@@ -40,16 +41,19 @@ fun LengthScreen(
             }
         }
     ) { innerPadding ->
-        Surface(
-            modifier = Modifier.padding(innerPadding)
+        BoxWithConstraints(
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
         ) {
-            Column(
-                modifier = modifier,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
+            val totalHeight = maxHeight
+            val firstColumnHeight = totalHeight * 0.2f
+            val secondColumnHeight = totalHeight * 0.65f
+
+            Column(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
-                        .fillMaxHeight(0.25f)
+                        .height(firstColumnHeight)
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.Top
                 ) {
@@ -98,15 +102,22 @@ fun LengthScreen(
                         )
                     }
                 }
-                val buttons = ButtonFactory()
-                CalculatorGrid(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp, start = 7.5.dp, end = 7.5.dp),
-                    buttons = buttons.getButtons(ScreenType.Length),
-                    onAction = viewModel::onAction,
-                    configuration = configuration
-                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Column(
+                    modifier = Modifier
+                        .height(secondColumnHeight)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    CalculatorGrid(
+                        modifier = Modifier.fillMaxWidth(),
+                        buttons = ButtonFactory().getButtons(ScreenType.Length),
+                        onAction = viewModel::onAction,
+                        configuration = configuration
+                    )
+                }
             }
         }
     }

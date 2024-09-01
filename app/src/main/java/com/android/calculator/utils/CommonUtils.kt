@@ -9,11 +9,11 @@ import java.util.Locale
 
 object CommonUtils {
     // Define constants for max and min value
-    const val MAX_LIMIT = 1E99
-    const val MIN_LIMIT = 1E-99
+    private const val MAX_LIMIT = 1E99
+    private const val MIN_LIMIT = 1E-99
 
-    const val MAX_LIMIT_FOR_NORMAL_NOTATION = 1E10
-    const val MIN_LIMIT_FOR_NORMAL_NOTATION = 1E-10
+    private const val MAX_LIMIT_FOR_NORMAL_NOTATION = 1E10
+    private const val MIN_LIMIT_FOR_NORMAL_NOTATION = 1E-10
 
     private val operators = setOf('+', '-', '*', '/', '%')
 
@@ -44,19 +44,6 @@ object CommonUtils {
         return !lastNumber.contains('.')
     }
 
-    fun removeZeroAfterDecimalPoint(number: String): String {
-        return try {
-            val doubleValue = number.toDouble()
-            if (doubleValue % 1 == 0.0) {
-                doubleValue.toInt().toString()
-            } else {
-                number
-            }
-        } catch (e: NumberFormatException) {
-            number
-        }
-    }
-
     fun removeZeroAfterDecimalPoint(number: Double): String {
         return try {
             if (number % 1 == 0.0) {
@@ -67,12 +54,6 @@ object CommonUtils {
         } catch (e: NumberFormatException) {
             number.toString()
         }
-    }
-
-    fun formatDisplayNumber(number: String): String {
-        val normal = convertScientificToNormal(number)
-        val scientific = convertNormalToScientific(normal)
-        return scientific
     }
 
     fun convertScientificToNormal(number: String): String {
@@ -90,21 +71,6 @@ object CommonUtils {
         }
     }
 
-    fun convertNormalToScientific(number: String): String {
-        // Check if the number is valid
-        val num = number.toDoubleOrNull() ?: return number
-
-        // Determine if the number should be converted to scientific notation
-        return if (number.length >= 10 || (number.split('.')
-                .getOrNull(1)?.length ?: 0) >= 10
-        ) {
-            val decimalFormat = DecimalFormat("0.############E0")
-            decimalFormat.format(num)
-        } else {
-            number
-        }
-    }
-
     fun formatDate(dateInMillis: Long): String {
         val date = Date(dateInMillis)
         val format = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
@@ -117,12 +83,15 @@ object CommonUtils {
 
         return when {
             value >= MAX_LIMIT_FOR_NORMAL_NOTATION -> DecimalFormat(pattern).format(value)
-            value <= MIN_LIMIT_FOR_NORMAL_NOTATION && value != 0.0 -> DecimalFormat(pattern).format(value)
+            value <= MIN_LIMIT_FOR_NORMAL_NOTATION && value != 0.0 -> DecimalFormat(pattern).format(
+                value
+            )
+
             else -> DecimalFormat(normalPattern).format(value)
         }
     }
 
-    fun convertScientificToNormal2(number: String, removeTrailingZeros: Boolean = false): String {
+    private fun convertScientificToNormal2(number: String, removeTrailingZeros: Boolean = false): String {
         return try {
             val bd = BigDecimal(number, MathContext.DECIMAL64)
 
@@ -136,7 +105,10 @@ object CommonUtils {
                     // Remove trailing zeros after the decimal point
                     var result = plainString
                     result = result.replace(Regex("(?<=\\d)0+$"), "") // Remove trailing zeros
-                    result = result.replace(Regex("\\.$"), "") // Remove trailing decimal point if it's the last character
+                    result = result.replace(
+                        Regex("\\.$"),
+                        ""
+                    ) // Remove trailing decimal point if it's the last character
                     result
                 } else {
                     plainString
@@ -146,6 +118,104 @@ object CommonUtils {
             }
         } catch (e: NumberFormatException) {
             number // Return the original string if it can't be parsed
+        }
+    }
+
+    fun formatUnitValues(value: String, number: String, precision: Int = 10): String {
+        val isLastCharDecimal = value.endsWith('.')
+        val normalNotation = convertScientificToNormal2(value)
+
+        val decimalPart = normalNotation.substringAfter('.', "")
+        if (decimalPart.length >= precision) {
+            return value// Don't add more digits if there are already 10 digits after the decimal
+        }
+
+        val newValueString = if (isLastCharDecimal) "$normalNotation.$number"
+        else normalNotation + number
+
+        val newBill = newValueString.toDoubleOrNull()
+
+        if (newBill != null && newBill <= MAX_LIMIT && newBill >= MIN_LIMIT) {
+            val formattedValue = formatValue(newBill, precision)
+
+            val finalValue = if (newValueString.contains(".") && !newValueString.contains("E")) {
+               newValueString // Keep original string with trailing zeros if it contains a decimal point
+            } else {
+                formattedValue
+            }
+
+            return finalValue
+        }
+        return value
+    }
+
+    fun deleteLastChar(value: String, precision: Int = 10): String {
+        if (value.isEmpty()) return value
+
+        val normalNotation = convertScientificToNormal(value)
+
+        val newBill = when {
+            normalNotation.length == 1 -> "0"
+            else -> normalNotation.dropLast(1)
+        }
+
+        val isLastCharDecimal = newBill.endsWith('.')
+        return formatValue(newBill.toDouble(), precision) + if (isLastCharDecimal) "." else ""
+    }
+
+    /**
+     * Splits the string by the last operator, formats the value after the operator,
+     * and appends it back to the part before the operator.
+     */
+    fun formatAndCombine(value: String, number: String): String {
+        val operatorRegex = Regex("[+\\-*/%]") // Regex to match operators: +, -, *, /, %
+        val lastOperatorIndex = operatorRegex.findAll(value).lastOrNull()?.range?.last
+
+        return if (lastOperatorIndex != null) {
+            // Split the string at the last operator
+            val beforeOperator = value.substring(0, lastOperatorIndex + 1)
+            val afterOperator = value.substring(lastOperatorIndex + 1)
+
+            // Apply formatting to the substring after the last operator
+            val formattedValue = formatUnitValues(afterOperator, number)
+
+            // Combine the original part before the operator with the formatted value after the operator
+            beforeOperator + formattedValue
+        } else {
+            // If no operator is found, just format the entire value
+            formatUnitValues(value, number)
+        }
+    }
+
+    /**
+     * Deletes the last character from the substring after the last operator,
+     * and appends it back to the part before the operator.
+     */
+    fun deleteLastCharFromExpression(value: String): String {
+        val operatorRegex = Regex("[+\\-*/%]") // Regex to match operators: +, -, *, /, %
+        val lastOperatorIndex = operatorRegex.findAll(value).lastOrNull()?.range?.last
+
+        return if (lastOperatorIndex != null) {
+            // Split the string at the last operator
+            val beforeOperator = value.substring(0, lastOperatorIndex + 1)
+            val afterOperator = value.substring(lastOperatorIndex + 1)
+
+            // Apply deleteLastChar to the substring after the last operator
+            val newAfterOperator = deleteLastChar(afterOperator)
+
+            // If the new value after the operator is empty, remove the operator
+            if (newAfterOperator.isEmpty()) {
+                beforeOperator.dropLast(1)
+            }
+            // If the new value after the operator is a single character, don't append
+            else if (newAfterOperator.length == 1) {
+                beforeOperator
+            }
+            // Combine the original part before the operator with the new value after the operator
+            else beforeOperator + newAfterOperator
+        } else {
+            // If no operator is found, just delete the last character from the entire value
+            deleteLastChar(value)
         }
     }
 }

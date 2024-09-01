@@ -52,22 +52,31 @@ object ExpressionEvaluator {
         val tokens = mutableListOf<String>()
         val currentToken = StringBuilder()
 
-        for ((index, char) in expression.withIndex()) {
+        var i = 0
+        while (i < expression.length) {
+            val char = expression[i]
+
             if (char.isDigit() || char == '.') {
                 currentToken.append(char)
-            } else if (char == '-' && (index == 0 || expression[index - 1] == '(')) {
+            } else if (char == '-' && (i == 0 || expression[i - 1] == '(')) {
                 // Handle unary negation
                 currentToken.append(char)
+            } else if ((char == 'e' || char == 'E') && i < expression.length - 1 && expression[i + 1].isDigitOrSign()) {
+                // Handle scientific notation
+                currentToken.append(char)
+                i++
+                currentToken.append(expression[i]) // append the next character (digit or sign)
             } else {
                 if (currentToken.isNotEmpty()) {
                     tokens.add(currentToken.toString())
                     currentToken.clear()
                 }
                 if (char == '(' && tokens.isNotEmpty() && tokens.last().isNumeric()) {
-                    tokens.add("*")
+                    tokens.add("*") // Implicit multiplication for cases like "2(3+4)"
                 }
                 tokens.add(char.toString())
             }
+            i++
         }
 
         if (currentToken.isNotEmpty()) {
@@ -75,6 +84,10 @@ object ExpressionEvaluator {
         }
 
         return tokens
+    }
+
+    private fun Char.isDigitOrSign(): Boolean {
+        return this.isDigit() || this == '+' || this == '-'
     }
 
     private fun applyOperation(numbers: Stack<Double>, operators: Stack<CalculatorOperation>) {

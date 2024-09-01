@@ -41,7 +41,7 @@ fun AnimatedSlider(
     thumbRadius: Dp = 16.dp,
     trackHeight: Dp = 4.dp,
     trackColor: Color = MaterialTheme.colorScheme.onSecondary,
-    thumbColor: Color = MaterialTheme.colorScheme.onSecondary.copy(alpha = .1f),
+    thumbColor: Color = MaterialTheme.colorScheme.onSecondary.copy(alpha = .25f),
     progressBoxColor: Color = MaterialTheme.colorScheme.primary
 ) {
     val coroutineScope = rememberCoroutineScope()

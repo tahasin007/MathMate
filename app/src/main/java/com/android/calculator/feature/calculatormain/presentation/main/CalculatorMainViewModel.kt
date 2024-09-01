@@ -28,8 +28,8 @@ class CalculatorMainViewModel @Inject constructor(
             is CalculatorAction -> handleCalculatorAction(action)
             is BaseAction.Number -> enterNumber(action.number)
             is BaseAction.DoubleZero -> enterDoubleZero(action.number)
-            is BaseAction.Clear -> clear()
-            is BaseAction.Delete -> delete()
+            is BaseAction.Clear -> clearCalculation()
+            is BaseAction.Delete -> deleteLastChar()
             is BaseAction.Calculate -> calculate()
             is BaseAction.Operation -> enterOperation(action.operation)
             is BaseAction.Decimal -> enterDecimal()
@@ -75,7 +75,7 @@ class CalculatorMainViewModel @Inject constructor(
         saveCalculation(filteredExpression)
     }
 
-    private fun delete() {
+    private fun deleteLastChar() {
         if (calculatorState.expression.isBlank()) return
 
         calculatorState = calculatorState.copy(
@@ -83,7 +83,7 @@ class CalculatorMainViewModel @Inject constructor(
         )
     }
 
-    private fun clear() {
+    private fun clearCalculation() {
         calculatorState = CalculatorMainState()
     }
 
@@ -137,7 +137,9 @@ class CalculatorMainViewModel @Inject constructor(
     }
 
     private fun enterOperation(operation: CalculatorOperation) {
-        if (calculatorState.expression.isBlank()) return
+        if (calculatorState.expression.isBlank() ||
+            CommonUtils.isLastCharOperator(calculatorState.expression)
+        ) return
 
         val updatedExpression =
             if (calculatorState.expression.last() == '.')

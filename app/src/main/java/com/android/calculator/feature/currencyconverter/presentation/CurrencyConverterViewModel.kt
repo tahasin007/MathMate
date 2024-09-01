@@ -49,7 +49,7 @@ class CurrencyConverterViewModel @Inject constructor(
             is CurrencyAction -> handleCurrencyAction(action)
             is BaseAction.Number -> enterNumber(action.number.toString())
             is BaseAction.Clear -> clearCalculation()
-            is BaseAction.Delete -> delete()
+            is BaseAction.Delete -> deleteLastChar()
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.DoubleZero -> enterNumber(action.number)
             else -> {}
@@ -72,29 +72,24 @@ class CurrencyConverterViewModel @Inject constructor(
 
             is CurrencyAction.ChangeView -> changeView()
             is CurrencyAction.SwitchView -> switchView()
-            is CurrencyAction.Convert -> TODO()
+            is CurrencyAction.Convert -> {}
         }
     }
 
     private fun enterNumber(number: String) {
-        _currencyState.value = if (_currencyState.value.currentView == CurrencyView.FROM) {
-            val fromValue =
-                if (_currencyState.value.fromValue == "0") number
-                else if (_currencyState.value.fromValue.last() == '.') _currencyState.value.fromValue + number
-                else {
-                    CommonUtils.convertScientificToNormal(_currencyState.value.fromValue) + number
-                }
-            _currencyState.value.copy(fromValue = fromValue)
+        if (_currencyState.value.currentView == CurrencyView.FROM) {
+            val fromValue = CommonUtils.formatUnitValues(_currencyState.value.fromValue, number)
+            if (fromValue != _currencyState.value.fromValue) {
+                _currencyState.value = _currencyState.value.copy(fromValue = fromValue)
+                convert()
+            }
         } else {
-            val toValue =
-                if (_currencyState.value.toValue == "0") number
-                else if (_currencyState.value.toValue.last() == '.') _currencyState.value.toValue + number
-                else {
-                    CommonUtils.convertScientificToNormal(_currencyState.value.toValue) + number
-                }
-            _currencyState.value.copy(toValue = toValue)
+            val toValue = CommonUtils.formatUnitValues(_currencyState.value.toValue, number)
+            if (toValue != _currencyState.value.toValue) {
+                _currencyState.value = _currencyState.value.copy(toValue = toValue)
+                convert()
+            }
         }
-        convert()
     }
 
     private fun clearCalculation() {
@@ -107,23 +102,20 @@ class CurrencyConverterViewModel @Inject constructor(
         }
     }
 
-    private fun delete() {
-        _currencyState.value = if (_currencyState.value.currentView == CurrencyView.FROM) {
-            _currencyState.value.copy(
-                fromValue =
-                if (_currencyState.value.fromValue == "0") _currencyState.value.fromValue
-                else if (_currencyState.value.fromValue.length == 1) "0"
-                else _currencyState.value.fromValue.dropLast(1)
-            )
+    private fun deleteLastChar() {
+        if (_currencyState.value.currentView == CurrencyView.FROM) {
+            val newFromValue = CommonUtils.deleteLastChar(_currencyState.value.fromValue)
+            if (newFromValue != _currencyState.value.fromValue) {
+                _currencyState.value = _currencyState.value.copy(fromValue = newFromValue)
+                convert()
+            }
         } else {
-            _currencyState.value.copy(
-                toValue =
-                if (_currencyState.value.toValue == "0") _currencyState.value.toValue
-                else if (_currencyState.value.toValue.length == 1) "0"
-                else _currencyState.value.toValue.dropLast(1)
-            )
+            val newToValue = CommonUtils.deleteLastChar(_currencyState.value.toValue)
+            if (newToValue != _currencyState.value.toValue) {
+                _currencyState.value = _currencyState.value.copy(toValue = newToValue)
+                convert()
+            }
         }
-        convert()
     }
 
     private fun enterDecimal() {
@@ -205,7 +197,8 @@ class CurrencyConverterViewModel @Inject constructor(
                     val fromValue = currentState.fromValue.toDoubleOrNull() ?: 0.0
                     val amountInBaseCurrency = fromValue / fromRate
                     val convertedValue = amountInBaseCurrency * toRate
-                    _currencyState.value = currentState.copy(toValue = convertedValue.toString())
+                    _currencyState.value =
+                        currentState.copy(toValue = CommonUtils.formatValue(convertedValue))
                 }
 
                 CurrencyView.TO -> {
@@ -213,7 +206,8 @@ class CurrencyConverterViewModel @Inject constructor(
                     val toValue = currentState.toValue.toDoubleOrNull() ?: 0.0
                     val amountInBaseCurrency = toValue / toRate
                     val convertedValue = amountInBaseCurrency * fromRate
-                    _currencyState.value = currentState.copy(fromValue = convertedValue.toString())
+                    _currencyState.value =
+                        currentState.copy(fromValue = CommonUtils.formatValue(convertedValue))
                 }
             }
         } else {

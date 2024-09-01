@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -48,126 +47,126 @@ fun TipCalculatorScreen(
             }
         }
     ) { innerPadding ->
-        Surface(
-            modifier = Modifier.padding(innerPadding)
+        BoxWithConstraints(
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
         ) {
-            BoxWithConstraints(
-                modifier = modifier.fillMaxSize()
+            val totalHeight = maxHeight
+            val firstColumnHeight = totalHeight * 0.45f
+            val secondColumnHeight = totalHeight * 0.5f
+
+            Column(
+                modifier = Modifier.fillMaxSize()
             ) {
-                val totalHeight = maxHeight
-                val firstColumnHeight = totalHeight * 0.45f
-                val secondColumnHeight = totalHeight * 0.5f
                 Column(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .height(firstColumnHeight)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
+                    Box(
                         modifier = Modifier
-                            .height(firstColumnHeight)
+                            .weight(.75f)
                             .fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .weight(.75f)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            SimpleUnitView(
-                                label = "Total Bill",
-                                value = state.value.bill,
-                                onClick = null,
-                                isCurrentView = true
-                            )
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .weight(.75f)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 20.dp),
-                                horizontalArrangement = Arrangement.SpaceAround,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "Split",
-                                    color = MaterialTheme.colorScheme.onSecondary,
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.weight(0.6f)
-                                )
-                                NumberCounter(
-                                    modifier = Modifier.weight(0.4f),
-                                    initialValue = state.value.headCount,
-                                    onValueChange = {
-                                        viewModel.onAction(TipCalculatorAction.EnterHeadCount(it))
-                                    }
-                                )
-                            }
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .weight(1.5f)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            AnimatedSlider(
-                                label = "Tip",
-                                value = state.value.tipPercentage,
-                                onValueChange = {
-                                    viewModel.onAction(TipCalculatorAction.EnterTipPercent(it.toInt()))
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth(0.85f)
-                                    .padding(16.dp)
-                            )
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .weight(1.25f)
-                                .fillMaxWidth()
-                                .padding(5.dp),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(5.dp)
-                            ) {
-                                InfoCard(
-                                    modifier = Modifier.weight(0.5f),
-                                    label = "TOTAL",
-                                    value = state.value.totalBill
-                                )
-                                InfoCard(
-                                    modifier = Modifier.weight(0.5f),
-                                    label = "P/PERSON",
-                                    value = state.value.totalPerHead
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Column(
-                        modifier = Modifier
-                            .height(secondColumnHeight)
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.Bottom
-                    ) {
-                        val buttons = ButtonFactory()
-                        CalculatorGridSimple(
-                            buttons = buttons.getButtons(ScreenType.TipCalculator),
-                            onAction = viewModel::onAction,
-                            configuration = configuration
+                        SimpleUnitView(
+                            label = "Total Bill",
+                            value = state.value.bill,
+                            onClick = null,
+                            isCurrentView = true
                         )
                     }
+
+                    Box(
+                        modifier = Modifier
+                            .weight(.75f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Split",
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                fontSize = 20.sp,
+                                modifier = Modifier.weight(0.6f)
+                            )
+                            NumberCounter(
+                                modifier = Modifier.weight(0.4f),
+                                initialValue = state.value.headCount,
+                                onValueChange = {
+                                    viewModel.onAction(TipCalculatorAction.EnterHeadCount(it))
+                                }
+                            )
+                        }
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1.5f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        AnimatedSlider(
+                            label = "Tip",
+                            value = state.value.tipPercentage,
+                            onValueChange = {
+                                viewModel.onAction(TipCalculatorAction.EnterTipPercent(it.toInt()))
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f)
+                                .padding(16.dp)
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1.25f)
+                            .fillMaxWidth()
+                            .padding(5.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(5.dp)
+                        ) {
+                            InfoCard(
+                                modifier = Modifier.weight(0.5f),
+                                label = "TOTAL",
+                                value = state.value.totalBill
+                            )
+                            InfoCard(
+                                modifier = Modifier.weight(0.5f),
+                                label = "P/PERSON",
+                                value = state.value.totalPerHead
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Column(
+                    modifier = Modifier
+                        .height(secondColumnHeight)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    val buttons = ButtonFactory()
+                    CalculatorGridSimple(
+                        buttons = buttons.getButtons(ScreenType.TipCalculator),
+                        onAction = viewModel::onAction,
+                        configuration = configuration
+                    )
                 }
             }
         }
     }
 }
+

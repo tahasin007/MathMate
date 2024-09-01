@@ -36,7 +36,7 @@ class LengthConverterViewModel @Inject constructor(
             is LengthAction -> handleLengthAction(action)
             is BaseAction.Number -> enterNumber(action.number.toString())
             is BaseAction.Clear -> clearCalculation()
-            is BaseAction.Delete -> delete()
+            is BaseAction.Delete -> deleteLastChar()
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Operation -> enterOperation(action.operation)
             is BaseAction.Calculate -> calculate()
@@ -64,14 +64,18 @@ class LengthConverterViewModel @Inject constructor(
 
     private fun changeView() {
         _lengthState.value = if (_lengthState.value.currentView == LengthView.INPUT) {
-            if (_lengthState.value.inputValue.last() == '.') {
+            if (_lengthState.value.inputValue.last() == '.' ||
+                CommonUtils.isLastCharOperator(_lengthState.value.inputValue)
+            ) {
                 _lengthState.value.copy(
                     currentView = LengthView.OUTPUT,
                     inputValue = _lengthState.value.inputValue.dropLast(1)
                 )
             } else _lengthState.value.copy(currentView = LengthView.OUTPUT)
         } else {
-            if (_lengthState.value.outputValue.last() == '.') {
+            if (_lengthState.value.outputValue.last() == '.' ||
+                CommonUtils.isLastCharOperator(_lengthState.value.outputValue)
+            ) {
                 _lengthState.value.copy(
                     currentView = LengthView.INPUT,
                     inputValue = _lengthState.value.outputValue.dropLast(1)
@@ -91,7 +95,7 @@ class LengthConverterViewModel @Inject constructor(
                     if (_lengthState.value.inputValue.isBlank() ||
                         CommonUtils.isLastCharOperator(_lengthState.value.inputValue)
                     ) null
-                    else calculate(_lengthState.value.inputValue)?.toDoubleOrNull()
+                    else calculate(_lengthState.value.inputValue)
                 if (inputValue == null) return@launch
 
                 val valueInMeters = inputValue * inputUnitFactor
@@ -113,7 +117,7 @@ class LengthConverterViewModel @Inject constructor(
                     if (_lengthState.value.outputValue.isBlank() ||
                         CommonUtils.isLastCharOperator(_lengthState.value.outputValue)
                     ) return@launch
-                    else calculate(_lengthState.value.outputValue)?.toDoubleOrNull()
+                    else calculate(_lengthState.value.outputValue)
                 if (outputValue == null) return@launch
 
                 val valueInMeters = outputValue * outputUnitFactor
@@ -134,24 +138,19 @@ class LengthConverterViewModel @Inject constructor(
     }
 
     private fun enterNumber(number: String) {
-        _lengthState.value = if (_lengthState.value.currentView == LengthView.INPUT) {
-            val inputValue =
-                if (_lengthState.value.inputValue == "0") number
-                else if (_lengthState.value.inputValue.last() == '.') _lengthState.value.inputValue + number
-                else {
-                    CommonUtils.convertScientificToNormal(_lengthState.value.inputValue) + number
-                }
-            _lengthState.value.copy(inputValue = inputValue)
+        if (_lengthState.value.currentView == LengthView.INPUT) {
+            val inputValue = CommonUtils.formatAndCombine(_lengthState.value.inputValue, number)
+            if (inputValue != _lengthState.value.inputValue) {
+                _lengthState.value = _lengthState.value.copy(inputValue = inputValue)
+                convert()
+            }
         } else {
-            val outputValue =
-                if (_lengthState.value.outputValue == "0") number
-                else if (_lengthState.value.outputValue.last() == '.') _lengthState.value.outputValue + number
-                else {
-                    CommonUtils.convertScientificToNormal(_lengthState.value.outputValue) + number
-                }
-            _lengthState.value.copy(outputValue = outputValue)
+            val outputValue = CommonUtils.formatAndCombine(_lengthState.value.outputValue, number)
+            if (outputValue != _lengthState.value.outputValue) {
+                _lengthState.value = _lengthState.value.copy(outputValue = outputValue)
+                convert()
+            }
         }
-        convert()
     }
 
     private fun clearCalculation() {
@@ -162,29 +161,27 @@ class LengthConverterViewModel @Inject constructor(
         viewModelScope.launch { repository.saveLengthState(_lengthState.value) }
     }
 
-    private fun delete() {
-        _lengthState.value = if (_lengthState.value.currentView == LengthView.INPUT) {
-            _lengthState.value.copy(
-                inputValue =
-                if (_lengthState.value.inputValue == "0") _lengthState.value.inputValue
-                else if (_lengthState.value.inputValue.length == 1) "0"
-                else _lengthState.value.inputValue.dropLast(1)
-            )
+    private fun deleteLastChar() {
+        if (_lengthState.value.currentView == LengthView.INPUT) {
+            val newInputValue =
+                CommonUtils.deleteLastCharFromExpression(_lengthState.value.inputValue)
+            if (newInputValue != _lengthState.value.inputValue) {
+                _lengthState.value = _lengthState.value.copy(inputValue = newInputValue)
+                convert()
+            }
         } else {
-            _lengthState.value.copy(
-                outputValue =
-                if (_lengthState.value.outputValue == "0") _lengthState.value.outputValue
-                else if (_lengthState.value.outputValue.length == 1) "0"
-                else _lengthState.value.outputValue.dropLast(1)
-            )
+            val outputValue =
+                CommonUtils.deleteLastCharFromExpression(_lengthState.value.outputValue)
+            if (outputValue != _lengthState.value.outputValue) {
+                _lengthState.value = _lengthState.value.copy(outputValue = outputValue)
+                convert()
+            }
         }
-        convert()
     }
 
     private fun enterDecimal() {
-        if (_lengthState.value.currentView == LengthView.INPUT && CommonUtils.canEnterDecimal(
-                _lengthState.value.inputValue
-            )
+        if (_lengthState.value.currentView == LengthView.INPUT &&
+            CommonUtils.canEnterDecimal(_lengthState.value.inputValue)
         ) {
             _lengthState.value =
                 if (CommonUtils.isLastCharOperator(_lengthState.value.inputValue)) {
@@ -231,12 +228,12 @@ class LengthConverterViewModel @Inject constructor(
                 }
             )
         }
-        convert()
+        viewModelScope.launch { repository.saveLengthState(_lengthState.value) }
     }
 
-    private fun calculate(expression: String): String? {
+    private fun calculate(expression: String): Double? {
         return try {
-            ExpressionEvaluator.evaluate(expression).toString()
+            ExpressionEvaluator.evaluate(expression)
         } catch (e: Exception) {
             null
         }
@@ -244,20 +241,23 @@ class LengthConverterViewModel @Inject constructor(
 
     private fun calculate() {
         viewModelScope.launch {
-            _lengthState.value = if (_lengthState.value.currentView == LengthView.INPUT) {
-                val inputValue =
-                    calculate(_lengthState.value.inputValue) ?: _lengthState.value.inputValue
-                _lengthState.value.copy(
-                    inputValue = CommonUtils.removeZeroAfterDecimalPoint(inputValue)
-                )
+            if (_lengthState.value.currentView == LengthView.INPUT) {
+                val inputValue = calculate(_lengthState.value.inputValue)
+                if (inputValue != null && inputValue.toString() != _lengthState.value.inputValue) {
+                    _lengthState.value = _lengthState.value.copy(
+                        inputValue = CommonUtils.formatValue(inputValue)
+                    )
+                    repository.saveLengthState(_lengthState.value)
+                }
             } else {
-                val outputValue =
-                    calculate(_lengthState.value.outputValue) ?: _lengthState.value.outputValue
-                _lengthState.value.copy(
-                    outputValue = CommonUtils.removeZeroAfterDecimalPoint(outputValue)
-                )
+                val outputValue = calculate(_lengthState.value.outputValue)
+                if (outputValue != null && outputValue.toString() != _lengthState.value.outputValue) {
+                    _lengthState.value = _lengthState.value.copy(
+                        outputValue = CommonUtils.formatValue(outputValue)
+                    )
+                    repository.saveLengthState(_lengthState.value)
+                }
             }
-            repository.saveLengthState(_lengthState.value)
         }
     }
 }

@@ -33,7 +33,7 @@ class NumeralSystemViewModel @Inject constructor(
             is NumeralSystemAction -> handleNumeralSystemAction(action)
             is BaseAction.Clear -> clearCalculation()
             is BaseAction.Decimal -> enterDecimal()
-            is BaseAction.Delete -> delete()
+            is BaseAction.Delete -> deleteLastChar()
             is BaseAction.Number -> enterNumber(action.number.toString())
             is BaseAction.DoubleZero -> enterNumber(action.number)
             else -> {}
@@ -43,13 +43,21 @@ class NumeralSystemViewModel @Inject constructor(
     private fun handleNumeralSystemAction(action: NumeralSystemAction) {
         when (action) {
             is NumeralSystemAction.ChangeInputUnit -> {
-                _numeralSystemState.value = _numeralSystemState.value.copy(inputUnit = action.unit)
-                convert()
+                _numeralSystemState.value =
+                    _numeralSystemState.value.copy(
+                        inputUnit = action.unit,
+                        inputValue = "1",
+                        outputValue = "1"
+                    )
             }
 
             is NumeralSystemAction.ChangeOutputUnit -> {
-                _numeralSystemState.value = _numeralSystemState.value.copy(outputUnit = action.unit)
-                convert()
+                _numeralSystemState.value =
+                    _numeralSystemState.value.copy(
+                        outputUnit = action.unit,
+                        inputValue = "1",
+                        outputValue = "1"
+                    )
             }
 
             is NumeralSystemAction.ChangeView -> changeView()
@@ -67,7 +75,7 @@ class NumeralSystemViewModel @Inject constructor(
         }
     }
 
-    private fun delete() {
+    private fun deleteLastChar() {
         _numeralSystemState.value =
             if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT) {
                 _numeralSystemState.value.copy(
@@ -110,7 +118,20 @@ class NumeralSystemViewModel @Inject constructor(
     }
 
     private fun enterDecimal() {
-
+        if (_numeralSystemState.value.currentView == NumeralSystemView.INPUT &&
+            !_numeralSystemState.value.inputValue.contains('.')
+        ) {
+            _numeralSystemState.value =
+                _numeralSystemState.value.copy(inputValue = _numeralSystemState.value.inputValue + ".")
+        } else if (_numeralSystemState.value.currentView == NumeralSystemView.OUTPUT &&
+            !_numeralSystemState.value.outputValue.contains('.')
+        ) {
+            _numeralSystemState.value =
+                _numeralSystemState.value.copy(outputValue = _numeralSystemState.value.outputValue + ".")
+        }
+        viewModelScope.launch {
+            repository.saveNumeralSystemState(_numeralSystemState.value)
+        }
     }
 
     private fun enterNumber(number: String) {

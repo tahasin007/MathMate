@@ -5,7 +5,7 @@ import com.android.calculator.feature.numeralsystem.presentation.utils.NumeralSy
 data class NumeralSystemState(
     val inputUnit: String = NumeralSystem.Binary::class.simpleName.toString(),
     val outputUnit: String = NumeralSystem.Decimal::class.simpleName.toString(),
-    val inputValue: String = "0",
-    val outputValue: String = "0",
+    val inputValue: String = "1",
+    val outputValue: String = "1",
     val currentView: NumeralSystemView = NumeralSystemView.INPUT
 )

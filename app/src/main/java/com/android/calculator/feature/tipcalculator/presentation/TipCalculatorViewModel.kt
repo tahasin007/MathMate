@@ -31,9 +31,9 @@ class TipCalculatorViewModel @Inject constructor(
     fun onAction(action: BaseAction) {
         when (action) {
             is TipCalculatorAction -> handleTipCalculatorAction(action)
-            is BaseAction.Clear -> clear()
+            is BaseAction.Clear -> clearCalculation()
             is BaseAction.Decimal -> enterDecimal()
-            is BaseAction.Delete -> delete()
+            is BaseAction.Delete -> deleteLastChar()
             is BaseAction.Number -> enterNumber(action.number.toString())
             is BaseAction.DoubleZero -> enterNumber(action.number)
             else -> {
@@ -49,7 +49,7 @@ class TipCalculatorViewModel @Inject constructor(
         }
     }
 
-    private fun clear() {
+    private fun clearCalculation() {
         _state.value = _state.value.copy(bill = "0")
         calculateBill()
     }
@@ -62,47 +62,19 @@ class TipCalculatorViewModel @Inject constructor(
         }
     }
 
-    private fun delete() {
-        val normalNotation = CommonUtils.convertScientificToNormal(_state.value.bill)
+    private fun deleteLastChar() {
+        val newBill = CommonUtils.deleteLastChar(_state.value.bill)
 
-        val newBill = when {
-            normalNotation.length == 1 -> "0"
-            else -> normalNotation.dropLast(1)
+        if (newBill != _state.value.bill) {
+            _state.value = _state.value.copy(bill = newBill)
+            calculateBill()
         }
-
-        val isLastCharDecimal = newBill.endsWith('.')
-
-        _state.value = _state.value.copy(
-            bill = CommonUtils.formatValue(newBill.toDouble(), 10)
-                    + if (isLastCharDecimal) "." else ""
-        )
-        calculateBill()
     }
 
     private fun enterNumber(number: String) {
-        val isLastCharDecimal = _state.value.bill.endsWith('.')
-        val normalNotation = CommonUtils.convertScientificToNormal2(_state.value.bill)
-
-        val decimalPart = normalNotation.substringAfter('.', "")
-        if (decimalPart.length >= 10) {
-            return // Don't add more digits if there are already 10 digits after the decimal
-        }
-
-        val newValueString = if (isLastCharDecimal) "$normalNotation.$number"
-        else normalNotation + number
-
-        val newBill = newValueString.toDoubleOrNull()
-
-        if (newBill != null && newBill <= CommonUtils.MAX_LIMIT && newBill >= CommonUtils.MIN_LIMIT) {
-            val formattedValue = CommonUtils.formatValue(newBill, 10)
-
-            val finalValue = if (newValueString.contains(".") && !newValueString.contains("E")) {
-                newValueString // Keep original string with trailing zeros if it contains a decimal point
-            } else {
-                formattedValue
-            }
-
-            _state.value = _state.value.copy(bill = finalValue)
+        val newBill = CommonUtils.formatUnitValues(_state.value.bill, number)
+        if (newBill != _state.value.bill) {
+            _state.value = _state.value.copy(bill = newBill)
             calculateBill()
         }
     }

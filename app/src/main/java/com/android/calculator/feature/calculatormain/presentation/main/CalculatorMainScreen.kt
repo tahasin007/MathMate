@@ -104,9 +104,7 @@ fun CalculatorMainScreen(
 
             val buttons = ButtonFactory()
             CalculatorGrid(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp, start = 7.5.dp, end = 7.5.dp),
+                modifier = Modifier.fillMaxWidth(),
                 buttons = buttons.getButtons(ScreenType.CalculatorMain),
                 onAction = viewModel::onAction,
                 configuration = configuration

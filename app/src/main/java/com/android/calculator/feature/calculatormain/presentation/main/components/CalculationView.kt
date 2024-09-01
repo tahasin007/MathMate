@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
@@ -69,33 +70,36 @@ fun CalculationView(
                 onBookmarkClick = onBookmarkClick
             )
 
-            Text(
-                text = buildAnnotatedString {
-                    state.expression.forEach { char ->
-                        val color =
-                            if (char.isDigit() || char == '.') MaterialTheme.colorScheme.onPrimary
-                            else MaterialTheme.colorScheme.onSecondary
-                        withStyle(style = SpanStyle(color = color)) {
-                            append(char)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    textAlign = TextAlign.End,
+                    text = buildAnnotatedString {
+                        state.expression.forEach { char ->
+                            val color =
+                                if (char.isDigit() || char == '.') MaterialTheme.colorScheme.onPrimary
+                                else MaterialTheme.colorScheme.onSecondary
+                            withStyle(style = SpanStyle(color = color)) {
+                                append(char)
+                            }
                         }
-                    }
-                },
-                maxLines = 3,
-                fontWeight = FontWeight.W400,
-                style = LocalTextStyle.current.copy(
-                    fontSize = LocalTextStyle.current.fontSize * multiplier
-                ),
-                onTextLayout = {
-                    if (it.hasVisualOverflow) {
-                        multiplier *= 0.9f
-                    }
-                },
-                modifier = Modifier
-                    .padding(end = 2.dp)
-                    .verticalScroll(rememberScrollState())
-            )
+                    },
+                    maxLines = 3,
+                    fontWeight = FontWeight.W400,
+                    style = LocalTextStyle.current.copy(
+                        fontSize = LocalTextStyle.current.fontSize * multiplier
+                    ),
+                    onTextLayout = {
+                        if (it.hasVisualOverflow) {
+                            multiplier *= 0.9f
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(end = 2.dp)
+                        .verticalScroll(rememberScrollState())
+                )
 
-            DrawBlinkingVerticalLine()
+                DrawBlinkingVerticalLine()
+            }
         }
     }
 }

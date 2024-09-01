@@ -36,7 +36,7 @@ class MassConverterViewModel @Inject constructor(
             is MassAction -> handleMassAction(action)
             is BaseAction.Number -> enterNumber(action.number.toString())
             is BaseAction.Clear -> clearCalculation()
-            is BaseAction.Delete -> delete()
+            is BaseAction.Delete -> deleteLastChar()
             is BaseAction.Decimal -> enterDecimal()
             is BaseAction.Operation -> enterOperation(action.operation)
             is BaseAction.Calculate -> calculate()
@@ -64,14 +64,18 @@ class MassConverterViewModel @Inject constructor(
 
     private fun changeView() {
         _massState.value = if (_massState.value.currentView == MassView.INPUT) {
-            if (_massState.value.inputValue.last() == '.') {
+            if (_massState.value.inputValue.last() == '.' ||
+                CommonUtils.isLastCharOperator(_massState.value.inputValue)
+            ) {
                 _massState.value.copy(
                     currentView = MassView.OUTPUT,
                     inputValue = _massState.value.inputValue.dropLast(1)
                 )
             } else _massState.value.copy(currentView = MassView.OUTPUT)
         } else {
-            if (_massState.value.outputValue.last() == '.') {
+            if (_massState.value.outputValue.last() == '.' ||
+                CommonUtils.isLastCharOperator(_massState.value.outputValue)
+            ) {
                 _massState.value.copy(
                     currentView = MassView.INPUT,
                     inputValue = _massState.value.outputValue.dropLast(1)
@@ -91,7 +95,7 @@ class MassConverterViewModel @Inject constructor(
                     if (_massState.value.inputValue.isBlank() ||
                         CommonUtils.isLastCharOperator(_massState.value.inputValue)
                     ) null
-                    else calculate(_massState.value.inputValue)?.toDoubleOrNull()
+                    else calculate(_massState.value.inputValue)
                 if (inputValue == null) return@launch
 
                 val valueInMeters = inputValue * inputUnitFactor
@@ -107,11 +111,10 @@ class MassConverterViewModel @Inject constructor(
                     )
             } else {
                 val outputValue =
-                    if (_massState.value.outputValue.isBlank() || CommonUtils.isLastCharOperator(
-                            _massState.value.outputValue
-                        )
+                    if (_massState.value.outputValue.isBlank() ||
+                        CommonUtils.isLastCharOperator(_massState.value.outputValue)
                     ) return@launch
-                    else calculate(_massState.value.outputValue)?.toDoubleOrNull()
+                    else calculate(_massState.value.outputValue)
                 if (outputValue == null) return@launch
 
                 val valueInMeters = outputValue * outputUnitFactor
@@ -131,24 +134,19 @@ class MassConverterViewModel @Inject constructor(
     }
 
     private fun enterNumber(number: String) {
-        _massState.value = if (_massState.value.currentView == MassView.INPUT) {
-            val inputValue =
-                if (_massState.value.inputValue == "0") number
-                else if (_massState.value.inputValue.last() == '.') _massState.value.inputValue + number
-                else {
-                    CommonUtils.convertScientificToNormal(_massState.value.inputValue) + number
-                }
-            _massState.value.copy(inputValue = inputValue)
+        if (_massState.value.currentView == MassView.INPUT) {
+            val inputValue = CommonUtils.formatAndCombine(_massState.value.inputValue, number)
+            if (inputValue != _massState.value.inputValue) {
+                _massState.value = _massState.value.copy(inputValue = inputValue)
+                convert()
+            }
         } else {
-            val outputValue =
-                if (_massState.value.outputValue == "0") number
-                else if (_massState.value.outputValue.last() == '.') _massState.value.outputValue + number
-                else {
-                    CommonUtils.convertScientificToNormal(_massState.value.outputValue) + number
-                }
-            _massState.value.copy(outputValue = outputValue)
+            val outputValue = CommonUtils.formatAndCombine(_massState.value.outputValue, number)
+            if (outputValue != _massState.value.outputValue) {
+                _massState.value = _massState.value.copy(outputValue = outputValue)
+                convert()
+            }
         }
-        convert()
     }
 
     private fun clearCalculation() {
@@ -159,27 +157,28 @@ class MassConverterViewModel @Inject constructor(
         viewModelScope.launch { repository.saveMassState(_massState.value) }
     }
 
-    private fun delete() {
-        _massState.value = if (_massState.value.currentView == MassView.INPUT) {
-            _massState.value.copy(
-                inputValue =
-                if (_massState.value.inputValue == "0") _massState.value.inputValue
-                else if (_massState.value.inputValue.length == 1) "0"
-                else _massState.value.inputValue.dropLast(1)
-            )
+    private fun deleteLastChar() {
+        if (_massState.value.currentView == MassView.INPUT) {
+            val newInputValue =
+                CommonUtils.deleteLastCharFromExpression(_massState.value.inputValue)
+            if (newInputValue != _massState.value.inputValue) {
+                _massState.value = _massState.value.copy(inputValue = newInputValue)
+                convert()
+            }
         } else {
-            _massState.value.copy(
-                outputValue =
-                if (_massState.value.outputValue == "0") _massState.value.outputValue
-                else if (_massState.value.outputValue.length == 1) "0"
-                else _massState.value.outputValue.dropLast(1)
-            )
+            val outputValue =
+                CommonUtils.deleteLastCharFromExpression(_massState.value.outputValue)
+            if (outputValue != _massState.value.outputValue) {
+                _massState.value = _massState.value.copy(outputValue = outputValue)
+                convert()
+            }
         }
-        convert()
     }
 
     private fun enterDecimal() {
-        if (_massState.value.currentView == MassView.INPUT && CommonUtils.canEnterDecimal(_massState.value.inputValue)) {
+        if (_massState.value.currentView == MassView.INPUT &&
+            CommonUtils.canEnterDecimal(_massState.value.inputValue)
+        ) {
             _massState.value = if (CommonUtils.isLastCharOperator(_massState.value.inputValue)) {
                 _massState.value.copy(inputValue = _massState.value.inputValue + "0.")
             } else {
@@ -202,7 +201,6 @@ class MassConverterViewModel @Inject constructor(
             _massState.value.copy(
                 inputValue =
                 if (_massState.value.inputValue == "0" ||
-                    _massState.value.inputValue.length == 50 ||
                     CommonUtils.isLastCharOperator(_massState.value.inputValue)
                 ) _massState.value.inputValue
                 else {
@@ -215,7 +213,6 @@ class MassConverterViewModel @Inject constructor(
             _massState.value.copy(
                 outputValue =
                 if (_massState.value.outputValue == "0" ||
-                    _massState.value.outputValue.length == 50 ||
                     CommonUtils.isLastCharOperator(_massState.value.outputValue)
                 ) _massState.value.outputValue
                 else {
@@ -225,12 +222,12 @@ class MassConverterViewModel @Inject constructor(
                 }
             )
         }
-        convert()
+        viewModelScope.launch { repository.saveMassState(_massState.value) }
     }
 
-    private fun calculate(expression: String): String? {
+    private fun calculate(expression: String): Double? {
         return try {
-            ExpressionEvaluator.evaluate(expression).toString()
+            ExpressionEvaluator.evaluate(expression)
         } catch (e: Exception) {
             null
         }
@@ -238,20 +235,21 @@ class MassConverterViewModel @Inject constructor(
 
     private fun calculate() {
         viewModelScope.launch {
-            _massState.value = if (_massState.value.currentView == MassView.INPUT) {
-                val inputValue =
-                    calculate(_massState.value.inputValue) ?: _massState.value.inputValue
-                _massState.value.copy(
-                    inputValue = CommonUtils.removeZeroAfterDecimalPoint(inputValue)
-                )
+            if (_massState.value.currentView == MassView.INPUT) {
+                val inputValue = calculate(_massState.value.inputValue)
+                if (inputValue != null && inputValue.toString() != _massState.value.inputValue) {
+                    _massState.value =
+                        _massState.value.copy(inputValue = CommonUtils.formatValue(inputValue))
+                    repository.saveMassState(_massState.value)
+                }
             } else {
-                val outputValue =
-                    calculate(_massState.value.outputValue) ?: _massState.value.outputValue
-                _massState.value.copy(
-                    outputValue = CommonUtils.removeZeroAfterDecimalPoint(outputValue)
-                )
+                val outputValue = calculate(_massState.value.outputValue)
+                if (outputValue != null && outputValue.toString() != _massState.value.outputValue) {
+                    _massState.value =
+                        _massState.value.copy(outputValue = CommonUtils.formatValue(outputValue))
+                    repository.saveMassState(_massState.value)
+                }
             }
-            repository.saveMassState(_massState.value)
         }
     }
 }
