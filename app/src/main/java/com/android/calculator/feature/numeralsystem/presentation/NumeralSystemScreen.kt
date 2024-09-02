@@ -61,7 +61,8 @@ fun NumeralSystemScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val unitList = Constants.NUMERAL_UNITS.toMutableSet()
+                    val unitList = Constants.NUMERAL_UNITS.keys.toMutableSet()
+
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -84,7 +85,8 @@ fun NumeralSystemScreen(
                             onSelectedUnitChanged = {
                                 viewModel.onAction(NumeralSystemAction.ChangeInputUnit(it))
                             },
-                            isCurrentView = state.value.currentView == NumeralSystemView.INPUT
+                            isCurrentView = state.value.currentView == NumeralSystemView.INPUT,
+                            symbol = Constants.NUMERAL_UNITS[state.value.inputUnit]?.symbol
                         )
                     }
 
@@ -110,7 +112,8 @@ fun NumeralSystemScreen(
                             onSelectedUnitChanged = {
                                 viewModel.onAction(NumeralSystemAction.ChangeOutputUnit(it))
                             },
-                            isCurrentView = state.value.currentView == NumeralSystemView.OUTPUT
+                            isCurrentView = state.value.currentView == NumeralSystemView.OUTPUT,
+                            symbol = Constants.NUMERAL_UNITS[state.value.outputUnit]?.symbol
                         )
                     }
                 }

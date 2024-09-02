@@ -1,6 +1,6 @@
 # MathMate
 
-MathMate is an user-friendly calculator app developed using Jetpack Compose for modern Android UI design. This app provides a comprehensive suite of features, including basic arithmetic operations, unit conversions, numeral system conversions, currency conversion, and specialized calculations for discounts and tips.
+MathMate is a calculator app built with a clean architecture using the MVVM pattern. Developed with Jetpack Compose for a modern Android UI, MathMate offers a comprehensive suite of features, including basic arithmetic operations, unit conversions, numeral system conversions, currency conversion, and specialized calculations for discounts and tips.
 
 ## Features
 

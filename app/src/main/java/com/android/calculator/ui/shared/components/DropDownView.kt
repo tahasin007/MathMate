@@ -34,7 +34,8 @@ fun DropDownView(
     menuWidth: Dp = 125.dp,
     selectedUnit: String,
     textColor: Color = MaterialTheme.colorScheme.primary,
-    onSelectedUnitChanged: (String) -> Unit
+    onSelectedUnitChanged: (String) -> Unit,
+    symbol: String? = null
 ) {
     var selectedItem by remember { mutableStateOf(selectedUnit) }
     var expanded by remember { mutableStateOf(false) }
@@ -52,9 +53,18 @@ fun DropDownView(
     ) {
         Text(
             text = selectedItem,
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             color = textColor
         )
+
+        if (symbol != null) {
+            Text(
+                text = symbol,
+                fontSize = 14.sp,
+                color = textColor.copy(alpha = .5f)
+            )
+        }
+
         Icon(
             imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
             contentDescription = "Dropdown Arrow",

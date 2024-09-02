@@ -87,8 +87,10 @@ class MassConverterViewModel @Inject constructor(
 
     private fun convert() {
         viewModelScope.launch {
-            val inputUnitFactor = MASS_UNITS[_massState.value.inputUnit] ?: return@launch
-            val outputUnitFactor = MASS_UNITS[_massState.value.outputUnit] ?: return@launch
+            val inputUnitFactor =
+                MASS_UNITS[_massState.value.inputUnit]?.factor ?: return@launch
+            val outputUnitFactor =
+                MASS_UNITS[_massState.value.outputUnit]?.factor ?: return@launch
 
             if (_massState.value.currentView == MassView.INPUT) {
                 val inputValue =

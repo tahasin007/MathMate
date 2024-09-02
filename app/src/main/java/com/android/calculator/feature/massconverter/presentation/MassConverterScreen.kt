@@ -67,10 +67,9 @@ fun MassConverterScreen(
                         val unitList = Constants.MASS_UNITS.keys.toMutableSet()
 
                         UnitView(
-                            items = unitList - state.value.outputUnit,
                             value = state.value.inputValue,
+                            items = unitList - state.value.outputUnit,
                             selectedUnit = state.value.inputUnit,
-                            isCurrentView = state.value.currentView == MassView.INPUT,
                             onClick = {
                                 if (state.value.currentView != MassView.INPUT) {
                                     viewModel.onAction(MassAction.ChangeView(MassView.INPUT))
@@ -79,6 +78,8 @@ fun MassConverterScreen(
                             onSelectedUnitChanged = {
                                 viewModel.onAction(MassAction.ChangeInputUnit(it))
                             },
+                            isCurrentView = state.value.currentView == MassView.INPUT,
+                            symbol = Constants.MASS_UNITS[state.value.inputUnit]?.symbol,
                         )
                     }
                     Box(
@@ -93,7 +94,6 @@ fun MassConverterScreen(
                             value = state.value.outputValue,
                             items = unitList - state.value.inputUnit,
                             selectedUnit = state.value.outputUnit,
-                            isCurrentView = state.value.currentView == MassView.OUTPUT,
                             onClick = {
                                 if (state.value.currentView != MassView.OUTPUT) {
                                     viewModel.onAction(MassAction.ChangeView(MassView.OUTPUT))
@@ -101,7 +101,9 @@ fun MassConverterScreen(
                             },
                             onSelectedUnitChanged = {
                                 viewModel.onAction(MassAction.ChangeOutputUnit(it))
-                            }
+                            },
+                            isCurrentView = state.value.currentView == MassView.OUTPUT,
+                            symbol = Constants.MASS_UNITS[state.value.outputUnit]?.symbol
                         )
                     }
                 }

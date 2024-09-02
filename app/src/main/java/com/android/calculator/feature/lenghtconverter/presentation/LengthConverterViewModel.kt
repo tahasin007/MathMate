@@ -87,8 +87,10 @@ class LengthConverterViewModel @Inject constructor(
 
     private fun convert() {
         viewModelScope.launch {
-            val inputUnitFactor = LENGTH_UNITS[_lengthState.value.inputUnit] ?: return@launch
-            val outputUnitFactor = LENGTH_UNITS[_lengthState.value.outputUnit] ?: return@launch
+            val inputUnitFactor =
+                LENGTH_UNITS[_lengthState.value.inputUnit]?.factor ?: return@launch
+            val outputUnitFactor =
+                LENGTH_UNITS[_lengthState.value.outputUnit]?.factor ?: return@launch
 
             if (_lengthState.value.currentView == LengthView.INPUT) {
                 val inputValue =

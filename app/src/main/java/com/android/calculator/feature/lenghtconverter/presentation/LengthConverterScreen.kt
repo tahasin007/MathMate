@@ -77,7 +77,8 @@ fun LengthScreen(
                             },
                             onSelectedUnitChanged = {
                                 viewModel.onAction(LengthAction.ChangeInputUnit(it))
-                            }
+                            },
+                            symbol = Constants.LENGTH_UNITS[state.value.inputUnit]?.symbol
                         )
                     }
                     Box(
@@ -90,7 +91,6 @@ fun LengthScreen(
                             value = state.value.outputValue,
                             items = unitList - state.value.inputUnit,
                             selectedUnit = state.value.outputUnit,
-                            isCurrentView = state.value.currentView == LengthView.OUTPUT,
                             onClick = {
                                 if (state.value.currentView != LengthView.OUTPUT) {
                                     viewModel.onAction(LengthAction.ChangeView(LengthView.OUTPUT))
@@ -98,7 +98,9 @@ fun LengthScreen(
                             },
                             onSelectedUnitChanged = {
                                 viewModel.onAction(LengthAction.ChangeOutputUnit(it))
-                            }
+                            },
+                            isCurrentView = state.value.currentView == LengthView.OUTPUT,
+                            symbol = Constants.LENGTH_UNITS[state.value.outputUnit]?.symbol
                         )
                     }
                 }

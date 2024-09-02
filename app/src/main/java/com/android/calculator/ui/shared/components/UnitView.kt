@@ -38,7 +38,8 @@ fun UnitView(
     selectedUnit: String,
     onClick: () -> Unit,
     onSelectedUnitChanged: (String) -> Unit,
-    isCurrentView: Boolean
+    isCurrentView: Boolean,
+    symbol: String? = null
 ) {
     val backgroundColor =
         if (isCurrentView) MaterialTheme.colorScheme.onSecondary.copy(alpha = .1f)
@@ -81,7 +82,8 @@ fun UnitView(
                     items = items,
                     onSelectedUnitChanged = onSelectedUnitChanged,
                     textColor = textColor,
-                    menuWidth = 150.dp
+                    menuWidth = 150.dp,
+                    symbol = symbol
                 )
             }
 
