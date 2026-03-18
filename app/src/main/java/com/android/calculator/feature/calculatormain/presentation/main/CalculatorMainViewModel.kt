@@ -13,6 +13,7 @@ import com.android.calculator.feature.calculatormain.domain.usecase.CalculationU
 import com.android.calculator.utils.CommonUtils
 import com.android.calculator.utils.ExpressionEvaluator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +22,34 @@ class CalculatorMainViewModel @Inject constructor(
     private val calculationUseCases: CalculationUseCases
 ) : ViewModel() {
 
+    private companion object {
+        const val RECENT_CALCULATION_LIMIT = 10
+    }
+
     var calculatorState by mutableStateOf(CalculatorMainState())
+
+    init {
+        observeRecentCalculations()
+    }
+
+    private fun observeRecentCalculations() {
+        viewModelScope.launch {
+            calculationUseCases.getCalculations()
+                .map { calculations -> calculations.take(RECENT_CALCULATION_LIMIT) }
+                .collect { recentCalculations ->
+                    calculatorState = calculatorState.copy(recentCalculations = recentCalculations)
+                }
+        }
+    }
+
+    private fun resetToIdleState() {
+        calculatorState = calculatorState.copy(
+            expression = "",
+            lastExpression = "",
+            result = "0",
+            isSaveCalculationSheetOpen = false
+        )
+    }
 
     fun onAction(action: BaseAction) {
         when (action) {
@@ -51,7 +79,10 @@ class CalculatorMainViewModel @Inject constructor(
 
     private fun calculate() {
         val expression = calculatorState.expression
-        if (expression.isBlank()) return
+        if (expression.isBlank()) {
+            resetToIdleState()
+            return
+        }
 
         val openCount = expression.count { it == '(' }
         val closeCount = expression.count { it == ')' }
@@ -80,13 +111,17 @@ class CalculatorMainViewModel @Inject constructor(
     private fun deleteLastChar() {
         if (calculatorState.expression.isBlank()) return
 
-        calculatorState = calculatorState.copy(
-            expression = calculatorState.expression.dropLast(1)
-        )
+        val updatedExpression = calculatorState.expression.dropLast(1)
+        if (updatedExpression.isBlank()) {
+            resetToIdleState()
+            return
+        }
+
+        calculatorState = calculatorState.copy(expression = updatedExpression)
     }
 
     private fun clearCalculation() {
-        calculatorState = CalculatorMainState()
+        resetToIdleState()
     }
 
     private fun enterDecimal() {
@@ -109,33 +144,36 @@ class CalculatorMainViewModel @Inject constructor(
     }
 
     private fun enterNumber(number: Int) {
-        val updatedExpression =
-            if (calculatorState.expression.isNotEmpty() &&
-                calculatorState.result == calculatorState.expression
-            ) {
-                number.toString()
-            } else {
-                calculatorState.expression + number.toString()
-            }
+        // After = is pressed the result becomes the expression; start fresh.
+        val base = if (calculatorState.expression.isNotEmpty() &&
+            calculatorState.result == calculatorState.expression
+        ) "" else calculatorState.expression
 
-        calculatorState = calculatorState.copy(
-            expression = updatedExpression
-        )
+        // Isolate the number segment that is currently being typed
+        val lastSepIndex = base.indexOfLast { it in "+-*/%(" }
+        val currentNumber = base.substring(lastSepIndex + 1)
+
+        // If the current segment is "0", replace it so we never get "09", "099", etc.
+        val updated = if (currentNumber == "0") {
+            base.dropLast(1) + number.toString()
+        } else {
+            base + number.toString()
+        }
+
+        calculatorState = calculatorState.copy(expression = updated)
     }
 
     private fun enterDoubleZero(number: String) {
-        val updatedExpression =
-            if (calculatorState.expression.isNotEmpty() &&
-                calculatorState.result == calculatorState.expression
-            ) {
-                number
-            } else {
-                calculatorState.expression + number
-            }
+        val base = if (calculatorState.expression.isNotEmpty() &&
+            calculatorState.result == calculatorState.expression
+        ) "" else calculatorState.expression
 
-        calculatorState = calculatorState.copy(
-            expression = updatedExpression
-        )
+        val lastSepIndex = base.indexOfLast { it in "+-*/%(" }
+        val currentNumber = base.substring(lastSepIndex + 1)
+
+        if (currentNumber.isEmpty() || currentNumber == "0") return
+
+        calculatorState = calculatorState.copy(expression = base + number)
     }
 
     private fun enterOperation(operation: CalculatorOperation) {

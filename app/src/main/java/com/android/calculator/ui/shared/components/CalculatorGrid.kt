@@ -2,6 +2,7 @@ package com.android.calculator.ui.shared.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +24,8 @@ fun CalculatorGrid(
     onAction: (BaseAction) -> Unit,
     buttonSpacing: Dp = 7.5.dp,
     numeralSystem: NumeralSystem = NumeralSystem.Decimal,
-    configuration: SettingsState
+    configuration: SettingsState,
+    fitRowsToHeight: Boolean = false
 ) {
     Column(
         modifier = modifier.padding(10.dp),
@@ -31,7 +33,9 @@ fun CalculatorGrid(
     ) {
         buttons.forEach { row ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(if (fitRowsToHeight) Modifier.weight(1f) else Modifier),
                 horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
             ) {
                 row.forEach { buttonInfo ->
@@ -68,8 +72,17 @@ fun CalculatorGrid(
                         buttonColor = buttonColor,
                         buttonTextColor = buttonTextColor,
                         modifier = Modifier
-                            .aspectRatio(buttonInfo.aspectRatio)
-                            .weight(buttonInfo.weight),
+                            .then(
+                                if (fitRowsToHeight) {
+                                    Modifier
+                                        .weight(buttonInfo.weight)
+                                        .fillMaxHeight()
+                                } else {
+                                    Modifier
+                                        .aspectRatio(buttonInfo.aspectRatio)
+                                        .weight(buttonInfo.weight)
+                                }
+                            ),
                         onClick = {
                             onAction(buttonInfo.action)
                         },

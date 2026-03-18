@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -36,9 +37,12 @@ import com.android.calculator.ui.theme.PrimaryLight
 @Composable
 fun CalculationResult(
     result: String,
+    hasCalculated: Boolean,
     onCopyClick: () -> Unit,
     onBookmarkClick: () -> Unit
 ) {
+    val displayResult = if (hasCalculated) result else result.ifBlank { "0" }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,14 +61,17 @@ fun CalculationResult(
             // fade in the moment a result is available so they are discoverable
             // without any hidden gesture.
             AnimatedVisibility(
-                visible = result.isNotEmpty(),
+                visible = true,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(
                         onClick = onCopyClick,
-                        modifier = Modifier.size(32.dp)
+                        enabled = hasCalculated,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .alpha(if (hasCalculated) 1f else 0.35f)
                     ) {
                         Icon(
                             imageVector = Icons.Default.ContentCopy,
@@ -75,7 +82,10 @@ fun CalculationResult(
                     }
                     IconButton(
                         onClick = onBookmarkClick,
-                        modifier = Modifier.size(32.dp)
+                        enabled = hasCalculated,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .alpha(if (hasCalculated) 1f else 0.35f)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Bookmark,
@@ -92,7 +102,7 @@ fun CalculationResult(
             var multiplier by remember { mutableFloatStateOf(1.5f) }
 
             Text(
-                text = result,
+                text = displayResult,
                 maxLines = 2,
                 textAlign = TextAlign.End,
                 style = LocalTextStyle.current.copy(

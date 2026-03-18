@@ -29,8 +29,14 @@ import com.android.calculator.feature.calculatormain.presentation.main.Calculato
 import com.android.calculator.ui.shared.components.DrawBlinkingVerticalLine
 
 @Composable
-fun CalculationView(state: CalculatorMainState) {
+fun CalculationView(
+    state: CalculatorMainState,
+    hasCalculated: Boolean,
+    onCopyClick: () -> Unit,
+    onBookmarkClick: () -> Unit
+) {
     var multiplier by remember { mutableFloatStateOf(1.5f) }
+    val displayExpression = state.expression.ifBlank { "0" }
 
     Box(
         modifier = Modifier
@@ -41,13 +47,20 @@ fun CalculationView(state: CalculatorMainState) {
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            ResultActionRow(
+                enabled = hasCalculated,
+                onCopyClick = onCopyClick,
+                onBookmarkClick = onBookmarkClick,
+                modifier = Modifier.padding(start = 2.dp)
+            )
+
             Spacer(modifier = Modifier.weight(1f))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     textAlign = TextAlign.End,
                     text = buildAnnotatedString {
-                        state.expression.forEach { char ->
+                        displayExpression.forEach { char ->
                             val color =
                                 if (char.isDigit() || char == '.') MaterialTheme.colorScheme.onPrimary
                                 else MaterialTheme.colorScheme.onSecondary

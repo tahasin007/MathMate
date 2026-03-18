@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,7 +25,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.android.calculator.actions.CalculatorAction
 import com.android.calculator.feature.calculatormain.presentation.main.components.ActionIconRow
-import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationResult
+import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationHistoryPanel
 import com.android.calculator.feature.calculatormain.presentation.main.components.CalculationView
 import com.android.calculator.feature.calculatormain.presentation.main.components.CalculatorMainMenuBottomSheet
 import com.android.calculator.feature.calculatormain.presentation.main.components.SaveCalculationBottomSheet
@@ -64,12 +65,19 @@ fun CalculatorMainScreen(
     ) { innerPadding ->
         Column(
             // Arrangement.Top + a weighted Spacer before the grid
-            modifier = modifier.padding(innerPadding),
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Top
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            CalculationResult(
-                result = state.result,
+            CalculationHistoryPanel(
+                calculations = state.recentCalculations
+            )
+
+            CalculationView(
+                state = state,
+                hasCalculated = state.lastExpression.isNotEmpty(),
                 onCopyClick = {
                     val clip = ClipData.newPlainText("Copied Answer", state.result)
                     clipboardManager.setPrimaryClip(clip)
@@ -82,7 +90,6 @@ fun CalculatorMainScreen(
                 }
             )
 
-            CalculationView(state = state)
 
             SaveCalculationBottomSheet(state = state, onAction = viewModel::onAction)
 
@@ -100,15 +107,15 @@ fun CalculatorMainScreen(
                 navController.navigate(it)
             }
 
-            // Guarantees the grid is never pushed over the rows above it.
-            Spacer(modifier = Modifier.weight(1f))
-
             val buttons = remember { ButtonFactory() }
             CalculatorGrid(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
                 buttons = buttons.getButtons(ScreenType.CalculatorMain),
                 onAction = viewModel::onAction,
-                configuration = configuration
+                configuration = configuration,
+                fitRowsToHeight = true
             )
         }
     }
