@@ -49,11 +49,11 @@ fun CalculatorMainScreen(
     val clipboardManager: ClipboardManager =
         context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val hostState = remember { SnackbarHostState() }
 
     Scaffold(
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) {
+            SnackbarHost(hostState = hostState) {
                 Snackbar(
                     snackbarData = it,
                     containerColor = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.75f),
@@ -63,10 +63,11 @@ fun CalculatorMainScreen(
         }
     ) { innerPadding ->
         Column(
+            // Arrangement.Top + a weighted Spacer before the grid
             modifier = modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.Top
         ) {
-            Spacer(modifier = Modifier.height(35.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             CalculationResult(result = state.result)
 
             CalculationView(
@@ -77,7 +78,7 @@ fun CalculatorMainScreen(
                         clipboardManager.setPrimaryClip(clip)
 
                         scope.launch {
-                            snackbarHostState.showSnackbar("Answer Copied to Clipboard")
+                            hostState.showSnackbar("Answer Copied to Clipboard")
                         }
                     }
                 },
@@ -97,12 +98,14 @@ fun CalculatorMainScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
             CalculatorMainMenuBottomSheet(state = state, onAction = viewModel::onAction) {
                 navController.navigate(it)
             }
 
-            val buttons = ButtonFactory()
+            // Guarantees the grid is never pushed over the rows above it.
+            Spacer(modifier = Modifier.weight(1f))
+
+            val buttons = remember { ButtonFactory() }
             CalculatorGrid(
                 modifier = Modifier.fillMaxWidth(),
                 buttons = buttons.getButtons(ScreenType.CalculatorMain),

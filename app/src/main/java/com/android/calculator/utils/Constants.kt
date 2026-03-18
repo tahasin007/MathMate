@@ -21,7 +21,7 @@ object Constants {
         "Kilogram" to UnitInfo(1000.0, "kg"),
         "Milligram" to UnitInfo(0.001, "mg"),
         "Microgram" to UnitInfo(0.000001, "µg"),
-        "Ton" to UnitInfo(1000000.0, "t"),
+        "Ton" to UnitInfo(907185.0, "ton"),
         "Pound" to UnitInfo(453.592, "lb"),
         "Ounce" to UnitInfo(28.3495, "oz"),
         "Stone" to UnitInfo(6350.29, "st"),

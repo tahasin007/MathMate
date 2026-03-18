@@ -2,7 +2,6 @@ package com.android.calculator.feature.currencyconverter.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,102 +49,86 @@ fun CurrencyConverterScreen(
             navController.navigate(ScreenType.CalculatorMain.route)
         }
     }) { innerPadding ->
-        BoxWithConstraints(
+        Column(
             modifier = modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            val totalHeight = maxHeight
-            val firstColumnHeight = totalHeight * 0.5f
-            val secondColumnHeight = totalHeight * 0.5f
+            // weight(1f) gives it all space the grid doesn't need, so the grid
+            // is never pushed off-screen regardless of phone height.
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(
+                    text = buildAnnotatedString {
+                        append("Last Updated: ")
+                        withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
+                            append(state.value.lastUpdatedInLocalTime)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp),
+                    color = MaterialTheme.colorScheme.onSecondary.copy(alpha = .75f),
+                    fontSize = 18.sp,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
                 Column(
                     modifier = Modifier
-                        .height(firstColumnHeight)
-                        .fillMaxWidth(),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(MaterialTheme.colorScheme.onSecondary.copy(alpha = .5f))
+                        .padding(all = 10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
                 ) {
-
-                    Text(
-                        text = buildAnnotatedString {
-                            append("Last Updated: ")
-                            withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
-                                append(state.value.lastUpdatedInLocalTime)
+                    CurrencyInfoItem(
+                        selectedCurrency = state.value.fromCurrency,
+                        currencyValue = state.value.fromValue,
+                        isCurrentView = state.value.currentView == CurrencyView.FROM,
+                        exchangeRate = state.value.fromToExchangeRate,
+                        onClick = {
+                            if (state.value.currentView != CurrencyView.FROM) {
+                                viewModel.onAction(CurrencyAction.ChangeView(CurrencyView.FROM))
                             }
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 10.dp),
-                        color = MaterialTheme.colorScheme.onSecondary.copy(alpha = .75f),
-                        fontSize = 18.sp,
+                        onSelectedUnitChanged = {
+                            viewModel.onAction(CurrencyAction.ChangeFromUnit(it))
+                        }
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(MaterialTheme.colorScheme.onSecondary.copy(alpha = .5f))
-                            .padding(all = 10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        CurrencyInfoItem(
-                            selectedCurrency = state.value.fromCurrency,
-                            currencyValue = state.value.fromValue,
-                            isCurrentView = state.value.currentView == CurrencyView.FROM,
-                            exchangeRate = state.value.fromToExchangeRate,
-                            onClick = {
-                                if (state.value.currentView != CurrencyView.FROM) {
-                                    viewModel.onAction(CurrencyAction.ChangeView(CurrencyView.FROM))
-                                }
-                            },
-                            onSelectedUnitChanged = {
-                                viewModel.onAction(CurrencyAction.ChangeFromUnit(it))
+
+                    Spacer(modifier = Modifier.height(30.dp))
+                    CurrencySwapIcon(onSwapClicked = {
+                        viewModel.onAction(CurrencyAction.SwitchView)
+                    })
+
+                    CurrencyInfoItem(
+                        selectedCurrency = state.value.toCurrency,
+                        currencyValue = state.value.toValue,
+                        isCurrentView = state.value.currentView == CurrencyView.TO,
+                        exchangeRate = state.value.toFromExchangeRate,
+                        onClick = {
+                            if (state.value.currentView != CurrencyView.TO) {
+                                viewModel.onAction(CurrencyAction.ChangeView(CurrencyView.TO))
                             }
-                        )
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        CurrencySwapIcon(onSwapClicked = {
-                            viewModel.onAction(CurrencyAction.SwitchView)
-                        })
-
-                        CurrencyInfoItem(
-                            selectedCurrency = state.value.toCurrency,
-                            currencyValue = state.value.toValue,
-                            isCurrentView = state.value.currentView == CurrencyView.TO,
-                            exchangeRate = state.value.toFromExchangeRate,
-                            onClick = {
-                                if (state.value.currentView != CurrencyView.TO) {
-                                    viewModel.onAction(CurrencyAction.ChangeView(CurrencyView.TO))
-                                }
-                            },
-                            onSelectedUnitChanged = {
-                                viewModel.onAction(CurrencyAction.ChangeToUnit(it))
-                            }
-                        )
-                    }
-                }
-
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Column(
-                    modifier = Modifier
-                        .height(secondColumnHeight)
-                        .fillMaxWidth(),
-                    verticalArrangement = Arrangement.Bottom
-                ) {
-                    val buttons = ButtonFactory()
-                    CalculatorGridSimple(
-                        buttons = buttons.getButtons(ScreenType.Currency),
-                        onAction = viewModel::onAction,
-                        configuration = configuration
+                        },
+                        onSelectedUnitChanged = {
+                            viewModel.onAction(CurrencyAction.ChangeToUnit(it))
+                        }
                     )
                 }
             }
+
+            val buttons = remember { ButtonFactory() }
+            CalculatorGridSimple(
+                buttons = buttons.getButtons(ScreenType.Currency),
+                onAction = viewModel::onAction,
+                configuration = configuration
+            )
         }
     }
 }
