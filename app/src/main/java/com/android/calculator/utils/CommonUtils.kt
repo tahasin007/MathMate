@@ -51,7 +51,7 @@ object CommonUtils {
             } else {
                 number.toString()
             }
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             number.toString()
         }
     }
@@ -66,7 +66,7 @@ object CommonUtils {
                 val bd = BigDecimal(number, MathContext.DECIMAL64)
                 bd.stripTrailingZeros().toPlainString()
             }
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             number // return the original string if it can't be parsed
         }
     }
@@ -116,7 +116,7 @@ object CommonUtils {
             } else {
                 plainString
             }
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             number // Return the original string if it can't be parsed
         }
     }

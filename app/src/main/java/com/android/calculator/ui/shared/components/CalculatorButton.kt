@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -74,7 +74,7 @@ fun CalculatorButton(
                 .clickable(
                     enabled = isEnabled,
                     interactionSource = interactionSource,
-                    indication = rememberRipple(color = rippleColor),
+                    indication = ripple(color = rippleColor),
                     onClick = {
                         onClick()
                         shake = true

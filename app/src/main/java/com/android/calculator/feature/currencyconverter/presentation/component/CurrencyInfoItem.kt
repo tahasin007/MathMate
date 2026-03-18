@@ -12,10 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -55,7 +55,7 @@ fun CurrencyInfoItem(
     Column(
         modifier = Modifier.clickable(
             onClick = onClick,
-            indication = rememberRipple(
+            indication = ripple(
                 color = MaterialTheme.colorScheme.primary,
                 bounded = true,
                 radius = 32.dp

@@ -6,8 +6,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,7 +40,7 @@ fun ActionIconRow(
 //                .weight(1f)
 //                .clickable(
 //                    interactionSource = remember { MutableInteractionSource() },
-//                    indication = rememberRipple(
+//                    indication = ripple(
 //                        bounded = false,
 //                        radius = 30.dp,
 //                        color = MaterialTheme.colorScheme.onSecondary
@@ -61,7 +61,7 @@ fun ActionIconRow(
                 .weight(1f)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
+                    indication = ripple(
                         bounded = false,
                         radius = 30.dp,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -80,7 +80,7 @@ fun ActionIconRow(
                 .weight(1f)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(
+                    indication = ripple(
                         bounded = false,
                         radius = 30.dp,
                         color = MaterialTheme.colorScheme.onSecondary
@@ -105,7 +105,7 @@ fun ActionIconRow(
                     } else {
                         Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(
+                            indication = ripple(
                                 bounded = false,
                                 radius = 30.dp,
                                 color = MaterialTheme.colorScheme.onSecondary

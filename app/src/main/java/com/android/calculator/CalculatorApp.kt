@@ -1,7 +1,7 @@
 package com.android.calculator
 
-import android.app.Activity
 import android.view.WindowManager
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.EaseIn
@@ -60,18 +60,18 @@ fun CalculatorApp() {
     val configuration by settingsRepository.settingsStateFlow.collectAsState()
     val themeColor = configuration.themeColor
 
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current
 
     // Keep the device awake based on configuration
     DisposableEffect(configuration.keepDeviceAwake) {
         if (configuration.keepDeviceAwake) {
-            activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
-            activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
         onDispose {
             if (configuration.keepDeviceAwake) {
-                activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
         }
     }
