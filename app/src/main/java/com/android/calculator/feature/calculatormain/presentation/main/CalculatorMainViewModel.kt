@@ -51,6 +51,8 @@ class CalculatorMainViewModel @Inject constructor(
 
     private fun calculate() {
         val expression = calculatorState.expression
+        if (expression.isBlank()) return
+
         val openCount = expression.count { it == '(' }
         val closeCount = expression.count { it == ')' }
         val parenthesisDiff = openCount - closeCount

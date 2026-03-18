@@ -18,15 +18,15 @@ object CommonUtils {
     private val operators = setOf('+', '-', '*', '/', '%')
 
     fun isLastCharOperator(expression: String): Boolean {
-        return expression.last() in operators
+        return expression.isNotEmpty() && expression.last() in operators
     }
 
     fun isLastCharDecimal(expression: String): Boolean {
-        return expression.last() == '.'
+        return expression.isNotEmpty() && expression.last() == '.'
     }
 
     fun isLastCharNumber(expression: String): Boolean {
-        return expression.last() in "0123456789"
+        return expression.isNotEmpty() && expression.last() in "0123456789"
     }
 
     fun canEnterDecimal(expression: String): Boolean {

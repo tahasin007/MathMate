@@ -1,9 +1,8 @@
 package com.android.calculator.feature.calculatormain.presentation.main.components
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,55 +19,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
-import androidx.wear.compose.material.FractionalThreshold
-import androidx.wear.compose.material.rememberSwipeableState
-import androidx.wear.compose.material.swipeable
 import com.android.calculator.feature.calculatormain.presentation.main.CalculatorMainState
 import com.android.calculator.ui.shared.components.DrawBlinkingVerticalLine
 
-@OptIn(ExperimentalWearMaterialApi::class)
 @Composable
-fun CalculationView(
-    state: CalculatorMainState,
-    onCopyClick: () -> Unit,
-    onBookmarkClick: () -> Unit
-) {
-    val swipeableState = rememberSwipeableState(initialValue = 0)
-    val sizePx = with(LocalDensity.current) { 30.dp.toPx() }
-    val anchors = mapOf(0f to 0, sizePx to 1) // 0 is original, 1 is expanded
+fun CalculationView(state: CalculatorMainState) {
     var multiplier by remember { mutableFloatStateOf(1.5f) }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.25f)
-            .swipeable(
-                state = swipeableState,
-                anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.3f) },
-                orientation = Orientation.Horizontal
-            )
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            SwipeableIndicator(
-                swipeableState = swipeableState,
-                sizePx = sizePx,
-                onCopyClick = onCopyClick,
-                onBookmarkClick = onBookmarkClick
-            )
+            Spacer(modifier = Modifier.weight(1f))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
@@ -79,7 +52,7 @@ fun CalculationView(
                                 if (char.isDigit() || char == '.') MaterialTheme.colorScheme.onPrimary
                                 else MaterialTheme.colorScheme.onSecondary
                             withStyle(style = SpanStyle(color = color)) {
-                                append(char)
+                               append(char)
                             }
                         }
                     },
@@ -93,7 +66,7 @@ fun CalculationView(
                             multiplier *= 0.9f
                         }
                     },
-                    modifier = Modifier
+                     modifier = Modifier
                         .padding(end = 2.dp)
                         .verticalScroll(rememberScrollState())
                 )

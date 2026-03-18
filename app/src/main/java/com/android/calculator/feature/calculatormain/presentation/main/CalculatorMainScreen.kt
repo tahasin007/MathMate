@@ -68,23 +68,21 @@ fun CalculatorMainScreen(
             verticalArrangement = Arrangement.Top
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            CalculationResult(result = state.result)
-
-            CalculationView(
-                state = state,
+            CalculationResult(
+                result = state.result,
                 onCopyClick = {
-                    if (state.result.isNotEmpty()) {
-                        val clip = ClipData.newPlainText("Copied Answer", state.result)
-                        clipboardManager.setPrimaryClip(clip)
-
-                        scope.launch {
-                            hostState.showSnackbar("Answer Copied to Clipboard")
-                        }
+                    val clip = ClipData.newPlainText("Copied Answer", state.result)
+                    clipboardManager.setPrimaryClip(clip)
+                    scope.launch {
+                        hostState.showSnackbar("Answer Copied to Clipboard")
                     }
                 },
                 onBookmarkClick = {
                     viewModel.onAction(CalculatorAction.SaveCalculationMenuVisibility(true))
-                })
+                }
+            )
+
+            CalculationView(state = state)
 
             SaveCalculationBottomSheet(state = state, onAction = viewModel::onAction)
 
